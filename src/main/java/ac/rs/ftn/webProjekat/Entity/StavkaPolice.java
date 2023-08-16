@@ -43,6 +43,10 @@ public class StavkaPolice implements Serializable {
             recenzija = newRecenzija;
     }
 
+    public boolean daLiImaRecenziju(Recenzija r) {
+        return recenzija.contains(r);
+    }
+
     // trebalo bi mozda implementirati dobavljanje recenzija po id-u
     // kao sto smo i za knjigu
     // ali to posle
