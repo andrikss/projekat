@@ -2,6 +2,7 @@ package ac.rs.ftn.webProjekat.Entity;
 
 import ac.rs.ftn.webProjekat.Dto.AzurirajKorisnikaDto;
 import ac.rs.ftn.webProjekat.Dto.RegistrujSeDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -64,6 +65,24 @@ public class Korisnik implements Serializable {
             }
         }
         return null;
+    }
+
+    public boolean jelPostojiPolica(String polica) {
+        for (Polica it : police) {
+            if (it.getNaziv().equals(polica)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean jelNjegovaPolica(Polica polica) {
+        for(Polica it : police) {
+            if (it.getId().equals(polica.getId())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     //treba da se implementira DA LI JE KNJIGA NA PRIMARNOJ POLICI

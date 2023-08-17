@@ -49,7 +49,7 @@ public class Autor extends Korisnik implements Serializable {
                 newAutoroveKnjige.add(it);
             }
         } //if treba zakomentarisati??
-        if (newAutoroveKnjige.size() != autoroveKnjige.size())
+       // if (newAutoroveKnjige.size() != autoroveKnjige.size())
         autoroveKnjige = newAutoroveKnjige;
     }
 

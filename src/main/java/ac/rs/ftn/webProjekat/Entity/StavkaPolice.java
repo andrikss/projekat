@@ -52,6 +52,17 @@ public class StavkaPolice implements Serializable {
     // ali to posle
     // getRecenzijaById
 
+   /* public void removeKnjiga(Knjiga knj) {
+        Set<Knjiga> newKnjige = new HashSet<>();
+        for (Knjiga it : knjiga) {
+            if (!it.getISBN().equals(knj.getISBN())) {
+                newKnjige.add(it);
+            }
+        }
+        knjiga = (Knjiga) newKnjige;
+    }*/
+
+
     public StavkaPolice() {}
 
     public Long getId() {

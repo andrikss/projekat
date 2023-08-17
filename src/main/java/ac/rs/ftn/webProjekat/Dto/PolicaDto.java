@@ -16,9 +16,15 @@ public class PolicaDto {
 
     private List<KnjigaDto> knjige;
 
-    public PolicaDto(PolicaDto p) {
+    public PolicaDto() {
     }
 
+    public boolean isValid() {
+        if (naziv != null && !naziv.isEmpty()) {
+            return true;
+        }
+        return false;
+    }
     public PolicaDto(Polica polica) {
         this.id = polica.getId();
         this.naziv = polica.getNaziv();

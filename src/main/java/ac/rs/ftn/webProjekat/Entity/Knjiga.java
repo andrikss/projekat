@@ -30,6 +30,9 @@ public class Knjiga implements Serializable {
     @Column(name = "broj_strana")
     private Long brojStrana;
 
+    @Column(name = "email_adresa_autora")
+    private String emailAdresaAutora;
+
     @Column(name = "opis")
     private String opis;
 
@@ -44,7 +47,7 @@ public class Knjiga implements Serializable {
     @Column(name = "ocjena")
     private Long ocjena;
 
-    public void updateKnjiga(String naslov, String naslovnaFotografija, String ISBN, Date datumObjavljivanja, Long brojStrana, String opis, Long ocjena) {
+    public void updateKnjiga(String naslov, String naslovnaFotografija, String ISBN, Date datumObjavljivanja, Long brojStrana, String opis, Long ocjena, String emailAdresaAutora) {
         this.naslov = naslov;
         this.naslovnaFotografija = naslovnaFotografija;
         this.ISBN = ISBN;
@@ -52,6 +55,7 @@ public class Knjiga implements Serializable {
         this.brojStrana = brojStrana;
         this.opis = opis;
         this.ocjena = ocjena;
+        this.emailAdresaAutora = emailAdresaAutora;
     }
 
     //treba pogledati logiku azurirajKnjigaDto cini mi se d a je isto kao KNjigaDTO
@@ -64,6 +68,7 @@ public class Knjiga implements Serializable {
         this.ocjena = updateKnjigaDto.getOcjena();
         this.naslovnaFotografija = updateKnjigaDto.getNaslovnaFotografija();
         this.datumObjavljivanja = updateKnjigaDto.getDatumObjavljivanja();
+        this.emailAdresaAutora = updateKnjigaDto.getEmailAdresaAutora();
     }
 
     public boolean daLiImaZanr(Zanr zanr) {
@@ -96,6 +101,7 @@ public class Knjiga implements Serializable {
         this.brojStrana = knjigaDto.getBrojStrana();
         this.opis = knjigaDto.getOpis();
         this.ocjena = knjigaDto.getOcjena();
+        this.emailAdresaAutora = knjigaDto.getEmailAdresaAutora();
     }
 
     public Long getId() {
@@ -185,5 +191,11 @@ public class Knjiga implements Serializable {
                 '}';
     }
 
+    public String getEmailAdresaAutora() {
+        return emailAdresaAutora;
+    }
 
+    public void setEmailAdresaAutora(String emailAdresaAutora) {
+        this.emailAdresaAutora = emailAdresaAutora;
+    }
 }

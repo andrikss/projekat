@@ -1,10 +1,7 @@
 package ac.rs.ftn.webProjekat.Controller;
 
 import ac.rs.ftn.webProjekat.Dto.*;
-import ac.rs.ftn.webProjekat.Entity.Autor;
-import ac.rs.ftn.webProjekat.Entity.Korisnik;
-import ac.rs.ftn.webProjekat.Entity.Polica;
-import ac.rs.ftn.webProjekat.Entity.UlogaKorisnika;
+import ac.rs.ftn.webProjekat.Entity.*;
 import ac.rs.ftn.webProjekat.Service.AutorService;
 import ac.rs.ftn.webProjekat.Service.KorisnikService;
 import ac.rs.ftn.webProjekat.Service.PolicaService;
@@ -45,9 +42,22 @@ public class KorisnikRestController {
         return new ResponseEntity<>(korisnikDtos, HttpStatus.OK);
     }
 
+    //lista autora
+    @GetMapping("/listaAutora")
+    public ResponseEntity<List<AutorDto>> getAllAutori() {
+        List<Autor> autori = korisnikService.findAllAutor();
+
+        List<AutorDto> autorDtos = new ArrayList<>();
+        for (Autor autor : autori) {
+            autorDtos.add(new AutorDto(autor));
+        }
+
+        return new ResponseEntity<>(autorDtos, HttpStatus.OK);
+    }
+
     //prikaz jednog korisnika
     @GetMapping("/{id}")
-    public ResponseEntity<KorisnikDto> getKorisnikById(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<?> getKorisnikById(@PathVariable(name = "id") Long id) {
         Korisnik targetKorisnik = korisnikService.findById(id);
 
         if (targetKorisnik == null) {
@@ -56,8 +66,8 @@ public class KorisnikRestController {
         }
 
         if (targetKorisnik.getUlogaKorisnika().equals(UlogaKorisnika.ADMINISTRATOR.toString())) {
-            // taj korisnik je administrator
-            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+            String errorMessage = "Taj korisnik je administrator!";
+            return new ResponseEntity<String>(errorMessage, HttpStatus.FORBIDDEN);
         }
 
         KorisnikDto targetKorisnikDto = new KorisnikDto(targetKorisnik);
@@ -66,19 +76,37 @@ public class KorisnikRestController {
         return new ResponseEntity<>(targetKorisnikDto, HttpStatus.OK);
     }
 
+    //prikaz jednog autora
+    @GetMapping("/autor/{id}")
+    public ResponseEntity<?> getAutorById(@PathVariable(name = "id") Long id) {
+        Autor targetAutor = (Autor) korisnikService.findAutorById(id);
+
+        if (targetAutor == null) {
+            // korisnik sa datim id-om ne postoji ili nije autor
+            String errorMessage = "Taj korisnik ne postoji ili nije autor.";
+            return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
+        }
+
+        AutorDto targetAutorDto = new AutorDto(targetAutor);
+
+        // oki
+        return new ResponseEntity<>(targetAutorDto, HttpStatus.OK);
+    }
+
+
     //prikaz korisnikovih polica
     @GetMapping("/{id}/police")
-    public ResponseEntity<List<PolicaDto>> getPoliciesForKorisnik(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<?> getPoliciesForKorisnik(@PathVariable(name = "id") Long id) {
         Korisnik targetKorisnik = korisnikService.findById(id);
 
         if (targetKorisnik == null) {
             //korisnik ne posotji
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Taj korisnik ne postoji!", HttpStatus.NOT_FOUND);
         }
 
         if (targetKorisnik.getUlogaKorisnika().equals(UlogaKorisnika.ADMINISTRATOR.toString())) {
             // ne moze adm
-            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("Taj korisnik je administrator!", HttpStatus.FORBIDDEN);
         }
 
         List<Polica> korisnikovePolice = policaService.findPolicaByKorisnikId(targetKorisnik.getId());
@@ -94,18 +122,18 @@ public class KorisnikRestController {
 
     //prijavi se
     @PostMapping("/login")
-    public ResponseEntity<KorisnikDto> login(@RequestBody UlogujSeDto loginDto, HttpSession httpSession) {
+    public ResponseEntity<?> login(@RequestBody UlogujSeDto loginDto, HttpSession httpSession) {
         if (loginDto.getEmailAdresa() == null || loginDto.getEmailAdresa().isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Unesite email adresu!", HttpStatus.BAD_REQUEST);
         }
 
         if (loginDto.getEmailAdresa().isEmpty() || loginDto.getLozinka().isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Unesite lozinku", HttpStatus.BAD_REQUEST);
         }
 
         Korisnik korisnik = korisnikService.findByEmail(loginDto.getEmailAdresa());
         if (korisnik == null || !korisnik.getLozinka().equals(loginDto.getLozinka())) {
-            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("Netacna lozinka ili mejl!", HttpStatus.UNAUTHORIZED);
         }
 
         httpSession.setAttribute("loggedUser", korisnik);
@@ -115,21 +143,21 @@ public class KorisnikRestController {
 
     //registruj se
     @PostMapping("/register")
-    public ResponseEntity<KorisnikDto> register(@RequestBody RegistrujSeDto registracijaDto) {
+    public ResponseEntity<?> register(@RequestBody RegistrujSeDto registracijaDto) {
         if (registracijaDto.getIme().isEmpty() || registracijaDto.getPrezime().isEmpty() ||
                 registracijaDto.getKorisnickoIme().isEmpty() || registracijaDto.getEmailAdresa().isEmpty() ||
                 registracijaDto.getLozinka().isEmpty() || registracijaDto.getPonovljenaLozinka().isEmpty() ||
                 registracijaDto.getDatumRodjenja() == null) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Niste popunili sva polja", HttpStatus.BAD_REQUEST);
         }
 
         if (!registracijaDto.getLozinka().equals(registracijaDto.getPonovljenaLozinka())) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST); // Lozinke se ne podudaraju
+            return new ResponseEntity<>("Lozinke se ne podudaraju", HttpStatus.BAD_REQUEST); // Lozinke se ne podudaraju
         }
 
         Korisnik noviKorisnik = new Korisnik();
         if (korisnikService.daLiPostojiDuplikat(noviKorisnik)) {
-            return new ResponseEntity<>(null, HttpStatus.CONFLICT); // Konflikt jer postoji
+            return new ResponseEntity<>("Korisnik vec postoji!", HttpStatus.CONFLICT); // Konflikt jer postoji
         }
 
         // Pravim novog korisnika
@@ -150,22 +178,22 @@ public class KorisnikRestController {
 
     //azuriranje korisnika
     @PutMapping("/updateKorisnik/{id}")
-    public ResponseEntity<KorisnikDto> updateKorisnik(@PathVariable(name = "id") Long id, @RequestBody AzurirajKorisnikaDto azurirajKorisnikaDto, HttpSession httpSession) {
+    public ResponseEntity<?> updateKorisnik(@PathVariable(name = "id") Long id, @RequestBody AzurirajKorisnikaDto azurirajKorisnikaDto, HttpSession httpSession) {
         Korisnik korisnik = korisnikService.findById(id);
 
         if (korisnik == null) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND); // ne postoji
+            return new ResponseEntity<>("Korisnik ne postoji", HttpStatus.NOT_FOUND); // ne postoji
         }
 
         Korisnik loggedUser = (Korisnik) httpSession.getAttribute("loggedUser");
 
         if (loggedUser == null || !loggedUser.getId().equals(id)) {
-            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN); // zabranjen pristup
+            return new ResponseEntity<>("Ne mozete azurirati acc ako se prije niste ulogovali na nj!", HttpStatus.FORBIDDEN); // zabranjen pristup
         }
 
         // verifikacija trenutne lozinke ako korisnik mijenja mejl adresu ili lozinku
         if (!korisnik.getLozinka().equals(azurirajKorisnikaDto.getStaraLozinka())) {
-            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED); // neispravna trenutna lozinka
+            return new ResponseEntity<>("Lozinke nisu okej!", HttpStatus.UNAUTHORIZED); // neispravna trenutna lozinka
         }
 
         // azuriranje korisnikovih informacija
@@ -194,22 +222,22 @@ public class KorisnikRestController {
     //azuriranje autora
     //basically the same samo sto ima AKTIVAN polje
     @PutMapping("/updateAutor/{id}")
-    public ResponseEntity<AutorDto> updateAutor(@PathVariable(name = "id") Long id, @RequestBody AzurirajAutoraDto azurirajAutoraDto, HttpSession httpSession) {
+    public ResponseEntity<?> updateAutor(@PathVariable(name = "id") Long id, @RequestBody AzurirajAutoraDto azurirajAutoraDto, HttpSession httpSession) {
         Autor autor = autorService.findById(id);
 
         if (autor == null) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Korisnik ne postoji!", HttpStatus.NOT_FOUND);
         }
         Autor loggedUser = (Autor) httpSession.getAttribute("loggedUser");
 
         //provjera
         if (!loggedUser.getId().equals(autor.getId())) {
-            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN); // Nema dozvolu za ažuriranje
+            return new ResponseEntity<>("Ulogujte se da biste mogli azurirati profil!", HttpStatus.FORBIDDEN); // Nema dozvolu za ažuriranje
         }
 
         //
         if (!azurirajAutoraDto.getStaraLozinka().equals(autor.getLozinka())) {
-            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED); // Neispravna trenutna lozinka
+            return new ResponseEntity<>("Lozinke nisu okej!", HttpStatus.UNAUTHORIZED); // Neispravna trenutna lozinka
         }
 
         autor.setIme(azurirajAutoraDto.getIme());
@@ -231,11 +259,11 @@ public class KorisnikRestController {
     //KREIRANJE AUTORA, OVO MOZE SAMO KO???
     // ADMIINISTRATOR WOOP WOOP
     @PostMapping("/kreirajAutora")
-    public ResponseEntity<AutorDto> createAutor(@RequestBody AutorDto autorDto, HttpSession httpSession) {
+    public ResponseEntity<?> createAutor(@RequestBody AutorDto autorDto, HttpSession httpSession) {
         //  je l administrator
         Korisnik loggedUser = (Korisnik) httpSession.getAttribute("loggedUser");
         if (loggedUser == null || !loggedUser.getUlogaKorisnika().equals(UlogaKorisnika.ADMINISTRATOR.toString())) {
-            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN); //ne diraj zabranjeno voce
+            return new ResponseEntity<>("Niste administrator!", HttpStatus.FORBIDDEN); //ne diraj zabranjeno voce
         }
 
         //duplikat?
@@ -266,10 +294,40 @@ public class KorisnikRestController {
             Korisnik loggedUser = (Korisnik) httpSession.getAttribute("loggedUser");
             if (loggedUser.getId().equals(id)) {
                 httpSession.invalidate();
-                return new ResponseEntity<>("Uspješno ste se odjavili.", HttpStatus.OK);
+                return new ResponseEntity<>("Uspjesno ste se odjavili.", HttpStatus.OK);
             }
         }
 
         return new ResponseEntity<>("Niste prijavljeni ili nemate dozvolu za odjavu.", HttpStatus.UNAUTHORIZED);
     }
+
+    @PutMapping("/aktivirajAutora/{id}")
+    public ResponseEntity<String> activateAutorAccount(
+            @PathVariable(name = "id") Long autorId,
+            @RequestBody AutorDto autorDto,
+            HttpSession httpSession) {
+        Korisnik loggedUser = (Korisnik) httpSession.getAttribute("loggedUser");
+        if (loggedUser == null) {
+            return new ResponseEntity<>("Nema sesije!", HttpStatus.FORBIDDEN);
+        }
+
+        if (!loggedUser.getUlogaKorisnika().equals(UlogaKorisnika.ADMINISTRATOR.toString())) {
+            return new ResponseEntity<>("Korisnik nije administrator!", HttpStatus.FORBIDDEN);
+        }
+
+        Autor targetAutor = (Autor )korisnikService.findAutorById(autorId);
+        if (targetAutor == null) {
+            return new ResponseEntity<>("Autor nije pronadjen!", HttpStatus.NOT_FOUND);
+        }
+
+        if (targetAutor.isAktivan()) {
+            return new ResponseEntity<>("Autor je već aktivan i ne moze se mijenjati!", HttpStatus.FORBIDDEN);
+        }
+
+        targetAutor.setAktivan(true);
+        korisnikService.saveKorisnik(targetAutor);
+
+        return new ResponseEntity<>("Nalog autora je aktiviran!", HttpStatus.OK);
+    }
+
 }

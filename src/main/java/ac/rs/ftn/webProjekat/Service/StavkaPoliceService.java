@@ -1,11 +1,13 @@
 package ac.rs.ftn.webProjekat.Service;
 
 import ac.rs.ftn.webProjekat.Entity.Knjiga;
+import ac.rs.ftn.webProjekat.Entity.Polica;
 import ac.rs.ftn.webProjekat.Entity.StavkaPolice;
 import ac.rs.ftn.webProjekat.Repository.StavkaPoliceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -38,16 +40,17 @@ public class StavkaPoliceService {
 
     public void deleteStavkeOfKnjiga(Knjiga knjiga) {
         List<StavkaPolice> stavke = stavkaPoliceRepository.findAll();
-        for(StavkaPolice it : stavke) {
-            if(it.getKnjiga().getId().equals(knjiga.getId())) {
-                deleteStavka(it);
-                //is save reaally necesery
-                stavkaPoliceRepository.save(it);
+            for(StavkaPolice it : stavke) {
+                if(it.getKnjiga().getISBN().equals(knjiga.getISBN())) {
+                    //  it.removeKnjiga(knjiga);
+                    deleteStavka(it);
+                    //is save reaally necesery
+                    //stavkaPoliceRepository.save(it);
+                }
             }
-        }
     }
 // ili pak ovako kao drugi, vidjecemo sta radi u controlleru
-    /*
+/*
     public void deleteStavkeOfKnjiga(Knjiga knjiga) {
         List<StavkaPolice> stavke = stavkaPoliceRepository.findAll();
         List<StavkaPolice> newStavkaPoliceList = new ArrayList<>();
@@ -61,8 +64,8 @@ public class StavkaPoliceService {
         }
 
         stavkaPoliceRepository.saveAll(newStavkaPoliceList);
-    }
+    }*/
 
-*/
+
 
 }

@@ -73,6 +73,10 @@ public class PolicaService {
         return null;
     }
 
+    public Korisnik saveKorisnik(Korisnik korisnik) {
+        return korisnikService.saveKorisnik(korisnik);
+    }
+
     public Korisnik findKorisnikById(Long id) {
         return korisnikService.findById(id);
     }

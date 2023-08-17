@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class KorisnikService {
@@ -16,12 +17,23 @@ public class KorisnikService {
     private KorisnikRepository korisnikRepository;
 
     public Korisnik findById(Long id) {
-        Optional<Korisnik> korisnik = korisnikRepository.findById(id);
-        return korisnik.orElse(null);
+        List<Korisnik> korisnici = korisnikRepository.findAll();
+        for(Korisnik it : korisnici) {
+            if(it.getId().equals(id)) {
+                return it;
+            }
+        }
+        return null;
     }
 
     public Korisnik findByEmail(String emailAdresa) {
-        return korisnikRepository.findByEmailAdresa(emailAdresa);
+        List<Korisnik> korisnici = korisnikRepository.findAll();
+        for(Korisnik it : korisnici) {
+            if(it.getEmailAdresa().equals(emailAdresa)) {
+                return it;
+            }
+        }
+        return null;
     }
 
     public Korisnik findByKorisnickoIme(String ki) {
@@ -64,6 +76,16 @@ public class KorisnikService {
         return autori;
     }
 
+    public Korisnik findAutorById(Long id) {
+        List<Korisnik> autori = korisnikRepository.findAll();
+        for(Korisnik it : autori) {
+            if(it.getId().equals(id) && it.getUlogaKorisnika().equals(UlogaKorisnika.AUTOR.toString())) {
+                return it;
+            }
+        }
+        return null;
+    }
+
     public boolean daLiPostojiDuplikat(Korisnik korisnik) {
         List<Korisnik> korisnici = korisnikRepository.findAll();
         for(Korisnik it : korisnici) {
@@ -90,6 +112,8 @@ public class KorisnikService {
             }
         }
     }
+
+
 
 
 

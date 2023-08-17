@@ -26,4 +26,14 @@ public class AutorService {
     public Autor save(Autor autor) {
        return autorRepository.save(autor);
     }
+
+    public Autor findByEmail(String email) {
+        List<Autor> autori = autorRepository.findAll();
+        for(Autor it : autori) {
+            if(it.getEmailAdresa().equals(email)) {
+                return it;
+            }
+        }
+        return null;
+    }
 }
