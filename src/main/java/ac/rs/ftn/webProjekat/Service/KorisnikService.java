@@ -1,10 +1,8 @@
 package ac.rs.ftn.webProjekat.Service;
 
-import ac.rs.ftn.webProjekat.Entity.Autor;
-import ac.rs.ftn.webProjekat.Entity.Knjiga;
-import ac.rs.ftn.webProjekat.Entity.Korisnik;
-import ac.rs.ftn.webProjekat.Entity.UlogaKorisnika;
+import ac.rs.ftn.webProjekat.Entity.*;
 import ac.rs.ftn.webProjekat.Repository.KorisnikRepository;
+import ac.rs.ftn.webProjekat.Repository.PolicaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -92,5 +90,7 @@ public class KorisnikService {
             }
         }
     }
+
+
 
 }

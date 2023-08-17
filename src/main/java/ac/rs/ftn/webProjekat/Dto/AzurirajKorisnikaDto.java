@@ -6,6 +6,8 @@ public class AzurirajKorisnikaDto {
 
     private String ime;
     private String prezime;
+
+    private String korisnickoIme;
     private String staraLozinka;
     private String novaLozinka;
     private String staraEmailAdresa;
@@ -87,5 +89,13 @@ public class AzurirajKorisnikaDto {
 
     public void setProfilnaSlika(String profilnaSlika) {
         this.profilnaSlika = profilnaSlika;
+    }
+
+    public String getKorisnickoIme() {
+        return korisnickoIme;
+    }
+
+    public void setKorisnickoIme(String korisnickoIme) {
+        this.korisnickoIme = korisnickoIme;
     }
 }

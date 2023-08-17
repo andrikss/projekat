@@ -15,6 +15,8 @@ public class KorisnikDto {
     private String ime;
     private String prezime;
 
+    private String lozinka;
+
     private String emailAdresa;
     private String korisnickoIme;
 
@@ -22,7 +24,7 @@ public class KorisnikDto {
     private String opis;
     private String profilnaSlika;
 
-    private String  ulogaKorisnika;
+    private String ulogaKorisnika;
 
     private List<PolicaDto> policeDto = new ArrayList<>();
 
@@ -130,4 +132,5 @@ public class KorisnikDto {
     public void setPoliceDto(List<PolicaDto> policeDto) {
         this.policeDto = policeDto;
     }
+
 }

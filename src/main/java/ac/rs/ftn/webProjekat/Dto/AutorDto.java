@@ -12,6 +12,8 @@ public class AutorDto {
     private String ime;
     private String prezime;
     private String emailAdresa;
+
+    private String lozinka;
     private String korisnickoIme;
     private Date datumRodjenja;
     private String opis;
@@ -113,5 +115,13 @@ public class AutorDto {
 
     public void setProfilnaSlika(String profilnaSlika) {
         this.profilnaSlika = profilnaSlika;
+    }
+
+    public String getLozinka() {
+        return lozinka;
+    }
+
+    public void setLozinka(String lozinka) {
+        this.lozinka = lozinka;
     }
 }

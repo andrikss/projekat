@@ -40,23 +40,56 @@ INSERT INTO KORISNIK(ime, prezime, korisnicko_ime, email_adresa, lozinka, datum_
 INSERT INTO AUTOR_KNJIGA(autor_id, knjiga_id) VALUES (5,4);
 
 /*POLICE*/
-INSERT INTO POLICA(naziv, tip) VALUES ('Moja Polica Ivana', 0);
-INSERT INTO POLICA(naziv, tip) VALUES ('Want to Read Polica Vanja', 1);
-INSERT INTO POLICA(naziv, tip) VALUES ('Read Polica Vanja', 3);
-INSERT INTO POLICA(naziv, tip) VALUES ('Currently Reading Polica Ivana', 2);
-INSERT INTO POLICA(naziv, tip) VALUES ('Want to Read Polica Sasa', 1);
+INSERT INTO POLICA(naziv, tip) VALUES ('WantToRead', 1);
+INSERT INTO POLICA(naziv, tip) VALUES ('CurrentlyReading', 2);
+INSERT INTO POLICA(naziv, tip) VALUES ('Read', 3);
 
-/*povezujem police sa citaocima/korisnicima*/
+INSERT INTO POLICA(naziv, tip) VALUES ('Moja Polica Ivana', 0);
+INSERT INTO POLICA(naziv, tip) VALUES ('Moja Polica Vanja', 0);
+INSERT INTO POLICA(naziv, tip) VALUES ('Moja Polica Sasa', 0);
+
+INSERT INTO POLICA(naziv, tip) VALUES ('WantToRead', 1);
+INSERT INTO POLICA(naziv, tip) VALUES ('CurrentlyReading', 2);
+INSERT INTO POLICA(naziv, tip) VALUES ('Read', 3);
+
+INSERT INTO POLICA(naziv, tip) VALUES ('WantToRead', 1);
+INSERT INTO POLICA(naziv, tip) VALUES ('CurrentlyReading', 2);
+INSERT INTO POLICA(naziv, tip) VALUES ('Read', 3);
+
+INSERT INTO POLICA(naziv, tip) VALUES ('WantToRead', 1);
+INSERT INTO POLICA(naziv, tip) VALUES ('CurrentlyReading', 2);
+INSERT INTO POLICA(naziv, tip) VALUES ('Read', 3);
+
+INSERT INTO POLICA(naziv, tip) VALUES ('WantToRead', 1);
+INSERT INTO POLICA(naziv, tip) VALUES ('CurrentlyReading', 2);
+INSERT INTO POLICA(naziv, tip) VALUES ('Read', 3);
+
+/*povezujem police sa citaocima/korisnicima, PRVO PRIMARNE*/
 INSERT INTO KORISNIK_POLICE(korisnik_id, police_id) VALUES (2,1);
-INSERT INTO KORISNIK_POLICE(korisnik_id, police_id) VALUES (4,2);
-INSERT INTO KORISNIK_POLICE(korisnik_id, police_id) VALUES (4,3);
+INSERT INTO KORISNIK_POLICE(korisnik_id, police_id) VALUES (2,2);
+INSERT INTO KORISNIK_POLICE(korisnik_id, police_id) VALUES (2,3);
 INSERT INTO KORISNIK_POLICE(korisnik_id, police_id) VALUES (2,4);
-INSERT INTO KORISNIK_POLICE(korisnik_id, police_id) VALUES (3,5);
+INSERT INTO KORISNIK_POLICE(korisnik_id, police_id) VALUES (4,5);
+INSERT INTO KORISNIK_POLICE(korisnik_id, police_id) VALUES (3,6);
+
+INSERT INTO KORISNIK_POLICE(korisnik_id, police_id) VALUES (3,7);
+INSERT INTO KORISNIK_POLICE(korisnik_id, police_id) VALUES (3,8);
+INSERT INTO KORISNIK_POLICE(korisnik_id, police_id) VALUES (3,9);
+INSERT INTO KORISNIK_POLICE(korisnik_id, police_id) VALUES (4,10);
+INSERT INTO KORISNIK_POLICE(korisnik_id, police_id) VALUES (4,11);
+INSERT INTO KORISNIK_POLICE(korisnik_id, police_id) VALUES (4,12);
+INSERT INTO KORISNIK_POLICE(korisnik_id, police_id) VALUES (5,13);
+INSERT INTO KORISNIK_POLICE(korisnik_id, police_id) VALUES (5,14);
+INSERT INTO KORISNIK_POLICE(korisnik_id, police_id) VALUES (5,15);
+INSERT INTO KORISNIK_POLICE(korisnik_id, police_id) VALUES (6,16);
+INSERT INTO KORISNIK_POLICE(korisnik_id, police_id) VALUES (6,17);
+INSERT INTO KORISNIK_POLICE(korisnik_id, police_id) VALUES (6,18);
+
 
 /*STAVKA POLICE*/
 INSERT INTO STAVKA_POLICE(stavka_police_knjiga, polica_id) VALUES (1, 1);
 INSERT INTO STAVKA_POLICE(stavka_police_knjiga, polica_id) VALUES (2, 5);
-INSERT INTO STAVKA_POLICE(stavka_police_knjiga, polica_id) VALUES (3, 3);
+INSERT INTO STAVKA_POLICE(stavka_police_knjiga, polica_id) VALUES (3, 9);
 INSERT INTO STAVKA_POLICE(stavka_police_knjiga, polica_id) VALUES (4, 1);
 
 /*RECENZIJA*/
