@@ -1,38 +1,16 @@
 package ac.rs.ftn.webProjekat.Dto;
 
-import ac.rs.ftn.webProjekat.Entity.Recenzija;
-
 import java.util.Date;
 
-public class RecenzijaDto {
+public class RecenzijaDataDto {
 
-    private Long id;
     private Long ocjena;
     private String tekst;
     private Date datumRecenzije;
+
     private String korisnik;
 
-    public RecenzijaDto() {}
-
-    public RecenzijaDto(Recenzija recenzija) {
-        this.id = recenzija.getId();
-        this.ocjena = recenzija.getOcjena();
-        this.tekst = recenzija.getTekst();
-        this.datumRecenzije = recenzija.getDatumRecenzije();
-        if (recenzija.getKorisnik() != null) {
-            this.korisnik = recenzija.getKorisnik().getKorisnickoIme();
-        } else {
-            this.korisnik = "Nepoznati korisnik";
-        }
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public RecenzijaDataDto() {}
 
     public Long getOcjena() {
         return ocjena;

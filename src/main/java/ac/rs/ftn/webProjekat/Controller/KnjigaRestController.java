@@ -170,14 +170,12 @@ public class KnjigaRestController {
             return new ResponseEntity<>("Knjiga ili zanr ne postoji!", HttpStatus.NOT_FOUND);
         }
 
-        // Session check
         Korisnik loggedUser = (Korisnik) httpSession.getAttribute("loggedUser");
         if (loggedUser == null) {
             return new ResponseEntity<>("No session!", HttpStatus.FORBIDDEN);
         }
         loggedUser = knjigaService.findKorisnikById(loggedUser.getId());
 
-        // Check permissions
         if (!loggedUser.getUlogaKorisnika().equals(UlogaKorisnika.ADMINISTRATOR.toString())
                 && !loggedUser.getUlogaKorisnika().equals(UlogaKorisnika.AUTOR.toString())) {
             return new ResponseEntity<>("Niste ni autor ni administrator!", HttpStatus.FORBIDDEN);
@@ -191,7 +189,7 @@ public class KnjigaRestController {
             }
         }
 
-        // Add the genre to the book
+
         targetKnjiga.getZanrovi().add(targetZanr);
         knjigaService.save(targetKnjiga);
 

@@ -65,7 +65,9 @@ public class RecenzijaService {
         List<StavkaPolice> stavke = stavkaPoliceService.findAllStavka();
         for(StavkaPolice it : stavke) {
             if(it.getKnjiga().getId().equals(id)) {
-                recenzije.add((Recenzija) it.getRecenzija());
+                for(Recenzija r : it.getRecenzija()) {
+                    recenzije.add(r);
+                }
             }
         }
         return recenzije;
