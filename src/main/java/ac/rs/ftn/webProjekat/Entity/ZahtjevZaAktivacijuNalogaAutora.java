@@ -30,7 +30,7 @@ public class ZahtjevZaAktivacijuNalogaAutora implements Serializable {
     @Column(name = "status")
     private StatusZahtjeva status;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "autor_id",
             referencedColumnName = "id")
     private Autor autor;
@@ -45,6 +45,14 @@ public class ZahtjevZaAktivacijuNalogaAutora implements Serializable {
         this.datum = zahtjev.getDatum();
         this.poruka = zahtjev.getPoruka();
         this.status = StatusZahtjeva.NA_CEKANJU;
+    }
+
+    public ZahtjevZaAktivacijuNalogaAutora(ZahtjevZaAktivacijuNalogaAutora zahtjev) {
+        this.status = StatusZahtjeva.NA_CEKANJU;
+        this.emailAdresa = zahtjev.getEmailAdresa();
+        this.telefon = zahtjev.getTelefon();
+        this.datum = zahtjev.getDatum();
+        this.poruka = zahtjev.getPoruka();
     }
 
     public Long getId() {

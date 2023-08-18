@@ -15,6 +15,14 @@ public class ZahtjevZaAktivacijuNalogaAutoraDto {
     private String autorEmailAdresa;
     private StatusZahtjeva status;
 
+    public boolean isValid() {
+        if (autorEmailAdresa == null || autorEmailAdresa.isEmpty()
+                || emailAdresa == null || emailAdresa.isEmpty())
+        {
+            return false;
+        }
+        return true;
+    }
     public ZahtjevZaAktivacijuNalogaAutoraDto() {
     }
 

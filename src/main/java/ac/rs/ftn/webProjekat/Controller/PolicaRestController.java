@@ -4,6 +4,7 @@ import ac.rs.ftn.webProjekat.Dto.PolicaDto;
 import ac.rs.ftn.webProjekat.Entity.*;
 import ac.rs.ftn.webProjekat.Service.PolicaService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -98,9 +99,9 @@ public class PolicaRestController {
         }
 
         Polica newCustomPolica = new Polica(policaDto);
-        newCustomPolica.setStavkaPolice(new HashSet<>());
-
+        //newCustomPolica.setKorisnik(loggedUser);
         //dodajemo tom ulogovanom korisniku policu
+        newCustomPolica.setStavkaPolice(new HashSet<>());
         loggedUser.getPolice().add(newCustomPolica);
 
         //cuvamo prvo policu pa korisnika - logicno
@@ -129,9 +130,10 @@ public class PolicaRestController {
             return new ResponseEntity<>("Ne mozes obrisati primarnu policu", HttpStatus.FORBIDDEN);
         }
 
-        if (!loggedUser.daLiSadrziPolicu(targetPolica)) {
+        if (!loggedUser.jelNjegovaPolica(targetPolica)) {
             return new ResponseEntity<>("Ovo nije tvoja polica!", HttpStatus.FORBIDDEN);
         }
+
 
         loggedUser.izbrisiPolicu(targetPolica);
 
@@ -143,6 +145,7 @@ public class PolicaRestController {
     }
 
     //dodavanje knjige na policu
+    @Transactional
     @PostMapping("/knjiga/{knjigaId}/polica/{policaId}")
     public ResponseEntity<String> addKnjigaToPolica(@PathVariable(name="knjigaId") Long knjigaId,
                                                     @PathVariable(name="policaId") Long policaId,
@@ -191,6 +194,55 @@ public class PolicaRestController {
     }
 
     //brisanje knjige s police
+    @DeleteMapping("/knjiga/{knjigaId}/polica/{policaId}")
+    public ResponseEntity<String> deleteKnjigaFromPolica(@PathVariable(name = "knjigaId") Long knjigaId,
+                                                         @PathVariable(name = "policaId") Long policaId,
+                                                         HttpSession httpSession) {
+        Korisnik loggedUser = (Korisnik) httpSession.getAttribute("loggedUser");
+        if (loggedUser == null) {
+            return new ResponseEntity<>("No session!", HttpStatus.FORBIDDEN);
+        }
+
+        Polica targetPolica = policaService.findById(policaId);
+        if (targetPolica == null) {
+            return new ResponseEntity<>("Can not find polica!", HttpStatus.NOT_FOUND);
+        }
+
+        Knjiga targetKnjiga = policaService.findKnjigaById(knjigaId);
+        if (targetKnjiga == null) {
+            return new ResponseEntity<>("Can not find knjiga!", HttpStatus.NOT_FOUND);
+        }
+
+        if (!loggedUser.jelNjegovaPolica(targetPolica)) {
+            return new ResponseEntity<>("User does not own polica!", HttpStatus.FORBIDDEN);
+        }
+
+        if (!targetPolica.daLiPostojiKnjiga(targetKnjiga)) {
+            return new ResponseEntity<>("Polica does not contain knjiga!", HttpStatus.NOT_FOUND);
+        }
+
+        List<Polica> policaList = policaService.findPolicaByKorisnikId(loggedUser.getId());
+
+        if (targetPolica.getTip() != TipPolice.REGULAR) {
+            for (Polica p : policaList) {
+                if (p.getTip() != TipPolice.REGULAR) {
+                    continue;
+                }
+
+                policaService.deleteStavkeOfKnjiga(p, targetKnjiga);
+                policaService.savePolica(p);
+            }
+        }
+
+        StavkaPolice targetStavka = targetPolica.getStavkaByKnjiga(targetKnjiga);
+        targetPolica.removeStavkaPolice(targetStavka);
+
+        policaService.savePolica(targetPolica);
+        policaService.deleteStavkaPolice(targetStavka);
+
+
+        return new ResponseEntity<>("Knjiga removed from polica!", HttpStatus.OK);
+    }
 
 
 

@@ -168,6 +168,8 @@ public class RecenzijeRestController {
             return new ResponseEntity<>("Ovo nije vasa recenzija!", HttpStatus.FORBIDDEN);
         }
 
+        targetRecenzija.setKorisnik(null);
+        recenzijaService.saveRecenzija(targetRecenzija);
         recenzijaService.deleteRecenzija(targetRecenzija);
 
         return new ResponseEntity<>("Uspjesno izbrisana recenzija!", HttpStatus.OK);

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -94,7 +95,7 @@ public class PolicaService {
     }
 
     public void deleteStavkeOfKnjiga(Polica polica, Knjiga knjiga) {
-        List<StavkaPolice> stavke = new ArrayList<>();
+        Set<StavkaPolice> stavke = new HashSet<>();
         for(StavkaPolice it : polica.getStavkaPolice()) {
             if(it.getKnjiga().getId().equals(knjiga.getId())) {
                 stavkaPoliceService.deleteStavka(it);
@@ -102,8 +103,20 @@ public class PolicaService {
                 stavke.add(it);
             }
         }
-        polica.setStavkaPolice((Set<StavkaPolice>) stavke);
+        polica.setStavkaPolice(stavke);
     }
+
+   /* public void deleteStavkeOfKnjigaWithArrayList(Polica polica, Knjiga knjiga) {
+        List<StavkaPolice> stavkeToDelete = new ArrayList<>();
+
+        for (StavkaPolice stavka : polica.getStavkaPolice()) {
+            if (stavka.getKnjiga().equals(knjiga)) {
+                stavkeToDelete.add(stavka);
+            }
+        }
+
+        polica.getStavkaPolice().removeAll(stavkeToDelete);
+    }*/
 }
 
 

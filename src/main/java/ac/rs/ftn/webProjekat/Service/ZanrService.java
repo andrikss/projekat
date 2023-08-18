@@ -1,5 +1,6 @@
 package ac.rs.ftn.webProjekat.Service;
 
+import ac.rs.ftn.webProjekat.Dto.ZanrDto;
 import ac.rs.ftn.webProjekat.Entity.Knjiga;
 import ac.rs.ftn.webProjekat.Entity.Zanr;
 import ac.rs.ftn.webProjekat.Repository.ZanrRepository;
@@ -36,10 +37,10 @@ public class ZanrService {
         zanrRepository.delete(zanr);
     }
 
-    public boolean daLiPostojiZanr(Long id) {
+    public boolean daLiPostojiZanr(ZanrDto zanr) {
         List<Zanr> zanrovi = zanrRepository.findAll();
         for(Zanr it : zanrovi) {
-            if(it.getId().equals(id)) {
+            if(it.getNaziv().equals(zanr.getNaziv())) {
                 return true;
             }
         }

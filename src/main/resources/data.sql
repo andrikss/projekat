@@ -98,7 +98,7 @@ INSERT INTO RECENZIJA(ocjena, tekst, korisnik_id, stavka_police_id) VALUES (9,'J
 
 /*ZAHTJEV ZA AKTIVACIJU NALOGA*/
 INSERT INTO ZAHTJEV_ZA_AKTIVACIJU_NALOGA_AUTORA(email_adresa, telefon, poruka, datum, status, autor_id)
-    VALUES ('visnjamaks@gmail.com', '+38765222334', 'Molim Vas da mi odobrite nalog autora', '2022-11-19', 0, 6);
+    VALUES ('stepicvuk@gmail.com', '+38765222334', 'Molim Vas da mi odobrite nalog autora', '2022-11-19', 0, 6);
 
 
 

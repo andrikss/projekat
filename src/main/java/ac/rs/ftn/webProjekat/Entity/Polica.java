@@ -2,10 +2,8 @@ package ac.rs.ftn.webProjekat.Entity;
 
 import ac.rs.ftn.webProjekat.Dto.PolicaDto;
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 import java.io.Serializable;
 
 
@@ -23,7 +21,11 @@ public class Polica implements Serializable {
     @Column(name = "tip")
     private TipPolice tip;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "korisnik_id")
+    private Korisnik korisnik;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @JoinColumn(referencedColumnName = "id",
             name = "polica_id"
     )
@@ -51,6 +53,15 @@ public class Polica implements Serializable {
         for (StavkaPolice s : stavkaPolice) {
             if (s.getKnjiga().getId().equals(knjigaId)) {
                 return s;
+            }
+        }
+        return null;
+    }
+
+    public StavkaPolice getStavkaByKnjiga(Knjiga knjiga) {
+        for (StavkaPolice st : stavkaPolice) {
+            if (st.getKnjiga().getISBN().equals(knjiga.getISBN())) {
+                return st;
             }
         }
         return null;
@@ -95,6 +106,7 @@ public class Polica implements Serializable {
     }
 
     public Polica(PolicaDto policaDto) {
+        this.id = policaDto.getId();
         this.naziv = policaDto.getNaziv();
         this.tip = TipPolice.REGULAR;
     }
@@ -144,6 +156,14 @@ public class Polica implements Serializable {
         this.stavkaPolice = stavkaPolice;
     }
 
+    public Korisnik getKorisnik() {
+        return korisnik;
+    }
+
+    public void setKorisnik(Korisnik korisnik) {
+        this.korisnik = korisnik;
+    }
+
     @Override
     public String toString() {
         return "Polica{" +
@@ -152,5 +172,18 @@ public class Polica implements Serializable {
                 ", tip=" + tip +
                 ", stavkaPolice=" + stavkaPolice +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Polica polica = (Polica) o;
+        return Objects.equals(id, polica.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
