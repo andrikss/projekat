@@ -47,7 +47,7 @@ public class Korisnik implements Serializable {
     @Column(name = "uloga_korisnika", insertable = false, updatable = false)
     private String ulogaKorisnika;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = {})
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private Set<Polica> police = new HashSet<>();
 
     //pravljenje primarnih polica

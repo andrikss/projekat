@@ -21,11 +21,11 @@ public class Polica implements Serializable {
     @Column(name = "tip")
     private TipPolice tip;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    /*@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     @JoinColumn(name = "korisnik_id")
-    private Korisnik korisnik;
+    private Korisnik korisnik;*/
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     @JoinColumn(referencedColumnName = "id",
             name = "polica_id"
     )
@@ -108,6 +108,7 @@ public class Polica implements Serializable {
     public Polica(PolicaDto policaDto) {
         this.id = policaDto.getId();
         this.naziv = policaDto.getNaziv();
+       // this.korisnik = policaDto.getKorisnik();
         this.tip = TipPolice.REGULAR;
     }
     public Polica() {
@@ -156,13 +157,13 @@ public class Polica implements Serializable {
         this.stavkaPolice = stavkaPolice;
     }
 
-    public Korisnik getKorisnik() {
+    /*public Korisnik getKorisnik() {
         return korisnik;
     }
 
     public void setKorisnik(Korisnik korisnik) {
         this.korisnik = korisnik;
-    }
+    }*/
 
     @Override
     public String toString() {

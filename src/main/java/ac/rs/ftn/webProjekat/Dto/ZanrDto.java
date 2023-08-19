@@ -14,6 +14,11 @@ public class ZanrDto {
         this.naziv = zanr.getNaziv();
     }
 
+    public ZanrDto(String naziv) {
+        this.naziv = naziv;
+    }
+
+
     public Long getId() {
         return id;
     }

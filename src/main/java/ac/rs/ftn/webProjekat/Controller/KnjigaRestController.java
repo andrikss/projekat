@@ -119,6 +119,7 @@ public class KnjigaRestController {
         // Postavi autora knjige na korisnika koji dodaje knjigu
         if (loggedUser.getUlogaKorisnika().equals(UlogaKorisnika.AUTOR.toString())) {
             novaKnjiga.setEmailAdresaAutora(loggedUser.getEmailAdresa());
+            knjigaService.saveAutorOfKnjiga((Autor)loggedUser);
         }
 
         knjigaService.save(novaKnjiga);
@@ -147,12 +148,16 @@ public class KnjigaRestController {
 
         // Ako je korisnik autor, provjeri da li je to njegova knjiga
         if (loggedUser.getUlogaKorisnika().equals(UlogaKorisnika.AUTOR.toString())) {
+            if(targetKnjiga.getEmailAdresaAutora() == null) {
+                return new ResponseEntity<>("Email autora je ostao anoniman, samo administrator moze da pristupi!", HttpStatus.FORBIDDEN);
+            }
             if (!targetKnjiga.getEmailAdresaAutora().equals(loggedUser.getEmailAdresa())) {
                 return new ResponseEntity<>("Ako si autor, mozes da azuriras samo svoju knjigu", HttpStatus.FORBIDDEN);
             }
         }
 
         // oki
+       // knjigaService.saveAutorOfKnjiga((Autor)loggedUser);
         targetKnjiga.updateKnjiga(knjigaDto);
         knjigaService.save(targetKnjiga);
 

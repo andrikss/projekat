@@ -1,6 +1,7 @@
 package ac.rs.ftn.webProjekat.Dto;
 
 import ac.rs.ftn.webProjekat.Entity.Knjiga;
+import ac.rs.ftn.webProjekat.Entity.Korisnik;
 import ac.rs.ftn.webProjekat.Entity.Polica;
 import ac.rs.ftn.webProjekat.Entity.TipPolice;
 
@@ -15,6 +16,8 @@ public class PolicaDto {
     private TipPolice tip;
 
     private List<KnjigaDto> knjige;
+
+    private Korisnik korisnik;
 
     public PolicaDto() {
     }
@@ -35,6 +38,7 @@ public class PolicaDto {
                 this.knjige.add(new KnjigaDto(knjiga));
             }
         }
+        //this.korisnik = polica.getKorisnik();
     }
 
     public Long getId() {
@@ -67,5 +71,23 @@ public class PolicaDto {
 
     public void setKnjige(List<KnjigaDto> knjige) {
         this.knjige = knjige;
+    }
+
+    @Override
+    public String toString() {
+        return "PolicaDto{" +
+                "id=" + id +
+                ", naziv='" + naziv + '\'' +
+                ", tip=" + tip +
+              //  ", knjige=" + knjige +
+                '}';
+    }
+
+    public Korisnik getKorisnik() {
+        return korisnik;
+    }
+
+    public void setKorisnik(Korisnik korisnik) {
+        this.korisnik = korisnik;
     }
 }

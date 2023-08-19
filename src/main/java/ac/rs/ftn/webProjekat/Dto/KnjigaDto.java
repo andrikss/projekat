@@ -44,6 +44,7 @@ public class KnjigaDto {
         this.recenzije = new HashSet<>();
         this.zanrovi = new HashSet<>();
         this.naslovnaFotografija = knjiga.getNaslovnaFotografija();
+        this.emailAdresaAutora = knjiga.getEmailAdresaAutora();
     }
 
     public Long getId() {

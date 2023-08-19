@@ -94,6 +94,7 @@ public class PolicaService {
         stavkaPoliceService.deleteStavka(st);
     }
 
+    public void deleteKnjiga(Knjiga knjiga) { knjigaService.delete(knjiga);}
     public void deleteStavkeOfKnjiga(Polica polica, Knjiga knjiga) {
         Set<StavkaPolice> stavke = new HashSet<>();
         for(StavkaPolice it : polica.getStavkaPolice()) {

@@ -72,7 +72,7 @@ public class Zanr implements Serializable {
         return "Zanr{" +
                 "id=" + id +
                 ", naziv='" + naziv + '\'' +
-                ", knjige=" + knjige +
+                //", knjige=" + knjige +
                 '}';
     }
 }

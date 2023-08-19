@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/police")
@@ -76,6 +77,7 @@ public class PolicaRestController {
 
     //dodaj policu
     @PostMapping("/dodajPolicu")
+    @Transactional
     public ResponseEntity<String> addPolicaToLoggedUser(@RequestBody PolicaDto policaDto,
                                                               HttpSession httpSession) {
         Korisnik loggedUser = (Korisnik) httpSession.getAttribute("loggedUser");
@@ -98,15 +100,34 @@ public class PolicaRestController {
             return new ResponseEntity<>("Vec postoji takva polica", HttpStatus.FORBIDDEN);
         }
 
-        Polica newCustomPolica = new Polica(policaDto);
+
+        Polica newCustomPolica = new Polica(policaDto); // Automatski će generisati id
+
+        //loggedUser.getPolice().add(newCustomPolica);
+        newCustomPolica.setStavkaPolice(new HashSet<>());
+
+       // System.out.println(policaDto.toString());
+        //System.out.println(newCustomPolica.toString());
         //newCustomPolica.setKorisnik(loggedUser);
         //dodajemo tom ulogovanom korisniku policu
-        newCustomPolica.setStavkaPolice(new HashSet<>());
+       // newCustomPolica.setKorisnik(loggedUser);
+        //System.out.println(newCustomPolica.getKorisnik().toString());
+        //newCustomPolica.setStavkaPolice(new HashSet<>());
+        //newCustomPolica.setNaziv(policaDto.getNaziv());
+        //newCustomPolica.setId(policaDto.getId());
+        //loggedUser.getPolice().add(newCustomPolica);
         loggedUser.getPolice().add(newCustomPolica);
 
-        //cuvamo prvo policu pa korisnika - logicno
+        for(Polica it: loggedUser.getPolice()) {
+            System.out.println(it.getId());
+        }
+        //newCustomPolica.setKorisnik(loggedUser);
         policaService.savePolica(newCustomPolica);
         policaService.saveKorisnik(loggedUser);
+
+        for(Polica it: loggedUser.getPolice()) {
+            System.out.println(it.getId());
+        }
 
         return new ResponseEntity<>("Uspjesno!", HttpStatus.OK);
     }
@@ -130,9 +151,27 @@ public class PolicaRestController {
             return new ResponseEntity<>("Ne mozes obrisati primarnu policu", HttpStatus.FORBIDDEN);
         }
 
-        if (!loggedUser.jelNjegovaPolica(targetPolica)) {
+        loggedUser = policaService.findKorisnikById(loggedUser.getId());
+        for(Polica it: loggedUser.getPolice()) {
+            System.out.println(it.getId());
+        }
+
+        boolean found = false;
+        for (Polica p : loggedUser.getPolice()) {
+            if (p.getId().equals(policaId)) {
+                found = true;
+                break; // Ako je pronađena ciljana polica, nema potrebe za daljom proverom
+            }
+        }
+
+        if (!found) {
             return new ResponseEntity<>("Ovo nije tvoja polica!", HttpStatus.FORBIDDEN);
         }
+
+
+
+
+        List<PolicaDto> police = new ArrayList<>();
 
 
         loggedUser.izbrisiPolicu(targetPolica);
@@ -195,6 +234,7 @@ public class PolicaRestController {
 
     //brisanje knjige s police
     @DeleteMapping("/knjiga/{knjigaId}/polica/{policaId}")
+    @Transactional
     public ResponseEntity<String> deleteKnjigaFromPolica(@PathVariable(name = "knjigaId") Long knjigaId,
                                                          @PathVariable(name = "policaId") Long policaId,
                                                          HttpSession httpSession) {
@@ -205,20 +245,31 @@ public class PolicaRestController {
 
         Polica targetPolica = policaService.findById(policaId);
         if (targetPolica == null) {
-            return new ResponseEntity<>("Can not find polica!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Ne postoji polica", HttpStatus.NOT_FOUND);
         }
 
         Knjiga targetKnjiga = policaService.findKnjigaById(knjigaId);
         if (targetKnjiga == null) {
-            return new ResponseEntity<>("Can not find knjiga!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Ne mogu pronaci knjgiu", HttpStatus.NOT_FOUND);
         }
 
-        if (!loggedUser.jelNjegovaPolica(targetPolica)) {
-            return new ResponseEntity<>("User does not own polica!", HttpStatus.FORBIDDEN);
+        /*if (!loggedUser.jelNjegovaPolica(targetPolica)) {
+            return new ResponseEntity<>("Korisnik ne posjeduje policu!", HttpStatus.FORBIDDEN);
+        }*/
+        boolean found = false;
+        for (Polica p : loggedUser.getPolice()) {
+            if (p.getId().equals(policaId)) {
+                found = true;
+                break; // Ako je pronađena ciljana polica, nema potrebe za daljom proverom
+            }
+        }
+
+        if (!found) {
+            return new ResponseEntity<>("Ovo nije tvoja polica!", HttpStatus.FORBIDDEN);
         }
 
         if (!targetPolica.daLiPostojiKnjiga(targetKnjiga)) {
-            return new ResponseEntity<>("Polica does not contain knjiga!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Ta knjiga nije na toj polici!", HttpStatus.NOT_FOUND);
         }
 
         List<Polica> policaList = policaService.findPolicaByKorisnikId(loggedUser.getId());
@@ -235,13 +286,19 @@ public class PolicaRestController {
         }
 
         StavkaPolice targetStavka = targetPolica.getStavkaByKnjiga(targetKnjiga);
-        targetPolica.removeStavkaPolice(targetStavka);
-
+        if (targetStavka != null) {
+            // Prvo izbrišite sve stavke police povezane sa knjigom
+            targetPolica.removeStavkaPolice(targetStavka);
+        }
+        //targetPolica.removeStavkaPolice(targetStavka);
+        //policaService.deleteKnjiga(targetKnjiga);
         policaService.savePolica(targetPolica);
         policaService.deleteStavkaPolice(targetStavka);
+        //policaService.deleteStavkaPolice(targetStavka);
+       // policaService.deleteKnjiga(targetKnjiga);
 
 
-        return new ResponseEntity<>("Knjiga removed from polica!", HttpStatus.OK);
+        return new ResponseEntity<>("Uspjesno!", HttpStatus.OK);
     }
 
 

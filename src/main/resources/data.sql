@@ -1,12 +1,12 @@
 /* KNJIGA*/
-INSERT INTO KNJIGA(naslov, ISBN, datum_objavljivanja, broj_strana, opis, ocjena)
-    VALUES ('Sumrak Saga', 'SS234', '2008-07-01', 280, 'Najbolja fantasticna knjiga svih vremena!', 9);
-INSERT INTO KNJIGA(naslov, ISBN, datum_objavljivanja, broj_strana, opis, ocjena)
-    VALUES ('Septembarska Svetla', 'SS555', '1999-01-09', 190, 'Za tinejdzere, ali i za odrasle, vrlo dobra!', 7);
-INSERT INTO KNJIGA(naslov, ISBN, datum_objavljivanja, broj_strana, opis, ocjena)
-    VALUES ('Carry On', 'CO908', '2016-05-05', 420, 'YA knjiga', 10);
-INSERT INTO KNJIGA(naslov, ISBN, datum_objavljivanja, broj_strana, opis, ocjena)
-    VALUES ('Gdje srce spava', 'GSC15', '2022-09-15', 120, 'Poezija mlade autorke<3', 10);
+INSERT INTO KNJIGA(naslov, ISBN, datum_objavljivanja, broj_strana, opis, ocjena, email_adresa_autora)
+    VALUES ('Sumrak Saga', 'SS234', '2008-07-01', 280, 'Najbolja fantasticna knjiga svih vremena!', 9, 'stefanimejer@gmail.com');
+INSERT INTO KNJIGA(naslov, ISBN, datum_objavljivanja, broj_strana, opis, ocjena, email_adresa_autora)
+    VALUES ('Septembarska Svetla', 'SS555', '1999-01-09', 190, 'Za tinejdzere, ali i za odrasle, vrlo dobra!', 7, 'karloss@gmail.com');
+INSERT INTO KNJIGA(naslov, ISBN, datum_objavljivanja, broj_strana, opis, ocjena, email_adresa_autora)
+    VALUES ('Carry On', 'CO908', '2016-05-05', 420, 'YA knjiga', 10, 'rejnbovrowel@gmail.com');
+INSERT INTO KNJIGA(naslov, ISBN, datum_objavljivanja, broj_strana, opis, ocjena, email_adresa_autora)
+    VALUES ('Gdje srce spava', 'GSC15', '2022-09-15', 120, 'Poezija mlade autorke<3', 10, 'milica.mrkonjic15@gmail.com');
 
 /*ZANR*/
 INSERT INTO ZANR(naziv) VALUES ('fantazija');
