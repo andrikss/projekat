@@ -1,25 +1,31 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { createRouter, createWebHistory } from "vue-router";
+import Login from "@/components/Login.vue";
+import Register from "@/components/Register.vue"; // Dodajte import za Login komponentu
+import HomeView from "@/views/HomeView.vue";
+import KnjigeView from "@/views/KnjigeView.vue";
+import KnjigaView from "@/views/KnjigaView.vue";
+import PregledKnjigaView from "@/views/PregledKnjigaView.vue";
+import RecenzijaView from "@/views/RecenzijaView.vue";
+import ZanroviView from "@/views/ZanroviView.vue";
+import KorisniciView from "@/views/KorisniciView.vue";
+import DodajZahtjevView from "@/views/DodajZahtjevView.vue";
 
 const routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: HomeView
-  },
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
-]
+  { path: "/register", component: Register },
+  { path: "/login", component: Login },
+  { path: '/', name: 'home', component: HomeView },
+  { path: '/knjige', name: 'knjige', component: KnjigeView },
+  { path: '/knjiga', name: 'knjigaJedna', component: KnjigaView },
+  { path: '/pretragaKnjiga', name: 'searchKnjiga', component: PregledKnjigaView},
+  { path: '/recenzije', name: 'recenzije', component: RecenzijaView},
+  { path: '/zanrovi', name: 'zanrovi', component: ZanroviView},
+  { path: '/korisnici', name: 'korisnici', component: KorisniciView},
+  { path: '/dodajZahtjev', name: 'dodajZahtjev', component: DodajZahtjevView}
+];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes
-})
+  history: createWebHistory(),
+  routes,
+});
 
-export default router
+export default router;

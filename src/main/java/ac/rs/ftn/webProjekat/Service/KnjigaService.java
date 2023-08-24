@@ -8,6 +8,7 @@ import ac.rs.ftn.webProjekat.Repository.ZanrRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -148,5 +149,26 @@ public class KnjigaService {
         zanrService.deleteZanrOfKnjiga(knjiga);
     }
 
+    public List<Knjiga> findKnjigeThatContainInISBN(String ISBN_substring) {
+        List<Knjiga> ret = new ArrayList<>();
+        List<Knjiga> knjigaList = knjigaRepository.findAll();
+        for (Knjiga k : knjigaList) {
+            if (k.getISBN().contains(ISBN_substring)) {
+                ret.add(k);
+            }
+        }
+        return ret;
+    }
+
+    public List<Knjiga> findKnjigeThatContainInNaslov(String naslov_substring) {
+        List<Knjiga> ret = new ArrayList<>();
+        List<Knjiga> knjigaList = knjigaRepository.findAll();
+        for (Knjiga k : knjigaList) {
+            if (k.getNaslov().contains(naslov_substring)) {
+                ret.add(k);
+            }
+        }
+        return ret;
+    }
 
 }

@@ -17,6 +17,18 @@ public class RegistrujSeDto {
     public RegistrujSeDto() {
     }
 
+    public RegistrujSeDto(String emailAdresa, String korisnickoIme, String ime, String prezime, String lozinka, String ponovljenaLozinka, Date datumRodjenja, String opis, String profilnaSlika) {
+        this.emailAdresa = emailAdresa;
+        this.korisnickoIme = korisnickoIme;
+        this.ime = ime;
+        this.prezime = prezime;
+        this.lozinka = lozinka;
+        this.ponovljenaLozinka = ponovljenaLozinka;
+        this.datumRodjenja = datumRodjenja;
+        this.opis = opis;
+        this.profilnaSlika = profilnaSlika;
+    }
+
     public String getEmailAdresa() {
         return emailAdresa;
     }

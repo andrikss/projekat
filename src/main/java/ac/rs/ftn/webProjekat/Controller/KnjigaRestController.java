@@ -1,9 +1,6 @@
 package ac.rs.ftn.webProjekat.Controller;
 
-import ac.rs.ftn.webProjekat.Dto.AzurirajKnjiguDto;
-import ac.rs.ftn.webProjekat.Dto.KnjigaDto;
-import ac.rs.ftn.webProjekat.Dto.RecenzijaDto;
-import ac.rs.ftn.webProjekat.Dto.ZanrDto;
+import ac.rs.ftn.webProjekat.Dto.*;
 import ac.rs.ftn.webProjekat.Entity.*;
 import ac.rs.ftn.webProjekat.Service.AutorService;
 import ac.rs.ftn.webProjekat.Service.KnjigaService;
@@ -87,6 +84,49 @@ public class KnjigaRestController {
         return new ResponseEntity<>(knjigaDto, HttpStatus.OK);
     }
 
+    //pretraga knjige
+    @PostMapping("/pretraziKnjigu")
+    public ResponseEntity<List<KnjigaDto>> searchKnjiga(@RequestBody NadjiKnjiguDto nadjiKnjiguDto)
+    {
+        List<Knjiga> knjigeWithISBN = null;
+        List<Knjiga> knjigeWithNaslov = null;
+        if (nadjiKnjiguDto.getISBN() != null) {
+            knjigeWithISBN = knjigaService.findKnjigeThatContainInISBN(nadjiKnjiguDto.getISBN());
+        }
+        if (nadjiKnjiguDto.getNaslov() != null ) {
+            knjigeWithNaslov = knjigaService.findKnjigeThatContainInNaslov(nadjiKnjiguDto.getNaslov());
+        }
+
+        List<Knjiga> knjigaList = new ArrayList<>();
+        if (knjigeWithISBN != null) {
+            for (Knjiga kISBN : knjigeWithISBN) {
+                knjigaList.add(kISBN);
+            }
+        }
+        if (knjigeWithNaslov != null) {
+            for (Knjiga kNaslov : knjigeWithNaslov) {
+                boolean AllreadyContains = false;
+                for (Knjiga check : knjigaList) {
+                    if (check.getISBN().equals(kNaslov.getISBN())) {
+                        AllreadyContains = true;
+                        break;
+                    }
+                }
+                if (!AllreadyContains) {
+                    knjigaList.add(kNaslov);
+                }
+            }
+        }
+        List<KnjigaDto> ret = new ArrayList<>();
+
+        for (Knjiga k : knjigaList) {
+            KnjigaDto kdto = new KnjigaDto(k);
+            ret.add(kdto);
+        }
+
+        //No specified naslov or ISBN
+        return new ResponseEntity<>(ret, HttpStatus.OK);
+    }
     //dodavanje knjige
     // knjigu moze dodati ili autor ili administrator
     // administrator moze dodati bilo koju knjigu

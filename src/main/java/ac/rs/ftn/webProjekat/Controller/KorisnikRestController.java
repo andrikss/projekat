@@ -167,6 +167,7 @@ public class KorisnikRestController {
         noviKorisnik.setEmailAdresa(registracijaDto.getEmailAdresa());
         noviKorisnik.setLozinka(registracijaDto.getLozinka());
         noviKorisnik.setDatumRodjenja(registracijaDto.getDatumRodjenja());
+        noviKorisnik.setOpis(registracijaDto.getOpis());
         noviKorisnik.setUlogaKorisnika(UlogaKorisnika.CITALAC.toString());
 
         korisnikService.saveKorisnik(noviKorisnik);
