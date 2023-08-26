@@ -10,6 +10,8 @@ public class AzurirajKorisnikaDto {
     private String korisnickoIme;
     private String staraLozinka;
     private String novaLozinka;
+
+    private String lozinka;
     private String staraEmailAdresa;
     private String novaEmailAdresa;
     private Date datumRodjenja;
@@ -97,5 +99,13 @@ public class AzurirajKorisnikaDto {
 
     public void setKorisnickoIme(String korisnickoIme) {
         this.korisnickoIme = korisnickoIme;
+    }
+
+    public String getLozinka() {
+        return lozinka;
+    }
+
+    public void setLozinka(String lozinka) {
+        this.lozinka = lozinka;
     }
 }

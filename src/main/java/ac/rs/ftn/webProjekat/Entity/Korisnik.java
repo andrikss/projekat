@@ -168,6 +168,14 @@ public class Korisnik implements Serializable {
         return false;
     }
 
+    public void updateValues(AzurirajKorisnikaDto azurirajKorisnikaDto) {
+        this.ime = azurirajKorisnikaDto.getIme();
+        this.opis = azurirajKorisnikaDto.getOpis();
+        this.prezime = azurirajKorisnikaDto.getPrezime();
+        this.profilnaSlika = azurirajKorisnikaDto.getProfilnaSlika();
+        this.datumRodjenja = azurirajKorisnikaDto.getDatumRodjenja();
+    }
+
     // apdejt korisnika, mozda bi trebalo dodati if
     public void updateKorisnik( String ime, String prezime, String opis, Date datumRodjenja, String profilnaSlika) {
         this.ime = ime;

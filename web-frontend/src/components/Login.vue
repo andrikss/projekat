@@ -35,31 +35,14 @@ export default {
         },
         body: JSON.stringify(this.loginDTO),
       })
-          // .then((response) => response.text)
-          // .then((data) => {
-          //   console.log("Success : " + data);
-          //   // this.$router.push("/employees");
-          //   // this.$router.replace("/");  //releads the page
-          // })
-          // .catch((err) => {
-          //   console.log("Error : " + err);
-          //   alert(err);
-          // });
           .then((res) => {
-            //console.log("success:"+res);
             if (res.ok) {
-              // Clear user information from local storage or session storage
-              //localStorage.removeItem('loggedUser');
-              // Redirect to home
-              //this.$router.push('/info');
-              //this.$router.push('/');
               return res.json();
             } else {
               throw new Error('Login failed');
             }
           })
           .then((data) => {
-            //console.log(data);
             localStorage.setItem('loggedUser', JSON.stringify(data));
             if (data.ulogaKorisnika === 'Citalac') {
               this.$router.push('/homeCitalac');

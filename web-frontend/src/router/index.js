@@ -9,6 +9,9 @@ import RecenzijaView from "@/views/RecenzijaView.vue";
 import ZanroviView from "@/views/ZanroviView.vue";
 import KorisniciView from "@/views/KorisniciView.vue";
 import DodajZahtjevView from "@/views/DodajZahtjevView.vue";
+import HomeCitalac from "@/views/HomeCitalac.vue";
+import AutoriView from "@/views/AutoriView.vue";
+import AutorView from "@/views/AutorView.vue";
 
 const routes = [
   { path: "/register", component: Register },
@@ -20,7 +23,11 @@ const routes = [
   { path: '/recenzije', name: 'recenzije', component: RecenzijaView},
   { path: '/zanrovi', name: 'zanrovi', component: ZanroviView},
   { path: '/korisnici', name: 'korisnici', component: KorisniciView},
-  { path: '/dodajZahtjev', name: 'dodajZahtjev', component: DodajZahtjevView}
+  { path: '/dodajZahtjev', name: 'dodajZahtjev', component: DodajZahtjevView},
+  { path:'/homeCitalac', name:'homeCitalac', component: HomeCitalac},
+  { path: '/listaAutora', name:'listaAutora', component: AutoriView},
+  { path: '/autor', name: 'autor', component: AutorView}
+
 ];
 
 const router = createRouter({

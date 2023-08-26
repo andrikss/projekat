@@ -55,6 +55,19 @@ public class KorisnikRestController {
         return new ResponseEntity<>(autorDtos, HttpStatus.OK);
     }
 
+    @GetMapping("/korisnik")
+    public ResponseEntity<KorisnikDto> getThisSessionUserInfo(HttpSession httpSession)
+    {
+        Korisnik loggedKorisnik = (Korisnik) httpSession.getAttribute("loggedUser");
+        if (loggedKorisnik == null) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+        loggedKorisnik = korisnikService.findById(loggedKorisnik.getId());
+
+        KorisnikDto loggedUserDto = new KorisnikDto(loggedKorisnik);
+        return new ResponseEntity<KorisnikDto>(loggedUserDto, HttpStatus.OK);
+    }
+
     //prikaz jednog korisnika
     @GetMapping("/{id}")
     public ResponseEntity<?> getKorisnikById(@PathVariable(name = "id") Long id) {
@@ -176,9 +189,9 @@ public class KorisnikRestController {
         return new ResponseEntity<>(k, HttpStatus.CREATED); // Kreiran - uspješno registrovan
     }
 
-
+    //azuriranje korisnika po idu
     //azuriranje korisnika
-    @PutMapping("/updateKorisnik/{id}")
+   /* @PutMapping("/updateKorisnik/{id}")
     public ResponseEntity<?> updateKorisnik(@PathVariable(name = "id") Long id, @RequestBody AzurirajKorisnikaDto azurirajKorisnikaDto, HttpSession httpSession) {
         Korisnik korisnik = korisnikService.findById(id);
 
@@ -217,12 +230,43 @@ public class KorisnikRestController {
 
         KorisnikDto k = new KorisnikDto(korisnik);
         return new ResponseEntity<>(k, HttpStatus.OK);
-    }
+    }*/
 
+    //azuriranje korisnika
+    @PostMapping("/updateKorisnik")
+    public ResponseEntity<?> updateKorisnikProfile(@RequestBody AzurirajKorisnikaDto azurirajKorisnikaDto, HttpSession httpSession) {
+
+        Korisnik korisnik = (Korisnik) httpSession.getAttribute("loggedUser");
+        if (korisnik == null) {
+            return new ResponseEntity<>("Korisnik ne postoji", HttpStatus.NOT_FOUND); // ne postoji
+        }
+        if (!korisnik.getLozinka().equals(azurirajKorisnikaDto.getStaraLozinka())) {
+            return new ResponseEntity<>("Lozinke nisu okej!", HttpStatus.UNAUTHORIZED); // neispravna trenutna lozinka
+        }
+
+        korisnik.setIme(azurirajKorisnikaDto.getIme());
+        korisnik.setPrezime(azurirajKorisnikaDto.getPrezime());
+        korisnik.setDatumRodjenja(azurirajKorisnikaDto.getDatumRodjenja());
+        korisnik.setProfilnaSlika(azurirajKorisnikaDto.getProfilnaSlika());
+        korisnik.setOpis(azurirajKorisnikaDto.getOpis());
+        korisnik.setKorisnickoIme(azurirajKorisnikaDto.getKorisnickoIme());
+
+        if (!azurirajKorisnikaDto.getNovaEmailAdresa().isEmpty()) {
+            korisnik.setEmailAdresa(azurirajKorisnikaDto.getNovaEmailAdresa());
+        }
+
+        if (!azurirajKorisnikaDto.getNovaLozinka().isEmpty()) {
+            korisnik.setLozinka(azurirajKorisnikaDto.getNovaLozinka());
+        }
+        korisnik = korisnikService.saveKorisnik(korisnik);
+
+        KorisnikDto k = new KorisnikDto(korisnik);
+        return new ResponseEntity<>(k, HttpStatus.OK);
+    }
 
     //azuriranje autora
     //basically the same samo sto ima AKTIVAN polje
-    @PutMapping("/updateAutor/{id}")
+    @PostMapping("/updateAutor/{id}")
     public ResponseEntity<?> updateAutor(@PathVariable(name = "id") Long id, @RequestBody AzurirajAutoraDto azurirajAutoraDto, HttpSession httpSession) {
         Autor autor = autorService.findById(id);
 
@@ -289,17 +333,16 @@ public class KorisnikRestController {
         return new ResponseEntity<>(createdAutorDto, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/logout/{id}")
-    public ResponseEntity<String> logout(@PathVariable(name = "id") Long id, HttpSession httpSession) {
-        if (httpSession.getAttribute("loggedUser") != null) {
-            Korisnik loggedUser = (Korisnik) httpSession.getAttribute("loggedUser");
-            if (loggedUser.getId().equals(id)) {
-                httpSession.invalidate();
-                return new ResponseEntity<>("Uspjesno ste se odjavili.", HttpStatus.OK);
-            }
-        }
+    @GetMapping("/logout")
+    public ResponseEntity<String> Logout( HttpSession httpSession) {
+        Korisnik loggedKorisnik = (Korisnik) httpSession.getAttribute("loggedUser");
 
-        return new ResponseEntity<>("Niste prijavljeni ili nemate dozvolu za odjavu.", HttpStatus.UNAUTHORIZED);
+        if (loggedKorisnik == null)
+            return new ResponseEntity<String>("Session does not exist", HttpStatus.FORBIDDEN);
+
+        //httpSession.setAttribute("loggedUser",null);
+        httpSession.invalidate();
+        return new ResponseEntity<String>("Successfully logged out", HttpStatus.OK);
     }
 
     @PutMapping("/aktivirajAutora/{id}")
