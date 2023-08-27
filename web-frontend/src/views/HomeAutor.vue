@@ -19,12 +19,16 @@
   <div class="pretraga"><a href="/pretragaKnjiga">PRETRAGA KNJIGA</a></div>
 
   <div class="azuriraj-container">
-  <button @click="toggleProfileUpdate" class="azuriraj">Ažuriraj profil </button>
-  <AzurirajProfil :showProfileUpdate="showProfileUpdate" />
+    <button @click="toggleProfileUpdate" class="azuriraj">Ažuriraj profil </button>
+    <AzurirajProfil :showProfileUpdate="showProfileUpdate" />
   </div>
 
   <div class="logout-button-container">
     <Logout />
+  </div>
+
+  <div class="dodaj-knjigu">
+    <DodajNovuKnjigu />
   </div>
 
 </template>
@@ -32,13 +36,15 @@
 <script>
 import Logout from '@/components/Logout.vue'
 import JedanKorisnik from "@/components/JedanKorisnik.vue";
+import DodajNovuKnjigu from "@/components/DodajNovuKnjigu.vue";
 import AzurirajProfil from "@/components/AzurirajProfil.vue";
 export default {
-  name: "HomeCitalac",
+  name: "HomeAutor",
   components: {
     Logout,
     JedanKorisnik,
-    AzurirajProfil
+    AzurirajProfil,
+    DodajNovuKnjigu
   },
   data() {
     return {
@@ -144,9 +150,27 @@ export default {
   margin: 0 5px; /* Add spacing around the separator */
 }
 
-.top-menu {
+.dodaj-knjigu {
+  background-color: greenyellow;
+  position: fixed;
+  bottom: 197px;
+  right: 0px;
+  height: 40vh;
+  width: 280px;
+  padding: 20px;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  font-weight: bold;
+
+}
+
+.dodaj-knjigu button {
+  background-color: white;
+  color: indianred;
+  font-weight: bold;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
 }
 </style>

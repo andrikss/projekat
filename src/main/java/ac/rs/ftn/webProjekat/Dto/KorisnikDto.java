@@ -29,11 +29,12 @@ public class KorisnikDto {
     private List<PolicaDto> policeDto = new ArrayList<>();
 
     //valjda ovako
-    public void setPoliceDto(Set<Polica> police) {
-        if(police != null) {
-            for(Polica p: police) {
-                policeDto.add(new PolicaDto(p));
-            }
+    public void setPoliceDto(List<Polica> police) {
+        if (police == null) {
+            return;
+        }
+        for (Polica p : police) {
+            policeDto.add(new PolicaDto(p));
         }
     }
 
@@ -129,8 +130,5 @@ public class KorisnikDto {
         return policeDto;
     }
 
-    public void setPoliceDto(List<PolicaDto> policeDto) {
-        this.policeDto = policeDto;
-    }
 
 }

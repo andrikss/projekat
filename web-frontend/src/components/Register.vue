@@ -86,10 +86,7 @@ export default {
             .then((data) => {
               //console.log("Success : " + data);
               localStorage.setItem('loggedUser', JSON.stringify(data));
-              //console.log('data='+data);
-
-              // this.$router.push("/employees");
-              // this.$router.replace("/");  //releads the page
+              window.location.reload();
             })
             .catch((err) => {
               console.log("Error : " + err);
@@ -97,6 +94,7 @@ export default {
             })
             .then(() => {
               const loggedUserObj = localStorage.getItem('loggedUser');
+              console.log('Logged User Object:', loggedUserObj); // Dodajte ovu liniju
               const ulogaKorisnika = this.getValueOfField('ulogaKorisnika', loggedUserObj);
               console.log('ulogaKorisnika=' + ulogaKorisnika);
 

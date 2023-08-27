@@ -111,5 +111,15 @@ export default {
 </script>
 
 <style scoped>
+.update_form {
+  text-align: left; /* Poravnavanje teksta s lijeve strane */
+  margin-top: 20px;
+  background-color: pink;
+}
 
+.update_form label {
+  display: inline-block; /* Postavljanje labela kao inline-blok elemente */
+  width: 150px; /* Fiksna širina labela */
+  margin-right: 10px; /* Malo odvajanje između labela i input polja */
+}
 </style>

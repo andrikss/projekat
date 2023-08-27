@@ -12,6 +12,8 @@ import DodajZahtjevView from "@/views/DodajZahtjevView.vue";
 import HomeCitalac from "@/views/HomeCitalac.vue";
 import AutoriView from "@/views/AutoriView.vue";
 import AutorView from "@/views/AutorView.vue";
+import PolicaView from "@/views/PolicaView.vue";
+import HomeAutor from "@/views/HomeAutor.vue";
 
 const routes = [
   { path: "/register", component: Register },
@@ -26,8 +28,9 @@ const routes = [
   { path: '/dodajZahtjev', name: 'dodajZahtjev', component: DodajZahtjevView},
   { path:'/homeCitalac', name:'homeCitalac', component: HomeCitalac},
   { path: '/listaAutora', name:'listaAutora', component: AutoriView},
-  { path: '/autor', name: 'autor', component: AutorView}
-
+  { path: '/autor', name: 'autor', component: AutorView},
+  { path: '/polica', name: 'polica', component: PolicaView},
+  { path: '/homeAutor', name: 'homeAutor', component: HomeAutor}
 ];
 
 const router = createRouter({

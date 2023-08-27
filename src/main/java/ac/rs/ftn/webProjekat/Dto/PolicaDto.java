@@ -17,7 +17,7 @@ public class PolicaDto {
 
     private List<KnjigaDto> knjige;
 
-    private Korisnik korisnik;
+    //private Korisnik korisnik;
 
     public PolicaDto() {
     }
@@ -83,11 +83,11 @@ public class PolicaDto {
                 '}';
     }
 
-    public Korisnik getKorisnik() {
-        return korisnik;
-    }
+   // public Korisnik getKorisnik() {
+      //  return korisnik;
+    //}
 
-    public void setKorisnik(Korisnik korisnik) {
-        this.korisnik = korisnik;
-    }
+    //public void setKorisnik(Korisnik korisnik) {
+     //   this.korisnik = korisnik;
+    //}
 }

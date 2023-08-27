@@ -134,4 +134,21 @@ public class KnjigaDto {
     public void setNaslovnaFotografija(String naslovnaFotografija) {
         this.naslovnaFotografija = naslovnaFotografija;
     }
+
+    @Override
+    public String toString() {
+        return "KnjigaDto{" +
+                "id=" + id +
+                ", ISBN='" + ISBN + '\'' +
+                ", naslov='" + naslov + '\'' +
+                ", datumObjavljivanja=" + datumObjavljivanja +
+                ", brojStrana=" + brojStrana +
+                ", opis='" + opis + '\'' +
+                ", ocjena=" + ocjena +
+                ", zanrovi=" + zanrovi +
+                ", recenzije=" + recenzije +
+                ", emailAdresaAutora='" + emailAdresaAutora + '\'' +
+               // ", naslovnaFotografija='" + naslovnaFotografija + '\'' +
+                '}';
+    }
 }

@@ -86,6 +86,21 @@ public class KnjigaService {
         return null;
     }
 
+    public void poveziZanrSaKnjigom(Knjiga knjiga, List<String> zanrNaziv)
+    {
+        List<Zanr> zanrList = zanrService.findAllZanr();
+
+        for (Zanr it : zanrList) {
+
+            for (String jt : zanrNaziv) {
+                if (it.getNaziv().equals(jt)) {
+                    knjiga.getZanrovi().add(it);
+                    break;
+                }
+            }
+        }
+    }
+
     public Knjiga save(Knjiga knjiga) { return knjigaRepository.save(knjiga); }
     public void delete(Knjiga knjiga) { knjigaRepository.delete(knjiga);}
 

@@ -156,7 +156,7 @@ public class KorisnikRestController {
 
     //registruj se
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegistrujSeDto registracijaDto) {
+    public ResponseEntity<?> register(@RequestBody RegistrujSeDto registracijaDto, HttpSession httpSession) {
         if (registracijaDto.getIme().isEmpty() || registracijaDto.getPrezime().isEmpty() ||
                 registracijaDto.getKorisnickoIme().isEmpty() || registracijaDto.getEmailAdresa().isEmpty() ||
                 registracijaDto.getLozinka().isEmpty() || registracijaDto.getPonovljenaLozinka().isEmpty() ||
@@ -168,7 +168,9 @@ public class KorisnikRestController {
             return new ResponseEntity<>("Lozinke se ne podudaraju", HttpStatus.BAD_REQUEST); // Lozinke se ne podudaraju
         }
 
-        Korisnik noviKorisnik = new Korisnik();
+        Korisnik noviKorisnik = new Korisnik(registracijaDto);
+        System.out.println(noviKorisnik.getPolice().toString());
+
         if (korisnikService.daLiPostojiDuplikat(noviKorisnik)) {
             return new ResponseEntity<>("Korisnik vec postoji!", HttpStatus.CONFLICT); // Konflikt jer postoji
         }
@@ -184,8 +186,9 @@ public class KorisnikRestController {
         noviKorisnik.setUlogaKorisnika(UlogaKorisnika.CITALAC.toString());
 
         korisnikService.saveKorisnik(noviKorisnik);
-
-        KorisnikDto k = new KorisnikDto(noviKorisnik);
+        Korisnik kor = korisnikService.findByEmail(noviKorisnik.getEmailAdresa());
+        httpSession.setAttribute("loggedUser", kor);
+        KorisnikDto k = new KorisnikDto(kor);
         return new ResponseEntity<>(k, HttpStatus.CREATED); // Kreiran - uspješno registrovan
     }
 
@@ -244,12 +247,29 @@ public class KorisnikRestController {
             return new ResponseEntity<>("Lozinke nisu okej!", HttpStatus.UNAUTHORIZED); // neispravna trenutna lozinka
         }
 
-        korisnik.setIme(azurirajKorisnikaDto.getIme());
-        korisnik.setPrezime(azurirajKorisnikaDto.getPrezime());
-        korisnik.setDatumRodjenja(azurirajKorisnikaDto.getDatumRodjenja());
-        korisnik.setProfilnaSlika(azurirajKorisnikaDto.getProfilnaSlika());
-        korisnik.setOpis(azurirajKorisnikaDto.getOpis());
-        korisnik.setKorisnickoIme(azurirajKorisnikaDto.getKorisnickoIme());
+        if(!azurirajKorisnikaDto.getIme().isEmpty()) {
+            korisnik.setIme(azurirajKorisnikaDto.getIme());
+        }
+
+        if(!azurirajKorisnikaDto.getPrezime().isEmpty()) {
+            korisnik.setPrezime(azurirajKorisnikaDto.getPrezime());
+        }
+
+        if(azurirajKorisnikaDto.getDatumRodjenja() !=null) {
+            korisnik.setDatumRodjenja(azurirajKorisnikaDto.getDatumRodjenja());
+        }
+
+        if(azurirajKorisnikaDto.getProfilnaSlika() != null) {
+            korisnik.setProfilnaSlika(azurirajKorisnikaDto.getProfilnaSlika());
+        }
+
+        if(!azurirajKorisnikaDto.getOpis().isEmpty()) {
+            korisnik.setOpis(azurirajKorisnikaDto.getOpis());
+        }
+
+        if(!azurirajKorisnikaDto.getKorisnickoIme().isEmpty()) {
+            korisnik.setKorisnickoIme(azurirajKorisnikaDto.getKorisnickoIme());
+        }
 
         if (!azurirajKorisnikaDto.getNovaEmailAdresa().isEmpty()) {
             korisnik.setEmailAdresa(azurirajKorisnikaDto.getNovaEmailAdresa());

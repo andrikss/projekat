@@ -88,21 +88,15 @@ public class KnjigaRestController {
     @PostMapping("/pretraziKnjigu")
     public ResponseEntity<List<KnjigaDto>> searchKnjiga(@RequestBody NadjiKnjiguDto nadjiKnjiguDto)
     {
-        List<Knjiga> knjigeWithISBN = null;
         List<Knjiga> knjigeWithNaslov = null;
-        if (nadjiKnjiguDto.getISBN() != null) {
-            knjigeWithISBN = knjigaService.findKnjigeThatContainInISBN(nadjiKnjiguDto.getISBN());
-        }
+
+        System.out.println(nadjiKnjiguDto.getNaslov());
         if (nadjiKnjiguDto.getNaslov() != null ) {
             knjigeWithNaslov = knjigaService.findKnjigeThatContainInNaslov(nadjiKnjiguDto.getNaslov());
         }
-
+        System.out.println(knjigeWithNaslov);
         List<Knjiga> knjigaList = new ArrayList<>();
-        if (knjigeWithISBN != null) {
-            for (Knjiga kISBN : knjigeWithISBN) {
-                knjigaList.add(kISBN);
-            }
-        }
+
         if (knjigeWithNaslov != null) {
             for (Knjiga kNaslov : knjigeWithNaslov) {
                 boolean AllreadyContains = false;
@@ -139,6 +133,7 @@ public class KnjigaRestController {
             return new ResponseEntity<>("No session!", HttpStatus.FORBIDDEN);
         }
 
+        System.out.println("ovo je knjigaDTO" + knjigaDto);
         // autor ili administrator
         if (!loggedUser.getUlogaKorisnika().equals(UlogaKorisnika.AUTOR.toString())
                 && !loggedUser.getUlogaKorisnika().equals(UlogaKorisnika.ADMINISTRATOR.toString())) {
@@ -153,31 +148,51 @@ public class KnjigaRestController {
             }
         }
 
-        //oki
-        Knjiga novaKnjiga = new Knjiga(knjigaDto);
-
-        // Postavi autora knjige na korisnika koji dodaje knjigu
-        if (loggedUser.getUlogaKorisnika().equals(UlogaKorisnika.AUTOR.toString())) {
-            novaKnjiga.setEmailAdresaAutora(loggedUser.getEmailAdresa());
-            knjigaService.saveAutorOfKnjiga((Autor)loggedUser);
+        if (knjigaService.findByISBN(knjigaDto.getISBN()) != null) {
+            return new ResponseEntity<>("Knjiga sa istim ISBN vec postoji!", HttpStatus.FORBIDDEN);
         }
 
+        //oki
+        Knjiga novaKnjiga = new Knjiga(knjigaDto);
+        System.out.println("ovo je nova" + novaKnjiga);
+        if (knjigaDto.getZanrovi() != null && !knjigaDto.getZanrovi().isEmpty()) {
+
+            List<String> zanrovi = new ArrayList<>();
+            for (ZanrDto zanrDto_it : knjigaDto.getZanrovi()) {
+                zanrovi.add(zanrDto_it.getNaziv());
+            }
+
+            knjigaService.poveziZanrSaKnjigom(novaKnjiga, zanrovi);
+        }
         knjigaService.save(novaKnjiga);
+
+        if (loggedUser.getUlogaKorisnika().equals(UlogaKorisnika.AUTOR.toString())) {
+            Autor loggerUserAutor = (Autor) loggedUser;
+            loggerUserAutor.getAutoroveKnjige().add(novaKnjiga);
+            knjigaService.saveAutorOfKnjiga(loggerUserAutor);
+        }
+        else {
+            Autor targetAutor = (Autor) knjigaService.findAutorByEmail(knjigaDto.getEmailAdresaAutora());
+            if (targetAutor != null) {
+                targetAutor.getAutoroveKnjige().add(novaKnjiga);
+                knjigaService.saveAutorOfKnjiga(targetAutor);
+            }
+        }
 
         return new ResponseEntity<>("Uspjesno!", HttpStatus.OK);
     }
 
     //ista logika i sa azuriranjem
     @PutMapping("/azurirajKnjigu/{id}")
-    public ResponseEntity<String> updateKnjiga(@PathVariable(name = "id") Long id, @RequestBody AzurirajKnjiguDto knjigaDto, HttpSession httpSession) {
+    public ResponseEntity<String> updateKnjiga(@PathVariable(name = "id") Long id, @RequestBody AzurirajKnjiguDto azurirajKnjiguDto, HttpSession httpSession) {
         Korisnik loggedUser = (Korisnik) httpSession.getAttribute("loggedUser");
         if (loggedUser == null) {
             return new ResponseEntity<>("No session!", HttpStatus.FORBIDDEN);
         }
 
-        Knjiga targetKnjiga = knjigaService.findById(id);
-        if (targetKnjiga == null) {
-            return new ResponseEntity<>("Ta knjiga ne postoji", HttpStatus.NOT_FOUND);
+        loggedUser = knjigaService.findKorisnikById(loggedUser.getId());
+        if (loggedUser == null) {
+            return new ResponseEntity<>("No session!", HttpStatus.FORBIDDEN);
         }
 
         // autor ili administrator
@@ -186,6 +201,11 @@ public class KnjigaRestController {
             return new ResponseEntity<>("Niste administrator ili autor", HttpStatus.FORBIDDEN);
         }
 
+        Knjiga targetKnjiga = knjigaService.findById(id);
+        System.out.println("OVO JE KNJIGA" + targetKnjiga);
+        if (targetKnjiga == null) {
+            return new ResponseEntity<>("Ta knjiga ne postoji", HttpStatus.NOT_FOUND);
+        }
         // Ako je korisnik autor, provjeri da li je to njegova knjiga
         if (loggedUser.getUlogaKorisnika().equals(UlogaKorisnika.AUTOR.toString())) {
             if(targetKnjiga.getEmailAdresaAutora() == null) {
@@ -196,9 +216,38 @@ public class KnjigaRestController {
             }
         }
 
-        // oki
-       // knjigaService.saveAutorOfKnjiga((Autor)loggedUser);
-        targetKnjiga.updateKnjiga(knjigaDto);
+        if (azurirajKnjiguDto.getISBN() != null &&
+                !azurirajKnjiguDto.getISBN().isEmpty() &&
+                !azurirajKnjiguDto.getISBN().equals(targetKnjiga.getISBN()))
+        {
+            //mijenja se ISBN
+            if (knjigaService.findByISBN(azurirajKnjiguDto.getISBN()) != null) {
+                return new ResponseEntity<>("Knjiga with specified new ISBN is already in use!", HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        Autor owner = (Autor) knjigaService.findAutorByISBN(targetKnjiga.getISBN());
+        Autor targetAutor = (Autor) knjigaService.findAutorByEmail(azurirajKnjiguDto.getEmailAdresaAutora());
+        if (targetAutor == null &&
+                loggedUser.getUlogaKorisnika().equals(UlogaKorisnika.AUTOR.toString()))
+        {
+            targetAutor = (Autor) loggedUser;
+        }
+        if (owner == null &&
+                loggedUser.getUlogaKorisnika().equals(UlogaKorisnika.AUTOR.toString()))
+        {
+            owner = (Autor) loggedUser;
+        }
+
+        if (targetAutor == null) {
+            return new ResponseEntity<>("No autor to connect to!", HttpStatus.BAD_REQUEST);
+        }
+        owner.removeKnjiga(targetKnjiga);
+        targetAutor.getAutoroveKnjige().add(targetKnjiga);
+        knjigaService.saveAutorOfKnjiga(owner);
+        knjigaService.saveAutorOfKnjiga(targetAutor);
+
+        targetKnjiga.updateKnjiga(azurirajKnjiguDto);
         knjigaService.save(targetKnjiga);
 
         return new ResponseEntity<>("Azuriranje knjige - Uspjesno!", HttpStatus.OK);

@@ -166,7 +166,8 @@ export default {
   mounted: function() {
 
     //Nadji knjigu
-    fetch(`http://localhost:9090/api/knjige/${this.$route.query.id}`)        .then(response => response.json())
+    fetch(`http://localhost:9090/api/knjige/${this.$route.query.id}`)
+        .then(response => response.json())
         .then(data => { this.knjiga = data})
         .catch((error) => {
           console.error("Error:", error);
@@ -205,7 +206,7 @@ export default {
           console.error("Error:", error);
         });
 
-    //Get zanri za dodavanje
+    //Get zanrovi za dodavanje
     fetch('http://localhost:9090/api/zanrovi/lista',{
       method: "GET",
       credentials: 'include',
@@ -303,7 +304,7 @@ export default {
 
     refresh() {
       //Nadji knjigu
-      fetch('http://localhost:9090/api/knjige/{id}' + this.$route.query.id)
+      fetch('http://localhost:9090/api/knjige/' + this.$route.query.id)
           .then(response => response.json())
           .then(data => { this.knjiga = data})
           .catch((error) => {
@@ -322,7 +323,7 @@ export default {
       let payload = this.azurirajKnjiguDto;
       payload['emailAdresaAutora'] = this.selectedAutor.emailAdresa;
 
-      fetch('http://localhost:9090/api/knjige/azurirajKnjigu' + this.$route.query.id, {
+      fetch('http://localhost:9090/api/knjige/azurirajKnjigu/' + this.$route.query.id, {
         method: "PUT",
         credentials: 'include',
         headers: {
@@ -334,9 +335,10 @@ export default {
           .then((res) => {
             if (res.ok) {
               alert('Successfully updated knjiga!');
+              location.reload();
             } else {
               alert('Failed to update knjiga');
-              //console.log(res);
+              console.log(res);
               throw new Error('Failed to update knjiga');
             }
           })
@@ -364,7 +366,7 @@ export default {
 
 
     izbrisi(knjiga) {
-      fetch('http://localhost:9090/api/knjige/obrisiKnjigu/{id}' + this.$route.query.id, {
+      fetch('http://localhost:9090/api/knjige/obrisiKnjigu/' + this.$route.query.id, {
         method: "DELETE",
         credentials: 'include',
         headers: {
@@ -388,7 +390,7 @@ export default {
 
 
     dodajNaPolicu(selectedPolica) {
-      fetch('http://localhost:9090/api/knjige/knjiga/{knjigaId}/polica/{policaId}' + this.$route.query.id+"/polica/"+selectedPolica.id, {
+      fetch('http://localhost:9090/api/police/knjiga/' + this.$route.query.id+"/polica/"+ selectedPolica.id, {
         method: "POST",
         credentials: 'include',
         headers: {
@@ -407,7 +409,7 @@ export default {
                 this.$router.push('/polica?id='+selectedPolica.id);
               }
             } else {
-              alert('Failed to added knjiga to polica');
+              alert('Failed to add knjiga to polica');
               //console.log(res);
               throw new Error('Adding knjiga to polica failed');
             }

@@ -5,10 +5,7 @@ import ac.rs.ftn.webProjekat.Dto.RegistrujSeDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "korisnik")
@@ -48,13 +45,17 @@ public class Korisnik implements Serializable {
     private String ulogaKorisnika;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
-    private Set<Polica> police = new HashSet<>();
+    private List<Polica> police = new ArrayList<>();
 
     //pravljenje primarnih polica
     public void napraviPrimarnePolice() {
+        //System.out.println("Pozivam napraviPrimarnePolice() za" + this.ime);
         police.add(new Polica("WantToRead",TipPolice.WANT_TO_READ));
+        //System.out.println("Dodajem policu: WantToRead");
         police.add(new Polica("CurrentlyReading",TipPolice.CURRENTLY_READING));
+        //System.out.println("Dodajem policu: CurrentlyReading");
         police.add(new Polica("Read",TipPolice.READ));
+        //System.out.println("Dodajem policu: Read");
     }
 
     // dobavi policu po nazivu
@@ -88,17 +89,19 @@ public class Korisnik implements Serializable {
     //treba da se implementira DA LI JE KNJIGA NA PRIMARNOJ POLICI
     public boolean daLiJeKnjigaNaPrimarnoj(Knjiga knjiga) {
         for (Polica p : this.police) {
-            if (p.getTip() == TipPolice.WANT_TO_READ || p.getTip() == TipPolice.CURRENTLY_READING || p.getTip() == TipPolice.READ) {
-                // Ako je tip Police primaran, pravimo listu i tražimo da li knjiga postoji u njoj
-                Set<StavkaPolice> stavkePolice = p.getStavkaPolice();
-                for (StavkaPolice s : stavkePolice) {
-                    if (s.getKnjiga().getISBN().equals(knjiga.getISBN())) {
-                        return true; // Knjiga je pronađena na polici, vraćamo true
-                    }
+            if (p.getTip() == TipPolice.REGULAR) {
+                continue;
+            }
+            List<StavkaPolice> st = p.getStavkaPolice().stream().toList();
+            for (StavkaPolice s : st) {
+
+                if (s.getKnjiga().getISBN().equals(knjiga.getISBN()) ) {
+                    return true;
                 }
+
             }
         }
-        return false; // Knjiga nije pronađena na nijednoj primarnoj polici, vraćamo false
+        return false;
     }
 
     //dobavljanje PRIMARNE police po id-u knjige
@@ -137,7 +140,7 @@ public class Korisnik implements Serializable {
 
     public void izbrisiPolicu(Polica polica) {
         //ista logika kao i svuda
-        Set<Polica> newPolice = new HashSet<>();
+        List<Polica> newPolice = new ArrayList<>();
         for (Polica it : police) {
             if (it.getId() != polica.getId()) {
                 newPolice.add(it);
@@ -226,17 +229,25 @@ public class Korisnik implements Serializable {
         this.ulogaKorisnika = UlogaKorisnika.CITALAC.toString();
         napraviPrimarnePolice();
     }
-    public Korisnik(RegistrujSeDto reg) {
+    public Korisnik(RegistrujSeDto registrujSeDto) {
         this.ulogaKorisnika = UlogaKorisnika.CITALAC.toString();
-        this.emailAdresa = reg.getEmailAdresa();
-        this.ime = reg.getIme();
-        this.korisnickoIme = reg.getIme();
-        this.prezime = reg.getPrezime();
-        this.korisnickoIme = reg.getKorisnickoIme();
-        this.lozinka = reg.getLozinka();
-        this.opis = reg.getOpis();
-        this.datumRodjenja = reg.getDatumRodjenja();
-        napraviPrimarnePolice();     //uvijek
+        this.emailAdresa = registrujSeDto.getEmailAdresa();
+        this.ime = registrujSeDto.getIme();
+        this.korisnickoIme = registrujSeDto.getIme();
+        this.prezime = registrujSeDto.getPrezime();
+        this.korisnickoIme = registrujSeDto.getKorisnickoIme();
+        this.lozinka = registrujSeDto.getLozinka();
+        this.opis = registrujSeDto.getOpis();
+        this.datumRodjenja = registrujSeDto.getDatumRodjenja();
+       // napraviPrimarnePolice();     //uvijek
+            System.out.println("Pozivam napraviPrimarnePolice() za" + this.ime);
+            this.police.add(new Polica("WantToRead",TipPolice.WANT_TO_READ));
+            System.out.println("Dodajem policu: WantToRead");
+            this.police.add(new Polica("CurrentlyReading",TipPolice.CURRENTLY_READING));
+            System.out.println("Dodajem policu: CurrentlyReading");
+            this.police.add(new Polica("Read",TipPolice.READ));
+            System.out.println("Dodajem policu: Read");
+
     }
     public Long getId() {
         return id;
@@ -318,11 +329,11 @@ public class Korisnik implements Serializable {
         this.ulogaKorisnika = ulogaKorisnika;
     }
 
-    public Set<Polica> getPolice() {
+    public List<Polica> getPolice() {
         return police;
     }
 
-    public void setPolice(Set<Polica> police) {
+    public void setPolice(List<Polica> police) {
         this.police = police;
     }
 
