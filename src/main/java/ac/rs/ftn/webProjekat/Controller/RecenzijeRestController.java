@@ -8,6 +8,7 @@ import ac.rs.ftn.webProjekat.Service.KnjigaService;
 import ac.rs.ftn.webProjekat.Service.KorisnikService;
 import ac.rs.ftn.webProjekat.Service.RecenzijaService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -69,6 +70,7 @@ public class RecenzijeRestController {
     }
 
     //dodaj recenziju na knjigu
+    @Transactional
     @PostMapping("/knjiga/{knjigaId}/recenzija")
     public ResponseEntity<String> addRecenzija(@PathVariable(name = "knjigaId") Long knjigaId,
                                                @RequestBody RecenzijaDataDto recenzijaDto,
@@ -91,12 +93,15 @@ public class RecenzijeRestController {
         //Korisnik ime = knjigaService.findKorisnikById(loggedUser.getId());
         loggedUser = recenzijaService.findByKorisnikId(loggedUser.getId());
 
+        System.out.println("KORISNIKOVE POLICE:" + loggedUser.getPolice().toString());
         Polica targetPolica = loggedUser.getPrimarnaPolicaByKnjigaId(knjigaId);
         if (targetPolica == null && targetPolica.getTip()!= TipPolice.READ) {
             return new ResponseEntity<>("Knjiga nije na korisnikovoj primarnoj polici READ!", HttpStatus.FORBIDDEN);
         }
 
+        System.out.println("KORISNIKOVE POLICE:" + targetPolica.toString());
         StavkaPolice targetStavka = targetPolica.getStavkaByKnjigaId(knjigaId);
+        System.out.println("KORISNIKOVE stavke:" + targetStavka.toString());
 
 
         Recenzija recenzija = new Recenzija();
@@ -104,6 +109,7 @@ public class RecenzijeRestController {
         recenzija.setOcjena(recenzijaDto.getOcjena());
         recenzija.setDatumRecenzije(recenzijaDto.getDatumRecenzije());
         recenzija.setKorisnik(loggedUser);
+
         recenzijaService.saveRecenzija(recenzija);
         // recenzija.setKorisnik(praviKorisnik);
         // Korisnik korisnik = new Korisnik();

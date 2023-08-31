@@ -20,6 +20,7 @@
           >
             <td>{{ zanr.id }}</td>
             <td>{{ zanr.naziv }}</td>
+
           </tr>
           </tbody>
         </table>
@@ -28,14 +29,14 @@
 
   </div>
 
-  <!-- will be hidden for non admin users -->
-  <div id="dodajNoviZanrDiv">
-    <h2>Dodaj novi zanr:</h2>
-    <label for="naziv">naziv:</label>
-    <input v-model="addNewZanrDto.naziv" /><br />
-
-    <button v-on:click="addNewZanr()">Dodaj novi zanr</button>
+  <div class="add-genre-section" id="dodajNoviZanrID">
+    <h2 class="add-genre-title">Dodaj novi žanr:</h2>
+    <label for="addNewZanrDto">Žanr:</label>
+    <input v-model="newZanrName" /><br />
+    <button class="add-genre-button" @click="addNewZanr">Dodaj žanr</button>
   </div>
+
+
 
 </template>
 
@@ -49,7 +50,7 @@ export default {
   data() {
     return {
       zanrs: [],
-      addNewZanrDto: {},
+      newZanrName: "",
     };
   },
   mounted: function() {
@@ -57,15 +58,41 @@ export default {
     this.loadZanrovi();
 
     if (this.isLoggedUserAdmin()) {
-      document.getElementById("dodajNoviZanrDiv").style.visibility = "visible";
+      document.getElementById("dodajNoviZanrID").style.visibility = "visible";
     }
     else {
-      document.getElementById("dodajNoviZanrDiv").style.visibility = "hidden";
+      document.getElementById("dodajNoviZanrID").style.visibility = "hidden";
     }
 
 
   },
   methods: {
+
+
+    addNewZanr() {
+      fetch('http://localhost:9090/api/zanrovi/dodajZanr', {
+        method: "POST",
+        credentials: 'include',
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({ naziv: this.newZanrName }),
+      })
+          .then((res) => {
+            if (res.ok) {
+              alert('Uspjesno dodat novi zanr!');
+              window.location.reload();
+            } else {
+              console.log(res);
+              alert('Greska!');
+              //throw new Error('Adding knjiga to polica failed');
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+    },
 
     loadZanrovi() {
       axios
@@ -82,77 +109,39 @@ export default {
       //Pogledaj da li je admin ili ne
 
       //nadji koja mu je uloga:
-      const fieldName  = 'ulogaKorisnika';
+      const fieldName = 'ulogaKorisnika';
       const loggedUserObj = localStorage.getItem('loggedUser');
       let start_poz = loggedUserObj.indexOf(fieldName);
       start_poz += fieldName.length + 3; //+3 because of  ":"  part of the substring
-      const rest_of_obj = loggedUserObj.substring(start_poz,loggedUserObj.length);
+      const rest_of_obj = loggedUserObj.substring(start_poz, loggedUserObj.length);
       //console.log("rest_of_obj="+rest_of_obj);
       const end_of_value_poz = rest_of_obj.indexOf("\"");
 
-      const ulogaKorisnika = rest_of_obj.substring(0,end_of_value_poz);
+      const ulogaKorisnika = rest_of_obj.substring(0, end_of_value_poz);
 
       //localStorage.setItem('loggedUser', JSON.stringify(data));
       if (ulogaKorisnika === undefined ||
           ulogaKorisnika === null ||
-          ulogaKorisnika !== 'Administrator')
-      {
+          ulogaKorisnika !== 'Administrator') {
         return false;
       }
       return true;
     },
 
 
-
     refresh() {
       //Nadji sve zanrove
       fetch('http://localhost:9090/api/zanrovi/lista')
           .then(response => response.json())
-          .then(data => { this.zanriDto = data})
+          .then(data => {
+            this.zanrs = data
+          })
           .catch((error) => {
             console.error("Error:", error);
           });
     },
 
-
-    addNewZanr() {
-
-      fetch("http://localhost:9090/api/zanrovi/dodajZanr", {
-        method: "POST",
-        credentials: 'include',
-        headers: {
-          Accept: "application/json",
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(this.addNewZanrDto),
-      })
-          .then((res) => {
-            if (res.ok) {
-              alert('Successfully added new zanr!');
-            }
-            else if (res.status === 400) {
-              alert('Bad request!');
-            }
-            else if (res.status === 403) {
-              alert('Forbidden!');
-            }
-            else if (res.status === 404) {
-              alert('Not found!');
-            }
-            else {
-              //alert('Failed to update knjiga');
-              //console.log(res);
-              throw new Error('Failed to add new zanr');
-            }
-          })
-          .catch((err) => {
-            console.log("Error : " + err);
-            alert(err);
-          }).then( () => {
-        this.refresh();
-      } );
-    },
-  },
+  }
 };
 </script>
 
@@ -212,4 +201,32 @@ table.center {
 .white-background {
   background-color: white; /* Bijela pozadina za ID i Naziv */
 }
+
+.add-genre-section {
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  width: 70%;
+}
+
+.add-genre-title {
+  font-size: 24px;
+  margin-top: 0;
+  text-align: center;
+}
+
+.add-genre-button {
+  background-color: #ff4081;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
 </style>

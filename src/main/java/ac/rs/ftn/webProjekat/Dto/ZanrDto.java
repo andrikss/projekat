@@ -34,4 +34,12 @@ public class ZanrDto {
     public void setNaziv(String naziv) {
         this.naziv = naziv;
     }
+
+    @Override
+    public String toString() {
+        return "ZanrDto{" +
+                "id=" + id +
+                ", naziv='" + naziv + '\'' +
+                '}';
+    }
 }

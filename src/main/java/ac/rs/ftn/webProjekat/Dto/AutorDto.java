@@ -1,6 +1,7 @@
 package ac.rs.ftn.webProjekat.Dto;
 
 import ac.rs.ftn.webProjekat.Entity.Autor;
+import ac.rs.ftn.webProjekat.Entity.UlogaKorisnika;
 
 import java.util.Date;
 
@@ -30,14 +31,13 @@ public class AutorDto {
         this.prezime = autor.getPrezime();
         this.korisnickoIme = autor.getKorisnickoIme();
         this.lozinka = autor.getLozinka();
-
     }
 
     public AutorDto() {
         this.aktivan = false;
     }
 
-    public AutorDto(boolean aktivan, String emailAdresa, String korisnickoIme, String ime, String prezime, Date datumRodjenja, String opis, String profilnaSlika) {
+    public AutorDto(boolean aktivan, String emailAdresa, String korisnickoIme, String ime, String prezime, Date datumRodjenja, String opis, String profilnaSlika, UlogaKorisnika ulogaKorisnika) {
         this.aktivan = aktivan;
         this.ime = ime;
         this.prezime = prezime;
@@ -126,5 +126,21 @@ public class AutorDto {
 
     public void setLozinka(String lozinka) {
         this.lozinka = lozinka;
+    }
+
+    @Override
+    public String toString() {
+        return "AutorDto{" +
+                "id=" + id +
+                ", aktivan=" + aktivan +
+                ", ime='" + ime + '\'' +
+                ", prezime='" + prezime + '\'' +
+                ", emailAdresa='" + emailAdresa + '\'' +
+                ", lozinka='" + lozinka + '\'' +
+                ", korisnickoIme='" + korisnickoIme + '\'' +
+                ", datumRodjenja=" + datumRodjenja +
+                ", opis='" + opis + '\'' +
+                ", profilnaSlika='" + profilnaSlika + '\'' +
+                '}';
     }
 }

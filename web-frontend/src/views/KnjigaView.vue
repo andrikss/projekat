@@ -50,6 +50,7 @@
 
     <table class="zanrovi-table">
       <thead>
+      <h2 class="delete-title">Dodijeli ili izbriši žanr na ovoj knjizi:</h2>
       <tr>
         <th>Žanr</th>
         <th>Dodaj</th>
@@ -64,6 +65,9 @@
       </tr>
       </tbody>
     </table>
+
+  </div>
+
 
     <div class="recenzije-wrapper">
       <h2 class="delete-title">Recenzije:</h2>
@@ -140,12 +144,13 @@
       </tbody>
     </table>
   </div>
-  </div>
+
 </template>
 
 <script>
 
 import axios from 'axios';
+import router from "@/router";
 
 export default {
   name: 'KnjigaView',
@@ -160,12 +165,12 @@ export default {
       zanrDto: [],
       responseString: {},
       knjigaDatumObjavljivanja: {},
+      zanr: ""
     };
   },
 
   mounted: function() {
 
-    //Nadji knjigu
     fetch(`http://localhost:9090/api/knjige/${this.$route.query.id}`)
         .then(response => response.json())
         .then(data => { this.knjiga = data})
@@ -176,7 +181,6 @@ export default {
           this.knjigaDatumObjavljivanja = new Date(this.knjiga.datumObjavljivanja);
         } );
 
-    //Nadji korisnikove police
     fetch('http://localhost:9090/api/police/lista',{
       method: "GET",
       credentials: 'include',
@@ -191,7 +195,6 @@ export default {
           console.error("Error:", error);
         });
 
-    //Get autors za azuriranje
     fetch('http://localhost:9090/api/korisnici/listaAutora',{
       method: "GET",
       credentials: 'include',
@@ -206,7 +209,6 @@ export default {
           console.error("Error:", error);
         });
 
-    //Get zanrovi za dodavanje
     fetch('http://localhost:9090/api/zanrovi/lista',{
       method: "GET",
       credentials: 'include',
@@ -225,46 +227,9 @@ export default {
 
   },
   methods: {
-    removeZanrFromKnjiga(zanrDto) {
-      fetch('`http://localhost:9090/api/knjige/${this.$route.query.id}/zanr/${zanrDto.id}`' + this.$route.query.id + '/zanr/' + zanrDto.id, {
-        method: "DELETE",
-        credentials: 'include',
-        headers: {
-          Accept: "application/json",
-          "Content-type": "application/json",
-        },
-      })
-          .then((res) => {
-            if (res.ok) {
-              alert('Successfully removed zanr from knjiga!');
-            }
-            else if (res.status === 400) {
-              alert('Bad request!');
-            }
-            else if (res.status === 403) {
-              alert('Forbidden!');
-            }
-            else if (res.status === 404) {
-              alert('Not found!');
-            }
-            else {
-              //alert('Failed to update knjiga');
-              //console.log(res);
-              alert('Failed to remove zanr from knjiga');
-              throw new Error('Failed to remove zanr from knjiga!');
-            }
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          }).then(() => {
-        this.refresh();
-      });
-    },
-
 
     addZanrToKnjiga(zanrDto) {
-
-      fetch('`http://localhost:9090/api/knjige/${this.$route.query.id}/zanr/${zanrDto.id}`' + this.$route.query.id + '/zanr/' + zanrDto.id, {
+      fetch('http://localhost:9090/api/knjige/' + this.$route.query.id +  '/zanr/'  + zanrDto.id, {
         method: "PUT",
         credentials: 'include',
         headers: {
@@ -275,6 +240,7 @@ export default {
           .then((res) => {
             if (res.ok) {
               alert('Successfully added zanr to knjiga!');
+              window.location.reload();
             }
             else if (res.status === 400) {
               alert('Bad request!');
@@ -283,10 +249,11 @@ export default {
               alert('Forbidden!');
             }
             else if (res.status === 404) {
+              console.log(res);
               alert('Not found!');
             }
             else {
-              //console.log(res);
+              console.log(res);
               alert('Failed to add zanr to knjiga');
               throw new Error('Failed to add zanr to knjiga');
             }
@@ -299,11 +266,48 @@ export default {
 
     },
 
+    removeZanrFromKnjiga(zanrDto) {
+      fetch('http://localhost:9090/api/knjige/' + this.$route.query.id +  '/zanr/'  + zanrDto.id, {
+        method: "DELETE",
+        credentials: 'include',
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json",
+        },
+      })
+          .then((res) => {
+            if (res.ok) {
+              alert('Successfully removed zanr from knjiga!');
+              window.location.reload();
+            }
+            else if (res.status === 400) {
+              alert('Bad request!');
+            }
+            else if (res.status === 403) {
+              alert('Forbidden!');
+            }
+            else if (res.status === 404) {
+              console.log(res);
+              alert('Not found!');
+            }
+            else {
+              //alert('Failed to update knjiga');
+              console.log(res);
+              alert('Failed to remove zanr from knjiga');
+              throw new Error('Failed to remove zanr from knjiga!');
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          }).then(() => {
+        this.refresh();
+      });
+    },
+
 
 
 
     refresh() {
-      //Nadji knjigu
       fetch('http://localhost:9090/api/knjige/' + this.$route.query.id)
           .then(response => response.json())
           .then(data => { this.knjiga = data})
@@ -316,6 +320,16 @@ export default {
     },
 
 
+    addRecenzija() {
+      this.$router.push("/dodajRecenziju/knjiga?id="+this.$route.query.id);
+    },
+
+
+
+
+    viewRecenzija(recenzija) {
+      this.$router.push("/recenzija?id="+recenzija.id);
+    },
 
 
     updateKnjiga(azurirajknjiguDto) {
@@ -350,21 +364,6 @@ export default {
 
     },
 
-
-
-    addRecenzija() {
-      this.$router.push("/add-recenzija/knjiga?id="+this.$route.query.id);
-    },
-
-
-
-
-    viewRecenzija(recenzija) {
-      this.$router.push("/recenzija?id="+recenzija.id);
-    },
-
-
-
     izbrisi(knjiga) {
       fetch('http://localhost:9090/api/knjige/obrisiKnjigu/' + this.$route.query.id, {
         method: "DELETE",
@@ -376,9 +375,10 @@ export default {
       })
           .then((res) => {
             if (res.ok) {
-              //console.log("success:"+res);
-              this.$router.push('/');
+              alert('Uspjesno ste izbrisali knjigu!')
+              this.$router.push('/knjige');
             } else {
+              console.log(res);
               alert('Failed to delete knjiga! (check response)');
               throw new Error('deletion failed');
             }
@@ -708,4 +708,15 @@ table.center {
 .delete-button:hover {
   background-color: #ff2860;
 }
+
+.zanrovi-table {
+  margin: 40px auto;
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  width: 70%;
+}
+
 </style>

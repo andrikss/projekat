@@ -11,7 +11,9 @@
       <div class="table-item"><a href="/zanrovi">LISTA ZANROVA</a></div>
       <div class="separator">|</div>
       <div class="table-item"><a href="/listaAutora">LISTA AUTORA</a></div>
-      </div>
+      <div class="separator">|</div>
+      <div class="table-item"><a href="/zahtjevi"> LISTA ZAHTJEVA</a></div>
+    </div>
   </div>
 
   <div class="pretraga"><a href="/pretragaKnjiga">PRETRAGA KNJIGA</a></div>
@@ -29,6 +31,11 @@
     <DodajNovuKnjigu />
   </div>
 
+  <div class="napravi-autora">
+    <button @click="toggleCreateAuthor" class="napravi-autora-button">Napravi autora</button>
+    <NapraviAutora :showCreateAuthor="showCreateAuthor" />
+  </div>
+
 </template>
 
 <script>
@@ -36,23 +43,28 @@ import Logout from '@/components/Logout.vue'
 import JedanKorisnik from "@/components/JedanKorisnik.vue";
 import DodajNovuKnjigu from "@/components/DodajNovuKnjigu.vue";
 import AzurirajProfil from "@/components/AzurirajProfil.vue";
+import NapraviAutora from "@/components/NapraviAutora.vue";
 export default {
-  name: "HomeAutor",
+  name: "HomeAdministrator",
   components: {
     Logout,
     JedanKorisnik,
     AzurirajProfil,
-    DodajNovuKnjigu
+    DodajNovuKnjigu,
+    NapraviAutora
   },
   data() {
     return {
-      showProfileUpdate: false
+      showProfileUpdate: false,
+      showCreateAuthor: false
     };
   },
   methods: {
     toggleProfileUpdate() {
-      console.log("Toggle Profile Update method called");
       this.showProfileUpdate = !this.showProfileUpdate;
+    },
+    toggleCreateAuthor() {
+      this.showCreateAuthor = !this.showCreateAuthor;
     }
   }
 }
@@ -122,12 +134,17 @@ export default {
 }
 
 .azuriraj-container {
-  position: fixed;
+  position: absolute;
   top: 0;
-  left: 0;
-  margin: 20px;
-  display: flex;
-  align-items: center;
+  left: 4px;
+  display: inline-block;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.azuriraj:hover {
+  background-color: plum; /* Promijenite background boju za hover */
+  color: white; /* Boja teksta za hover */
 }
 
 .user-info-container {
@@ -170,5 +187,33 @@ export default {
   padding: 10px;
   border: none;
   cursor: pointer;
+}
+
+.napravi-autora {
+  position: absolute;
+  bottom: 10px;
+  left: 2px;
+  background-color: darkorange;
+  color: white;
+  font-weight: bold;
+  width: 300px;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.napravi-autora-button {
+  background-color: darkorange; /* Background boja dugmeta */
+  color: white; /* Boja teksta */
+  font-size: 18px; /* Veličina fonta */
+  font-weight: bold; /* Podebljano slovo */
+  padding: 15px 30px; /* Unutrašnji prostor dugmeta */
+  border: none; /* Uklanja okvir dugmeta */
+  cursor: pointer; /* Pokazivač prilikom hover-a preko dugmeta */
+  border-radius: 5px; /* Zaobljeni rubovi */
+}
+
+.napravi-autora-button:hover {
+  background-color: orange; /* Promijenite background boju za hover */
+  color: white; /* Boja teksta za hover */
 }
 </style>

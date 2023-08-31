@@ -80,7 +80,7 @@ public class ZanrRestController {
 
     //apdejtuj zanr? je l treba
 
-    @DeleteMapping("/{zanrId}")
+    /*@DeleteMapping("/{zanrId}")
     public ResponseEntity<String> deleteZanr(@PathVariable Long zanrId, HttpSession httpSession) {
         Korisnik loggedUser = (Korisnik) httpSession.getAttribute("loggedUser");
 
@@ -100,6 +100,6 @@ public class ZanrRestController {
 
         zanrService.deleteZanr(zanr);
         return new ResponseEntity<>("Zanr uspjesno obrisan!", HttpStatus.OK);
-    }
+    }*/
 
 }

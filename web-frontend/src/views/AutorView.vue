@@ -3,6 +3,7 @@
     <table class="center">
       <thead>
       <tr>
+
         <th>ID</th>
         <th>Email Adresa</th>
         <th>Korisnicko ime</th>
@@ -14,40 +15,26 @@
       </tr>
       </thead>
       <tbody>
-      <tr
-          v-for="(autorDto, index) in autorsDto"
-          :key="autorDto.id"
-          :class="{ 'light-yellow-row': index % 2 === 0, 'light-purple-row': index % 2 !== 0 }"
-      >
-        <td>{{ autorDto.id }}</td>
-        <td>{{ autorDto.emailAdresa }}</td>
-        <td>{{ autorDto.korisnickoIme }}</td>
-        <td>{{ autorDto.ime }}</td>
-        <td>{{ autorDto.prezime }}</td>
-        <td>{{ formatDate(autorDto.datumRodjenja) }}</td>
-        <td>{{ autorDto.opis ? autorDto.opis : '/' }}</td>
-        <td>{{ autorDto.aktivan }}</td>
-
-      </tr>
+      <td> {{ autorDto.id }} </td>
+      <td> {{ autorDto.emailAdresa }} </td>
+      <td> {{ autorDto.korisnickoIme }} </td>
+      <td> {{ autorDto.ime }} </td>
+      <td> {{ autorDto.prezime }} </td>
+      <td> {{ formatDate(autorDto.datumRodjenja)}} </td>
+      <td> {{ autorDto.opis ? autorDto.opis : '/' }} </td>
+      <td> {{ autorDto.aktivan }} </td>
       </tbody>
     </table>
 
+    <div id="azurirajAutora-ID">
+    <div class="azuriraj-container">
+      <button @click="toggleProfileUpdate" class="azuriraj">Ažuriraj profil </button>
+    </div>
 
-    <div id="azuriranjeAutoraDivId">
-      <h2>Azuziranje autora</h2>
-      <label for="emailAdresa">emailAdresa:</label>
-      <input v-model="updateAutorDto.emailAdresa" /><br />
-      <label for="korisnickoIme">korisnickoIme:</label>
-      <input v-model="updateAutorDto.korisnickoIme" /><br />
-      <label for="ime">ime:</label>
-      <input v-model="updateAutorDto.ime" /><br />
-      <label for="prezime">prezime:</label>
-      <input v-model="updateAutorDto.prezime" /><br />
-      <label for="opis">opis:</label>
-      <input v-model="updateAutorDto.opis" /><br />
-      <label for="datumRodjenja">datumRodjenja:</label>
-      <input type="date" v-model="updateAutorDto.datumRodjenja" /><br />
-      <button v-on:click="azurirajProfilAutora()">Azuriraj profil autora</button> <br />
+      <div v-if="showProfileUpdate" class="form-container">
+        <AzurirajAutora :showForm="showProfileUpdate" :showProfileUpdate="showProfileUpdate" />
+      </div>
+
     </div>
 
   </div>
@@ -55,26 +42,30 @@
 
 <script>
 
+import AzurirajAutora from "@/components/AzurirajAutora.vue";
+
 export default {
   name: 'AutorView',
+  components: {AzurirajAutora},
   data() {
     return {
       autorDto: {},
       updateAutorDto: {},
+      showProfileUpdate: false
     };
   },
   mounted: function() {
 
     if (this.isLoggedUserAdmin()) {
-      document.getElementById("azuriranjeAutoraDivId").style.visibility = "visible";
+      document.getElementById("azurirajAutora-ID").style.visibility = "visible";
     }
     else {
       alert('Samo admini i vlasnik acc-a moze da vidi jos opcija za nalog autora!');
-      document.getElementById("azuriranjeAutoraDivId").style.visibility = "hidden";
+      document.getElementById("azurirajAutora-ID").style.visibility = "hidden";
     }
 
     //Get autors za azuriranje
-    fetch('http://localhost:9090/api/korisnici/'+ this.$route.query.id,{
+    fetch('http://localhost:9090/api/korisnici/autor/'+ this.$route.query.id,{
       method: "GET",
       credentials: 'include',
       headers: {
@@ -90,6 +81,16 @@ export default {
 
   },
   methods: {
+
+    toggleProfileUpdate() {
+      console.log("Toggle Profile Update method called");
+      this.showProfileUpdate = !this.showProfileUpdate;
+    },
+
+    formatDate(dateString) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return new Date(dateString).toLocaleDateString(undefined, options);
+    },
 
     isLoggedUserAdmin() {
       //Pogledaj da li je admin ili ne
@@ -116,7 +117,7 @@ export default {
     },
 
     azurirajProfilAutora() {
-      fetch('http://localhost:9090/api/autor/' + this.autorDto.id, {
+      fetch('http://localhost:9090/api/korisnici/autor/' + this.autorDto.id, {
         method: "POST",
         credentials: 'include',
         headers: {
@@ -157,7 +158,7 @@ export default {
 
     refresh() {
       //Get autors za azuriranje
-      fetch('http://localhost:9090/api/autor/'+ this.$route.query.id,{
+      fetch('http://localhost:9090/api/korisnici/autor/'+ this.$route.query.id,{
         method: "GET",
         credentials: 'include',
         headers: {
@@ -173,19 +174,6 @@ export default {
     },
 
 
-
-
-
-    // addRecenzija() {
-    //     this.$router.push("/add-recenzija/knjiga?id="+this.$route.query.id);
-    // },
-    // viewRecenzija(recenzija) {
-    //     this.$router.push("/recenzija?id="+recenzija.id);
-    // },
-
-
-
-
   }
 };
 </script>
@@ -195,11 +183,85 @@ export default {
 
 
 <style>
+.azuriraj {
+  background-color: darkorange; /* Tamno narandžasta boja */
+  color: white; /* Bijela boja teksta */
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  margin: 0;
+  transition: background-color 0.3s; /* Dodaj tranziciju za glatku promenu boje */
+}
+
+.azuriraj:hover {
+  background-color: lightyellow; /* Svijetlo žuta boja na hover */
+  color: black;
+}
+
+.azuriraj-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
 .autori tr:nth-child(even) {
   background-color: #ffffcc; /* Svijetlo žuta boja za parne redove */
 }
 
 .autori tr:nth-child(odd) {
   background-color: #ffc0cb; /* Svijetlo roze boja za neparne redove */
+}
+
+.center {
+  background-color: lightskyblue;
+  font-weight: bold;
+}
+
+
+.form-container {
+  background-color: orange;
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 400px;
+  position: absolute;
+  left: 420px;
+}
+
+.form-container label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.form-container input {
+  width: 50%;
+  max-width: 300px; /* Definišite maksimalnu širinu polja */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.form-container button {
+  background-color: darkorange;
+  width: 50%;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.form-container button:hover {
+  background-color: lightyellow;
 }
 </style>

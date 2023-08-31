@@ -14,13 +14,13 @@ public class StavkaPolice implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     @JoinColumn(name = "stavka_police_knjiga",
             referencedColumnName = "id"
     )
     private Knjiga knjiga;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     @JoinColumn(name = "stavka_police_id",
             referencedColumnName = "id",
             nullable = true

@@ -14,6 +14,8 @@ import AutoriView from "@/views/AutoriView.vue";
 import AutorView from "@/views/AutorView.vue";
 import PolicaView from "@/views/PolicaView.vue";
 import HomeAutor from "@/views/HomeAutor.vue";
+import HomeAdministrator from "@/views/HomeAdministrator.vue";
+import DodajRecenzijuView from "@/views/DodajRecenzijuView.vue";
 
 const routes = [
   { path: "/register", component: Register },
@@ -30,7 +32,9 @@ const routes = [
   { path: '/listaAutora', name:'listaAutora', component: AutoriView},
   { path: '/autor', name: 'autor', component: AutorView},
   { path: '/polica', name: 'polica', component: PolicaView},
-  { path: '/homeAutor', name: 'homeAutor', component: HomeAutor}
+  { path: '/homeAutor', name: 'homeAutor', component: HomeAutor},
+  { path: '/homeAdministrator', name: 'homeAdministrator', component: HomeAdministrator},
+  { path: '/dodajRecenziju/knjiga', name: 'dodajRecenziju', component:  DodajRecenzijuView}
 ];
 
 const router = createRouter({

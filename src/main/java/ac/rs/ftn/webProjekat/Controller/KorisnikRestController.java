@@ -36,6 +36,7 @@ public class KorisnikRestController {
         for (Korisnik korisnik : korisnici) {
             if (!korisnik.getUlogaKorisnika().equals(UlogaKorisnika.ADMINISTRATOR.toString())) {
                 korisnikDtos.add(new KorisnikDto(korisnik));
+                System.out.println("OVO JE KORISNIK: " + korisnik.toString());
             }
         }
 
@@ -92,18 +93,16 @@ public class KorisnikRestController {
     //prikaz jednog autora
     @GetMapping("/autor/{id}")
     public ResponseEntity<?> getAutorById(@PathVariable(name = "id") Long id) {
-        Autor targetAutor = (Autor) korisnikService.findAutorById(id);
+        Korisnik targetKorisnik = korisnikService.findAutorById(id);
 
-        if (targetAutor == null) {
-            // korisnik sa datim id-om ne postoji ili nije autor
+        if (targetKorisnik == null) {
             String errorMessage = "Taj korisnik ne postoji ili nije autor.";
             return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
         }
 
-        AutorDto targetAutorDto = new AutorDto(targetAutor);
-
-        // oki
-        return new ResponseEntity<>(targetAutorDto, HttpStatus.OK);
+        Autor targetAutor = (Autor) targetKorisnik;
+        AutorDto a = new AutorDto(targetAutor);
+        return new ResponseEntity<>(a, HttpStatus.OK);
     }
 
 
@@ -287,37 +286,49 @@ public class KorisnikRestController {
     //azuriranje autora
     //basically the same samo sto ima AKTIVAN polje
     @PostMapping("/updateAutor/{id}")
-    public ResponseEntity<?> updateAutor(@PathVariable(name = "id") Long id, @RequestBody AzurirajAutoraDto azurirajAutoraDto, HttpSession httpSession) {
-        Autor autor = autorService.findById(id);
+    public ResponseEntity<?> updateAutor(@PathVariable(name = "id") Long id, @RequestBody AutorDto autorDto, HttpSession httpSession) {
+        Korisnik loggedUser = (Korisnik) httpSession.getAttribute("loggedUser");
 
-        if (autor == null) {
-            return new ResponseEntity<>("Korisnik ne postoji!", HttpStatus.NOT_FOUND);
+        if (loggedUser == null) {
+            return new ResponseEntity<>("No session!", HttpStatus.FORBIDDEN);
         }
-        Autor loggedUser = (Autor) httpSession.getAttribute("loggedUser");
 
+        if (!loggedUser.getUlogaKorisnika().equals(UlogaKorisnika.ADMINISTRATOR.toString())) {
+            return new ResponseEntity<>("User is not of type ADMINISTRATOR!", HttpStatus.FORBIDDEN);
+        }
+
+        Autor autor = (Autor) korisnikService.findById(id);
         //provjera
-        if (!loggedUser.getId().equals(autor.getId())) {
-            return new ResponseEntity<>("Ulogujte se da biste mogli azurirati profil!", HttpStatus.FORBIDDEN); // Nema dozvolu za ažuriranje
+        if (autor == null) {
+            return new ResponseEntity<>("Autor nije pronadjen!", HttpStatus.NOT_FOUND);
         }
 
-        //
-        if (!azurirajAutoraDto.getStaraLozinka().equals(autor.getLozinka())) {
-            return new ResponseEntity<>("Lozinke nisu okej!", HttpStatus.UNAUTHORIZED); // Neispravna trenutna lozinka
+       /* if (autor.isAktivan()) {
+            return new ResponseEntity<>("Autor je aktivan i ne moze se modifikovati!", HttpStatus.FORBIDDEN);
+        }*/
+
+        if (autorDto.getEmailAdresa() != null &&
+                !autorDto.getEmailAdresa().equals(autor.getEmailAdresa()) &&
+                korisnikService.findByEmail(autorDto.getEmailAdresa()) != null)
+        {
+            return new ResponseEntity<>("Autor sa email adresom vec postoji", HttpStatus.FORBIDDEN);
         }
 
-        autor.setIme(azurirajAutoraDto.getIme());
-        autor.setPrezime(azurirajAutoraDto.getPrezime());
-        autor.setKorisnickoIme(azurirajAutoraDto.getKorisnickoIme());
-        autor.setEmailAdresa(azurirajAutoraDto.getNovaEmailAdresa());
-        autor.setLozinka(azurirajAutoraDto.getNovaLozinka()); //
-        //autor.setAktivan(azurirajAutoraDto.isAktivan());
-        //kontam da on to ne moze azurirat jer bilo bi glupo
-        //da trazi onda zahtjev
-        // ili bi bila rupa lol u sistemu
-        Autor updatedAutor = autorService.save(autor);
-        AutorDto autorDto = new AutorDto(updatedAutor);
+        if (autorDto.getKorisnickoIme() != null && !autorDto.getKorisnickoIme().equals(autor.getKorisnickoIme())
+                && korisnikService.findByKorisnickoIme(autorDto.getKorisnickoIme()) != null)
+        {
+            return new ResponseEntity<>("Autor sa korisnickim imenom vec postoji", HttpStatus.FORBIDDEN);
+        }
 
-        return new ResponseEntity<>(autorDto, HttpStatus.OK);
+        autor.setIme(autorDto.getIme());
+        autor.setPrezime(autorDto.getPrezime());
+        autor.setKorisnickoIme(autorDto.getKorisnickoIme());
+        autor.setEmailAdresa(autorDto.getEmailAdresa());
+        autor.setDatumRodjenja(autorDto.getDatumRodjenja());
+        autor.setOpis(autorDto.getOpis());
+
+        korisnikService.saveKorisnik(autor);
+        return new ResponseEntity<>("Uspjesno!", HttpStatus.OK);
     }
 
 
@@ -331,20 +342,28 @@ public class KorisnikRestController {
             return new ResponseEntity<>("Niste administrator!", HttpStatus.FORBIDDEN); //ne diraj zabranjeno voce
         }
 
+        if (korisnikService.findByEmail(autorDto.getEmailAdresa()) != null) {
+            return new ResponseEntity<>("Email address is already in use!", HttpStatus.BAD_REQUEST);
+        }
+
+        if (korisnikService.findByKorisnickoIme(autorDto.getKorisnickoIme()) != null) {
+            return new ResponseEntity<>("Username is already in use!", HttpStatus.BAD_REQUEST);
+        }
         //duplikat?
-      /*  if (korisnikService.daLiPostojiDuplikat((autorDto.getEmailAdresa())) {
+       /* if (korisnikService.daLiPostojiDuplikat((autorDto.getEmailAdresa())) {
             return new ResponseEntity<>(null, HttpStatus.CONFLICT);
         }*/
 
-
+        System.out.println(autorDto.toString());
         Autor noviAutor = new Autor();
         noviAutor.setIme(autorDto.getIme());
         noviAutor.setPrezime(autorDto.getPrezime());
         noviAutor.setKorisnickoIme(autorDto.getKorisnickoIme());
         noviAutor.setEmailAdresa(autorDto.getEmailAdresa());
         noviAutor.setLozinka(autorDto.getLozinka());
-        //noviAutor.setAktivan(autorDto.isAktivan());
+        noviAutor.setDatumRodjenja(autorDto.getDatumRodjenja());
         noviAutor.setAktivan(false);
+        noviAutor.setOpis(autorDto.getOpis());
         //specifikacije tako kazu jer mora da podnese zahtjev
 
         korisnikService.saveKorisnik(noviAutor);
