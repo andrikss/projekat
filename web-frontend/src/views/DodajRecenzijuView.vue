@@ -9,7 +9,7 @@
     <input type="date" v-model="recenzijaDto.datumRecenzije" /><br />
 
 
-    <button v-on:click="addNewRecenzija()">Dodaj novu recenziju</button>
+    <button v-on:click="addNewRecenzija()" class="dugme">Dodaj novu recenziju</button>
 
   </div>
 </template>
@@ -62,5 +62,33 @@ methods: {
 </script>
 
 <style scoped>
+label {
+  display: block;
+  font-weight: bold;
+  margin-top: 10px;
+  color: #FF69B4; /* Roze boja */
+}
 
+input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #FF69B4;
+  border-radius: 4px;
+}
+
+/* Stilizacija za button element */
+.dugme {
+  background-color: #98FB98; /* Svijetlo zelena boja */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
 </style>

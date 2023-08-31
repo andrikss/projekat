@@ -45,7 +45,7 @@ public class Korisnik implements Serializable {
     private String ulogaKorisnika;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
-    private List<Polica> police = new ArrayList<>();
+    private Set<Polica> police = new HashSet<>();
 
     //pravljenje primarnih polica
     public void napraviPrimarnePolice() {
@@ -143,7 +143,7 @@ public class Korisnik implements Serializable {
 
     public void izbrisiPolicu(Polica polica) {
         //ista logika kao i svuda
-        List<Polica> newPolice = new ArrayList<>();
+        Set<Polica> newPolice = new HashSet<>();
         for (Polica it : police) {
             if (it.getId() != polica.getId()) {
                 newPolice.add(it);
@@ -332,11 +332,11 @@ public class Korisnik implements Serializable {
         this.ulogaKorisnika = ulogaKorisnika;
     }
 
-    public List<Polica> getPolice() {
+    public Set<Polica> getPolice() {
         return police;
     }
 
-    public void setPolice(List<Polica> police) {
+    public void setPolice(Set<Polica> police) {
         this.police = police;
     }
 

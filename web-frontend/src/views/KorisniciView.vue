@@ -63,6 +63,7 @@ export default {
 
   },
   methods: {
+
     formatDate(dateString) {
       const date = new Date(dateString);
       const options = { year: "numeric", month: "short", day: "numeric" };
@@ -88,7 +89,7 @@ export default {
 
 
     viewAutor(autorDto) {
-      this.$router.push("/autor?id="+autorDto.id);
+      this.$router.push("/korisnik?id="+autorDto.id);
     },
 
   }

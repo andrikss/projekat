@@ -283,6 +283,55 @@ public class KorisnikRestController {
         return new ResponseEntity<>(k, HttpStatus.OK);
     }
 
+
+    //azuriranje korisnika od administratora
+    @PostMapping("/updateKorisnik/{id}")
+    public ResponseEntity<?> updateKorisnikProfile(@RequestBody AzurirajKorisnikaDto azurirajKorisnikaDto,
+                                                   @PathVariable Long id,
+                                                   HttpSession httpSession) {
+
+        Korisnik korisnik = korisnikService.findById(id);
+
+        if (korisnik == null) {
+            return new ResponseEntity<>("Korisnik ne postoji", HttpStatus.NOT_FOUND); // ne postoji
+        }
+
+        if(azurirajKorisnikaDto.getIme() != null) {
+            korisnik.setIme(azurirajKorisnikaDto.getIme());
+        }
+
+        if(azurirajKorisnikaDto.getPrezime() != null) {
+            korisnik.setPrezime(azurirajKorisnikaDto.getPrezime());
+        }
+
+        if(azurirajKorisnikaDto.getDatumRodjenja() !=null) {
+            korisnik.setDatumRodjenja(azurirajKorisnikaDto.getDatumRodjenja());
+        }
+
+        if(azurirajKorisnikaDto.getProfilnaSlika() != null) {
+            korisnik.setProfilnaSlika(azurirajKorisnikaDto.getProfilnaSlika());
+        }
+
+        if(azurirajKorisnikaDto.getOpis() != null) {
+            korisnik.setOpis(azurirajKorisnikaDto.getOpis());
+        }
+
+        if(azurirajKorisnikaDto.getKorisnickoIme() != null) {
+            korisnik.setKorisnickoIme(azurirajKorisnikaDto.getKorisnickoIme());
+        }
+
+        if (azurirajKorisnikaDto.getNovaEmailAdresa() != null) {
+            korisnik.setEmailAdresa(azurirajKorisnikaDto.getNovaEmailAdresa());
+        }
+
+        if (azurirajKorisnikaDto.getNovaLozinka() != null) {
+            korisnik.setLozinka(azurirajKorisnikaDto.getNovaLozinka());
+        }
+        korisnik = korisnikService.saveKorisnik(korisnik);
+
+        KorisnikDto k = new KorisnikDto(korisnik);
+        return new ResponseEntity<>(k, HttpStatus.OK);
+    }
     //azuriranje autora
     //basically the same samo sto ima AKTIVAN polje
     @PostMapping("/updateAutor/{id}")

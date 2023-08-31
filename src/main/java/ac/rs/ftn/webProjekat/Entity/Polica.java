@@ -24,7 +24,6 @@ public class Polica implements Serializable {
     /*@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     @JoinColumn(name = "korisnik_id")
     private Korisnik korisnik;*/
-
     @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     @JoinColumn(referencedColumnName = "id",
             name = "polica_id"

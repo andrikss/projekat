@@ -106,7 +106,7 @@ INSERT INTO KORISNIK_POLICE(korisnik_id, police_id) VALUES (7,21);
 /*STAVKA POLICE*/
 INSERT INTO STAVKA_POLICE(stavka_police_knjiga, polica_id) VALUES (1, 3);
 INSERT INTO STAVKA_POLICE(stavka_police_knjiga, polica_id) VALUES (2, 5);
-INSERT INTO STAVKA_POLICE(stavka_police_knjiga, polica_id) VALUES (2, 9);
+INSERT INTO STAVKA_POLICE(stavka_police_knjiga, polica_id) VALUES (3, 9);
 INSERT INTO STAVKA_POLICE(stavka_police_knjiga, polica_id) VALUES (4, 1);
 
 /*RECENZIJA*/
@@ -116,11 +116,3 @@ INSERT INTO RECENZIJA(ocjena, tekst, korisnik_id, stavka_police_id) VALUES (9,'J
 /*ZAHTJEV ZA AKTIVACIJU NALOGA*/
 INSERT INTO ZAHTJEV_ZA_AKTIVACIJU_NALOGA_AUTORA(email_adresa, telefon, poruka, datum, status, autor_id)
     VALUES ('stepicvuk@gmail.com', '+38765222334', 'Molim Vas da mi odobrite nalog autora', '2022-11-19', 0, 6);
-
-
-
-
-
-
-
-

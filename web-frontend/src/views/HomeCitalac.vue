@@ -13,6 +13,8 @@
       <div class="table-item"><a href="/listaAutora">LISTA AUTORA</a></div>
       <div class="separator">|</div>
       <div class="table-item"><a href="/dodajZahtjev">PODNESI ZAHTJEV ZA AUTOR NALOG</a></div>
+      <div class="table-item"><a href="/korisnici">LISTA KORISNIKA</a></div>
+      <div class="separator">|</div>
     </div>
   </div>
 

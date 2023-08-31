@@ -1,5 +1,6 @@
 package ac.rs.ftn.webProjekat.Entity;
 
+import ac.rs.ftn.webProjekat.Dto.RecenzijaDataDto;
 import ac.rs.ftn.webProjekat.Dto.RecenzijaDto;
 import jakarta.persistence.*;
 
@@ -22,7 +23,7 @@ public class Recenzija implements Serializable {
     @Column(name = "datumRecenzije")
     private Date datumRecenzije;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {})
     @JoinColumn(name = "korisnik_id",
             referencedColumnName = "id"
     )
@@ -37,6 +38,12 @@ public class Recenzija implements Serializable {
     //equals metoda???? da li treba mozda
 
     public Recenzija() {
+
+    }
+    public Recenzija(RecenzijaDataDto recenzijaDataDto) {
+        this.ocjena = recenzijaDataDto.getOcjena();
+        this.tekst = recenzijaDataDto.getTekst();
+        this.datumRecenzije = recenzijaDataDto.getDatumRecenzije();
     }
 
     public Recenzija(Long ocjena, String tekst,Date datumRecenzije) {

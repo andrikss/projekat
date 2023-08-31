@@ -70,15 +70,11 @@ public class RecenzijeRestController {
     }
 
     //dodaj recenziju na knjigu
-    @Transactional
+
     @PostMapping("/knjiga/{knjigaId}/recenzija")
     public ResponseEntity<String> addRecenzija(@PathVariable(name = "knjigaId") Long knjigaId,
-                                               @RequestBody RecenzijaDataDto recenzijaDto,
+                                               @RequestBody RecenzijaDataDto recenzijaDataDto,
                                                HttpSession httpSession) {
-        Knjiga targetKnjiga = knjigaService.findById(knjigaId);
-        if (targetKnjiga == null) {
-            return new ResponseEntity<>("Knjiga ne postoji!", HttpStatus.NOT_FOUND);
-        }
 
         // Session check
         Korisnik loggedUser = (Korisnik) httpSession.getAttribute("loggedUser");
@@ -94,36 +90,34 @@ public class RecenzijeRestController {
         loggedUser = recenzijaService.findByKorisnikId(loggedUser.getId());
 
         System.out.println("KORISNIKOVE POLICE:" + loggedUser.getPolice().toString());
+
         Polica targetPolica = loggedUser.getPrimarnaPolicaByKnjigaId(knjigaId);
         if (targetPolica == null && targetPolica.getTip()!= TipPolice.READ) {
             return new ResponseEntity<>("Knjiga nije na korisnikovoj primarnoj polici READ!", HttpStatus.FORBIDDEN);
         }
 
-        System.out.println("KORISNIKOVE POLICE:" + targetPolica.toString());
         StavkaPolice targetStavka = targetPolica.getStavkaByKnjigaId(knjigaId);
-        System.out.println("KORISNIKOVE stavke:" + targetStavka.toString());
 
 
-        Recenzija recenzija = new Recenzija();
-        recenzija.setTekst(recenzijaDto.getTekst());
-        recenzija.setOcjena(recenzijaDto.getOcjena());
-        recenzija.setDatumRecenzije(recenzijaDto.getDatumRecenzije());
+        Recenzija recenzija = new Recenzija(recenzijaDataDto);
         recenzija.setKorisnik(loggedUser);
-
         recenzijaService.saveRecenzija(recenzija);
+        System.out.println(recenzija.toString());
+        targetStavka.getRecenzija().add(recenzija);
+        recenzijaService.saveStavkaPolice(targetStavka);
         // recenzija.setKorisnik(praviKorisnik);
         // Korisnik korisnik = new Korisnik();
        // korisnik.setEmailAdresa(loggedUser.getEmailAdresa());
        // korisnik.setKorisnickoIme(loggedUser.getKorisnickoIme());
        // recenzija.setKorisnik(korisnik);
-        targetStavka.getRecenzija().add(recenzija);
-        recenzijaService.saveStavkaPolice(targetStavka);
+
+        System.out.println("KOR POLICE KONACNO" + loggedUser.getPolice().toString());
 
         return new ResponseEntity<>("Recenzija uspješno dodata!", HttpStatus.OK);
     }
 
     //azuriraj recenziju
-    @PutMapping("/api/recenzija/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<String> updateRecenizja(@PathVariable(name = "id") Long recenzijaId,
                                                   @RequestBody RecenzijaDto recenzijaDto,
                                                   HttpSession httpSession)

@@ -107,7 +107,9 @@ export default {
 
     isLoggedUserAdmin() {
       //Pogledaj da li je admin ili ne
-
+    if(localStorage.getItem('loggedUser') == null) {
+      return false;
+    }
       //nadji koja mu je uloga:
       const fieldName = 'ulogaKorisnika';
       const loggedUserObj = localStorage.getItem('loggedUser');

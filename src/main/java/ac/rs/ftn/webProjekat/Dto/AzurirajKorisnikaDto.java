@@ -78,7 +78,7 @@ public class AzurirajKorisnikaDto {
     }
 
     public String getOpis() {
-        return opis;
+        return opis != null ? opis : "";
     }
 
     public void setOpis(String opis) {

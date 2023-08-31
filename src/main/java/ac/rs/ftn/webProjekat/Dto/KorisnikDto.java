@@ -3,10 +3,7 @@ package ac.rs.ftn.webProjekat.Dto;
 import ac.rs.ftn.webProjekat.Entity.Korisnik;
 import ac.rs.ftn.webProjekat.Entity.Polica;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class KorisnikDto {
 
@@ -29,7 +26,7 @@ public class KorisnikDto {
     private List<PolicaDto> policeDto = new ArrayList<>();
 
     //valjda ovako
-    public void setPoliceDto(List<Polica> police) {
+    public void setPoliceTo(List<Polica> police) {
         if (police == null) {
             return;
         }
@@ -51,7 +48,7 @@ public class KorisnikDto {
         this.opis = korisnik.getOpis();
         this.profilnaSlika = korisnik.getProfilnaSlika();
         this.ulogaKorisnika = korisnik.getUlogaKorisnika();
-        setPoliceDto(korisnik.getPolice());
+        setPoliceTo(korisnik.getPolice().stream().toList());
     }
 
     public Long getId() {
@@ -126,9 +123,19 @@ public class KorisnikDto {
         this.ulogaKorisnika = ulogaKorisnika;
     }
 
+    public String getLozinka() {
+        return lozinka;
+    }
+
+    public void setLozinka(String lozinka) {
+        this.lozinka = lozinka;
+    }
+
     public List<PolicaDto> getPoliceDto() {
         return policeDto;
     }
 
-
+    public void setPoliceDto(List<PolicaDto> policeDto) {
+        this.policeDto = policeDto;
+    }
 }

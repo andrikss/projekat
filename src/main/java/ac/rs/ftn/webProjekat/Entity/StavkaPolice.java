@@ -14,7 +14,7 @@ public class StavkaPolice implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {})
     @JoinColumn(name = "stavka_police_knjiga",
             referencedColumnName = "id"
     )

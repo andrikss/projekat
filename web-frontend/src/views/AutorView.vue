@@ -94,7 +94,9 @@ export default {
 
     isLoggedUserAdmin() {
       //Pogledaj da li je admin ili ne
-
+      if(localStorage.getItem('loggedUser') == null) {
+        return false;
+      }
       //nadji koja mu je uloga:
       const fieldName  = 'ulogaKorisnika';
       const loggedUserObj = localStorage.getItem('loggedUser');
@@ -117,7 +119,7 @@ export default {
     },
 
     azurirajProfilAutora() {
-      fetch('http://localhost:9090/api/korisnici/autor/' + this.autorDto.id, {
+      fetch('http://localhost:9090/api/korisnici/updateAutor/' + this.autorDto.id, {
         method: "POST",
         credentials: 'include',
         headers: {
@@ -128,19 +130,16 @@ export default {
       })
           .then((res) => {
             if (res.ok) {
+              window.location.reload();
               alert('Successfully updated autor profile');
 
-            }
-            else if (res.status === 400) {
+            } else if (res.status === 400) {
               alert('Bad request!');
-            }
-            else if (res.status === 403) {
+            } else if (res.status === 403) {
               alert('Forbidden!');
-            }
-            else if (res.status === 404) {
+            } else if (res.status === 404) {
               alert('Not found!');
-            }
-            else {
+            } else {
               alert('Failed update autor profile');
               //console.log(res);
               throw new Error('Failed update autor profile');
@@ -149,9 +148,9 @@ export default {
           .catch((error) => {
             console.error("Error:", error);
           })
-          .then( () => {
+          .then(() => {
             this.refresh();
-          } );
+          });
     },
 
 

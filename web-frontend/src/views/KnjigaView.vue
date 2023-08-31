@@ -70,14 +70,15 @@
 
 
     <div class="recenzije-wrapper">
-      <h2 class="delete-title">Recenzije:</h2>
+      <h2 class="delete-title">Recenzije na ovu knjigu:</h2>
     <table class="recenzije-table">
       <tbody>
       <tr v-for="recenzija in knjiga.recenzije" :key="recenzija.id">
         <td class="recenzija-cell">{{ recenzija.tekst }}</td>
         <td class="pregled-cell">
           <div class="pregled-button-wrapper">
-          <button class="recenzija-view-button" v-on:click="viewRecenzija(recenzija)">View</button>
+          <button class="recenzija-view-button" v-on:click="viewRecenzija(recenzija)">Detalji</button>
+            <button class="recenzija-view-button" v-on:click="deleteRecenzija(recenzija)">Izbriši</button>
           </div>
         </td>
       </tr>
@@ -331,6 +332,30 @@ export default {
       this.$router.push("/recenzija?id="+recenzija.id);
     },
 
+
+    deleteRecenzija(recenzija) {
+      fetch('http://localhost:9090/api/recenzije/' + recenzija.id, {
+        method: "DELETE",
+        credentials: 'include',
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json",
+        },
+      })
+          .then((res) => {
+            if (res.ok) {
+              alert('Uspjesno ste izbrisali recenziju!')
+              this.$router.push('/knjige');
+            } else {
+              console.log(res);
+              alert('Failed to delete recenzija! (check response)');
+              throw new Error('deletion failed');
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+    },
 
     updateKnjiga(azurirajknjiguDto) {
 

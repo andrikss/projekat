@@ -10,6 +10,10 @@
       <div class="separator">|</div>
       <div class="table-item"><a href="/zanrovi">LISTA ZANROVA</a></div>
       <div class="separator">|</div>
+      <div class="table-item"><a href="/recenzije">LISTA RECENZIJA</a></div>
+      <div class="separator">|</div>
+      <div class="table-item"><a href="/korisnici">LISTA KORISNIKA</a></div>
+      <div class="separator">|</div>
       <div class="table-item"><a href="/listaAutora">LISTA AUTORA</a></div>
       </div>
   </div>

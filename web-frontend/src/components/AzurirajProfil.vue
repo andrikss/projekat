@@ -1,6 +1,5 @@
 <template>
   <div class="update_form" v-if="showProfileUpdate">    <h2>Ažuriraj profil:</h2>
-    <button v-on:click="submit()" v-if="showForm">submit</button>
     <label for="oldEmailAdresa">Stara Email adresa:</label>
     <input v-model="updateDTO.staraEmailAdresa" /><br />
     <label for="newEmailAdresa">Nova Email adresa:</label>

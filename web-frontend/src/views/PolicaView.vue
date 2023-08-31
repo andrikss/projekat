@@ -150,6 +150,7 @@ export default {
       })
           .then((res) => {
             if (res.ok) {
+              window.location.reload();
               alert('Successfully removed knjiga from polica');
             }
             else if (res.status === 400) {

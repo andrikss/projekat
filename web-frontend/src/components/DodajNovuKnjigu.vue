@@ -87,7 +87,7 @@ export default {
             console.log(res);
             if (res.ok) {
               alert('Successfully created new knjiga!');
-              location.reload();
+              this.$router.push('/knjige');
             } else {
               //alert('Failed to update knjiga');
               //console.log(res);
