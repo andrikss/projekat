@@ -179,7 +179,8 @@ public class Polica implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Polica polica = (Polica) o;
-        return Objects.equals(id, polica.id);
+        return Objects.equals(naziv, polica.naziv) &&
+                tip == polica.tip;
     }
 
     @Override

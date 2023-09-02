@@ -42,21 +42,17 @@ export default {
   components: {
     Login,
     Register,
-    //LogoutButton,
-    //UpdateProfileForm,
   }
 }
 </script>
 
 <style>
-/* Stilizacija za glavni kontejner */
 .home {
   text-align: center;
   padding: 20px;
   background-color: #c29eff;
 }
 
-/* Stilizacija za navigacioni meni */
 .navbar {
   margin-bottom: 20px;
 }

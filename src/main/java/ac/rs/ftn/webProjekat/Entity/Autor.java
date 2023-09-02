@@ -14,7 +14,7 @@ public class Autor extends Korisnik implements Serializable {
     @Column(name = "aktivan")
     private boolean aktivan;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {})
     @JoinTable(name = "autor_knjiga",
             joinColumns = @JoinColumn(name = "autor_id",referencedColumnName = "id"),   // povezuje autora
             inverseJoinColumns = @JoinColumn(name = "knjiga_id", referencedColumnName = "id")   // povezuje knjigu
@@ -70,8 +70,8 @@ public class Autor extends Korisnik implements Serializable {
         this.setUlogaKorisnika(UlogaKorisnika.AUTOR.toString());
     }
 
-    public Autor(String emailAdresa, String ime) {
-        super(emailAdresa, ime);
+    public Autor(String emailAdresa, String korisnickoIme) {
+        super(emailAdresa, korisnickoIme);
         this.aktivan = false;
         this.setUlogaKorisnika(UlogaKorisnika.AUTOR.toString());
     }

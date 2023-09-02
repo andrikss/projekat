@@ -131,6 +131,7 @@ export default {
           .then((res) => {
             if (res.ok) {
               window.location.reload();
+              console.log(this.updateAutorDto);
               alert('Successfully updated autor profile');
 
             } else if (res.status === 400) {

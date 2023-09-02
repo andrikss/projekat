@@ -49,13 +49,24 @@ public class Korisnik implements Serializable {
 
     //pravljenje primarnih polica
     public void napraviPrimarnePolice() {
-        //System.out.println("Pozivam napraviPrimarnePolice() za" + this.ime);
-        police.add(new Polica("WantToRead",TipPolice.WANT_TO_READ));
-        //System.out.println("Dodajem policu: WantToRead");
-        police.add(new Polica("CurrentlyReading",TipPolice.CURRENTLY_READING));
-        //System.out.println("Dodajem policu: CurrentlyReading");
-        police.add(new Polica("Read",TipPolice.READ));
-        //System.out.println("Dodajem policu: Read");
+        System.out.println("Usao sam u napraviPrimarnePolice() za " + korisnickoIme);
+        Polica wantToRead = new Polica("WantToRead", TipPolice.WANT_TO_READ);
+        Polica currentlyReading = new Polica("CurrentlyReading", TipPolice.CURRENTLY_READING);
+        Polica read = new Polica("Read", TipPolice.READ);
+
+        police.add(wantToRead);
+        System.out.println("Dodajem policu: WantToRead" + korisnickoIme);
+
+        if (police.contains(currentlyReading)) {
+            System.out.println("NE ZNAM RAZLIKOVATI");
+        }
+
+        police.add(currentlyReading);
+        System.out.println("Dodajem policu: CurrentlyReading" + korisnickoIme);
+
+        police.add(read);
+        System.out.println("Dodajem policu: Read" + korisnickoIme);
+
     }
 
     // dobavi policu po nazivu
@@ -226,9 +237,9 @@ public class Korisnik implements Serializable {
         napraviPrimarnePolice();
     }
 
-    public Korisnik(String emailAdresa, String ime) {
+    public Korisnik(String emailAdresa, String korisnickoIme) {
         this.emailAdresa = emailAdresa;
-        this.ime = ime;
+        this.korisnickoIme = korisnickoIme;
         this.ulogaKorisnika = UlogaKorisnika.CITALAC.toString();
         napraviPrimarnePolice();
     }
@@ -236,21 +247,13 @@ public class Korisnik implements Serializable {
         this.ulogaKorisnika = UlogaKorisnika.CITALAC.toString();
         this.emailAdresa = registrujSeDto.getEmailAdresa();
         this.ime = registrujSeDto.getIme();
-        this.korisnickoIme = registrujSeDto.getIme();
         this.prezime = registrujSeDto.getPrezime();
         this.korisnickoIme = registrujSeDto.getKorisnickoIme();
         this.lozinka = registrujSeDto.getLozinka();
         this.opis = registrujSeDto.getOpis();
         this.datumRodjenja = registrujSeDto.getDatumRodjenja();
-       // napraviPrimarnePolice();     //uvijek
-            System.out.println("Pozivam napraviPrimarnePolice() za" + this.ime);
-            this.police.add(new Polica("WantToRead",TipPolice.WANT_TO_READ));
-            System.out.println("Dodajem policu: WantToRead");
-            this.police.add(new Polica("CurrentlyReading",TipPolice.CURRENTLY_READING));
-            System.out.println("Dodajem policu: CurrentlyReading");
-            this.police.add(new Polica("Read",TipPolice.READ));
-            System.out.println("Dodajem policu: Read");
-
+        napraviPrimarnePolice();
+        System.out.println("OVO JE REGISTROVAN" + toString());
     }
     public Long getId() {
         return id;
@@ -357,5 +360,19 @@ public class Korisnik implements Serializable {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Korisnik korisnik = (Korisnik) o;
+        return Objects.equals(id, korisnik.id) &&
+                Objects.equals(korisnickoIme, korisnik.korisnickoIme) &&
+                Objects.equals(emailAdresa, korisnik.emailAdresa);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, korisnickoIme, emailAdresa);
+    }
 
 }

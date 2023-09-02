@@ -12,23 +12,23 @@ public class ZahtjevZaAktivacijuNalogaAutoraDto {
     private String telefon;
     private String poruka;
     private Date datum;
-    private String autorEmailAdresa;
+    //private String autorEmailAdresa;
     private StatusZahtjeva status;
 
     public boolean isValid() {
-        if (autorEmailAdresa == null || autorEmailAdresa.isEmpty()
-                || emailAdresa == null || emailAdresa.isEmpty())
+        if ( emailAdresa == null || emailAdresa.isEmpty())
         {
             return false;
         }
         return true;
     }
+
     public ZahtjevZaAktivacijuNalogaAutoraDto() {
     }
 
     public ZahtjevZaAktivacijuNalogaAutoraDto(ZahtjevZaAktivacijuNalogaAutora zahtjev) {
         this.id = zahtjev.getId();
-        this.autorEmailAdresa = zahtjev.getAutor().getEmailAdresa();
+     //   this.autorEmailAdresa = zahtjev.getAutor().getEmailAdresa();
         this.poruka = zahtjev.getPoruka();
         this.datum = zahtjev.getDatum();
         this.telefon = zahtjev.getTelefon();
@@ -74,14 +74,6 @@ public class ZahtjevZaAktivacijuNalogaAutoraDto {
 
     public void setDatum(Date datum) {
         this.datum = datum;
-    }
-
-    public String getAutorEmailAdresa() {
-        return autorEmailAdresa;
-    }
-
-    public void setAutorEmailAdresa(String autorEmailAdresa) {
-        this.autorEmailAdresa = autorEmailAdresa;
     }
 
     public StatusZahtjeva getStatus() {

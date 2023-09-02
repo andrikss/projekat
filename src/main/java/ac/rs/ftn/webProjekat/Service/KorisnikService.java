@@ -105,7 +105,7 @@ public class KorisnikService {
     public void deleteKnjigaOfAutor(Knjiga knjiga) {
         List<Korisnik> korisnici = korisnikRepository.findAll();
         for(Korisnik it : korisnici) {
-            if(it.getUlogaKorisnika().equals(UlogaKorisnika.AUTOR.toString())) {
+            if(it.getUlogaKorisnika().equals(UlogaKorisnika.AUTOR)) {
                 Autor autor = (Autor) it;
                 autor.removeKnjiga(knjiga); // u autoru je izbrise
                 korisnikRepository.save(autor); //sacuvaj autora

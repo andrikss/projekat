@@ -30,7 +30,7 @@ public class ZahtjevZaAktivacijuNalogaAutora implements Serializable {
     @Column(name = "status")
     private StatusZahtjeva status;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {})
     @JoinColumn(name = "autor_id",
             referencedColumnName = "id")
     private Autor autor;

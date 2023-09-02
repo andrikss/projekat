@@ -77,7 +77,7 @@ export default {
 .home {
   background-color: #ffc0cb; /* Svijetlo roze pozadina */
   padding: 20px;
-  width: 38%;
+  width: 45%;
   height: 34px;
   align-items: flex-start;
   bottom: 0;

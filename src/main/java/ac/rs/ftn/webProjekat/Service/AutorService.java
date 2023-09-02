@@ -23,7 +23,7 @@ public class AutorService {
         return null;
     }
 
-    public Autor save(Autor autor) {
+    public Autor saveAutor(Autor autor) {
        return autorRepository.save(autor);
     }
 
@@ -35,5 +35,17 @@ public class AutorService {
             }
         }
         return null;
+    }
+
+    public void removeAuthorFromBook(Long authorId, Long bookId) {
+        // Prvo dohvatite autora iz baze
+        Autor autor = autorRepository.findById(authorId).orElse(null);
+
+        // Proverite da li je autor pronađen
+        if (autor != null) {
+            // Uklonite knjigu iz liste knjiga autora
+            autor.getAutoroveKnjige().removeIf(knjiga -> knjiga.getId().equals(bookId));
+            autorRepository.save(autor);
+        }
     }
 }

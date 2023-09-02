@@ -6,6 +6,7 @@ import ac.rs.ftn.webProjekat.Service.AutorService;
 import ac.rs.ftn.webProjekat.Service.KorisnikService;
 import ac.rs.ftn.webProjekat.Service.PolicaService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -154,6 +155,7 @@ public class KorisnikRestController {
     }
 
     //registruj se
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegistrujSeDto registracijaDto, HttpSession httpSession) {
         if (registracijaDto.getIme().isEmpty() || registracijaDto.getPrezime().isEmpty() ||

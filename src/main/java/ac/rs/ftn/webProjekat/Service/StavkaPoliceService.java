@@ -38,7 +38,7 @@ public class StavkaPoliceService {
        stavkaPoliceRepository.delete(st);
     }
 
-    public void deleteStavkeOfKnjiga(Knjiga knjiga) {
+  /*  public void deleteStavkeOfKnjiga(Knjiga knjiga) {
         List<StavkaPolice> stavke = stavkaPoliceRepository.findAll();
             for(StavkaPolice it : stavke) {
                 if(it.getKnjiga().getISBN().equals(knjiga.getISBN())) {
@@ -48,9 +48,9 @@ public class StavkaPoliceService {
                     //stavkaPoliceRepository.save(it);
                 }
             }
-    }
+    }*/
 // ili pak ovako kao drugi, vidjecemo sta radi u controlleru
-/*
+
     public void deleteStavkeOfKnjiga(Knjiga knjiga) {
         List<StavkaPolice> stavke = stavkaPoliceRepository.findAll();
         List<StavkaPolice> newStavkaPoliceList = new ArrayList<>();
@@ -64,7 +64,7 @@ public class StavkaPoliceService {
         }
 
         stavkaPoliceRepository.saveAll(newStavkaPoliceList);
-    }*/
+    }
 
 
 

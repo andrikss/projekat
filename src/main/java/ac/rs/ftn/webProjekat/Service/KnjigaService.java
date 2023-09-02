@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -19,6 +20,8 @@ public class KnjigaService {
     private KnjigaRepository knjigaRepository;
 
     @Autowired
+    private AutorService autorService;
+    @Autowired
     private KorisnikService korisnikService;
 
     @Autowired
@@ -27,6 +30,8 @@ public class KnjigaService {
     @Autowired
     private StavkaPoliceService stavkaPoliceService;
 
+    @Autowired
+    private StavkaPoliceRepository stavkaPoliceRepository;
     public List<Knjiga> findAllKnjiga() {
         return knjigaRepository.findAll();
     }
@@ -102,7 +107,16 @@ public class KnjigaService {
     }
 
     public Knjiga save(Knjiga knjiga) { return knjigaRepository.save(knjiga); }
-    public void delete(Knjiga knjiga) { knjigaRepository.delete(knjiga);}
+    public void delete(Knjiga knjiga) {
+        List<StavkaPolice> stavkeNaPolicama = findStavkeByKnjiga(knjiga);
+
+        // Obrišite sve stavke na policama koje referenciraju ovu knjigu
+        for (StavkaPolice stavka : stavkeNaPolicama) {
+            stavkaPoliceService.deleteStavka(stavka);
+        }
+        knjigaRepository.delete(knjiga);
+
+    }
 
     // ove funkcije na dole nisu vezane direktno za knjigu
     // ali ce mi biti potrebne u controlleru
@@ -113,6 +127,16 @@ public class KnjigaService {
 
     public Autor findAutorByEmail(String email) {
         Autor autor = (Autor) korisnikService.findByEmail(email);
+        if(autor != null) {
+            if(autor.getUlogaKorisnika().equals(UlogaKorisnika.AUTOR.toString())) {
+                return autor;
+            }
+        }
+        return null;
+    }
+
+    public Autor findAutorByEmailAdresaAutora(String email) {
+        Autor autor = autorService.findByEmail(email);
         if(autor != null) {
             if(autor.getUlogaKorisnika().equals(UlogaKorisnika.AUTOR.toString())) {
                 return autor;
@@ -135,6 +159,10 @@ public class KnjigaService {
             }
         }
         return null;
+    }
+
+    public List<StavkaPolice> findStavkeByKnjiga(Knjiga knjiga) {
+        return stavkaPoliceRepository.findByKnjiga(knjiga);
     }
 
     //naredne funkcije sluze za

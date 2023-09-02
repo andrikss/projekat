@@ -17,4 +17,5 @@ public enum TipPolice {
     public String toString() {
         return text;
     }
+
 }

@@ -115,22 +115,28 @@ public class ZahtjevRestController {
     {
 
         if (!zahtjevZaAktivacijuNalogaAutoraDto.isValid()) {
-            return new ResponseEntity<>("Nije validno!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Nisu ispravno uneseni podaci!", HttpStatus.BAD_REQUEST);
         }
 
-        Korisnik targetKorisnik = zahtjevZaAktivacijuNalogaAutoraService.findKorisnikByEmail(zahtjevZaAktivacijuNalogaAutoraDto.getAutorEmailAdresa());
-        if (targetKorisnik == null) {
-            return new ResponseEntity<>("Ne mogu da pronadjem autora sa tom email adresom!", HttpStatus.BAD_REQUEST);
+        String autorEmail = zahtjevZaAktivacijuNalogaAutoraDto.getEmailAdresa();
+        String autorIme = zahtjevZaAktivacijuNalogaAutoraService.generisiKorisnickoIme(autorEmail);
+        Autor existingAutor = (Autor) zahtjevZaAktivacijuNalogaAutoraService.findKorisnikByEmail(autorEmail);
+
+        if (existingAutor == null) {
+            // Ako ne postoji, kreiramo novog autora
+            Autor newAutor = new Autor(autorEmail, autorIme);
+            zahtjevZaAktivacijuNalogaAutoraService.saveAutor(newAutor);
+            existingAutor = newAutor;
         }
-        if (!targetKorisnik.getUlogaKorisnika().equals(UlogaKorisnika.AUTOR.toString())) {
+
+
+        // Sada imamo postojeceg autora (existingAutor)
+       /* if (!existingAutor.getUlogaKorisnika().equals(UlogaKorisnika.AUTOR.toString())) {
             return new ResponseEntity<>("Ne pripada autoru email adresa!", HttpStatus.BAD_REQUEST);
-        }
-
-
-        Autor targetAutor = (Autor) targetKorisnik;
+        }*/
 
         ZahtjevZaAktivacijuNalogaAutora noviZahtjev = new ZahtjevZaAktivacijuNalogaAutora(zahtjevZaAktivacijuNalogaAutoraDto);
-        noviZahtjev.setAutor(targetAutor);
+        noviZahtjev.setAutor(existingAutor);
 
         zahtjevZaAktivacijuNalogaAutoraService.saveZahtjev(noviZahtjev);
 

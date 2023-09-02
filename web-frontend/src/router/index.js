@@ -18,6 +18,7 @@ import HomeAdministrator from "@/views/HomeAdministrator.vue";
 import DodajRecenzijuView from "@/views/DodajRecenzijuView.vue";
 import JednaRecenzija from "@/views/JednaRecenzija.vue";
 import KorisnikView from "@/views/KorisnikView.vue";
+import ZahtjeviView from "@/views/ZahtjeviView.vue";
 
 const routes = [
   { path: "/register", component: Register },
@@ -38,7 +39,8 @@ const routes = [
   { path: '/homeAdministrator', name: 'homeAdministrator', component: HomeAdministrator},
   { path: '/dodajRecenziju/knjiga', name: 'dodajRecenziju', component:  DodajRecenzijuView},
   { path: '/recenzija', name: 'recenzija', component: JednaRecenzija},
-  { path: '/korisnik', name: 'korisnik', component: KorisnikView}
+  { path: '/korisnik', name: 'korisnik', component: KorisnikView},
+  { path: '/zahtjevi', name: 'zahtjevi', component: ZahtjeviView}
 ];
 
 const router = createRouter({

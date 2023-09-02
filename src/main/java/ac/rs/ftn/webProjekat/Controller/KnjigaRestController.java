@@ -4,7 +4,9 @@ import ac.rs.ftn.webProjekat.Dto.*;
 import ac.rs.ftn.webProjekat.Entity.*;
 import ac.rs.ftn.webProjekat.Service.AutorService;
 import ac.rs.ftn.webProjekat.Service.KnjigaService;
+import ac.rs.ftn.webProjekat.Service.StavkaPoliceService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,9 @@ public class KnjigaRestController {
 
     @Autowired
     private AutorService autorService;
+
+    @Autowired
+    private StavkaPoliceService stavkaPoliceService;
 
     //lista knjiga
     @GetMapping("/lista")
@@ -341,12 +346,14 @@ public class KnjigaRestController {
 
     //ne radi dobro
     // pise da je obrisana ali je ne obrise u listi
+    
     @DeleteMapping("/obrisiKnjigu/{id}")
     public ResponseEntity<String> deleteKnjiga(@PathVariable(name = "id") Long id, HttpSession httpSession) {
         Korisnik loggedUser = (Korisnik) httpSession.getAttribute("loggedUser");
         if (loggedUser == null) {
             return new ResponseEntity<>("No session!", HttpStatus.FORBIDDEN);
         }
+        loggedUser = knjigaService.findKorisnikById(loggedUser.getId());
 
         Knjiga targetKnjiga = knjigaService.findById(id);
         if (targetKnjiga == null) {
@@ -366,20 +373,30 @@ public class KnjigaRestController {
 
         // Obrisi knjigu
         knjigaService.deleteStavkeOfKnjiga(targetKnjiga);
+        stavkaPoliceService.deleteStavkeOfKnjiga(targetKnjiga);
+        // Pre nego što obrišete knjigu
+
         System.out.println("DEL STAVKE");
 
         knjigaService.deleteZanrOfKnjiga(targetKnjiga);
         System.out.println("DEL ZANR");
 
         knjigaService.deleteKnjigaOfAutor(targetKnjiga);
+
+        if(!loggedUser.getUlogaKorisnika().equals(UlogaKorisnika.AUTOR)) {
+            Autor autor = knjigaService.findAutorByEmailAdresaAutora(targetKnjiga.getEmailAdresaAutora());
+            autorService.removeAuthorFromBook(autor.getId(), targetKnjiga.getId());
+        }
+        autorService.removeAuthorFromBook(loggedUser.getId(), targetKnjiga.getId());
+
         System.out.println("DEL AUTOR");
 
-        knjigaService.delete(targetKnjiga);
         System.out.println("Deleting knjiga with ID: " + id);
 
         targetKnjiga.setZanrovi(null);
-        List<KnjigaDto> updatedKnjige = getAllKnjigeWithDetails().getBody();
+        knjigaService.delete(targetKnjiga);
 
+        System.out.println("OVO SU KNJIGE" + knjigaService.findAllKnjiga());
         return new ResponseEntity<>("Knjiga je uspesno obrisana", HttpStatus.OK);
     }
 
