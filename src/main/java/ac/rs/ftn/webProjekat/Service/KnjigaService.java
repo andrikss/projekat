@@ -108,12 +108,7 @@ public class KnjigaService {
 
     public Knjiga save(Knjiga knjiga) { return knjigaRepository.save(knjiga); }
     public void delete(Knjiga knjiga) {
-        List<StavkaPolice> stavkeNaPolicama = findStavkeByKnjiga(knjiga);
 
-        // Obrišite sve stavke na policama koje referenciraju ovu knjigu
-        for (StavkaPolice stavka : stavkeNaPolicama) {
-            stavkaPoliceService.deleteStavka(stavka);
-        }
         knjigaRepository.delete(knjiga);
 
     }
@@ -191,6 +186,7 @@ public class KnjigaService {
     public void deleteZanrOfKnjiga(Knjiga knjiga) {
         zanrService.deleteZanrOfKnjiga(knjiga);
     }
+
 
     public List<Knjiga> findKnjigeThatContainInISBN(String ISBN_substring) {
         List<Knjiga> ret = new ArrayList<>();

@@ -17,4 +17,6 @@ public enum UlogaKorisnika {
     public String toString() {
         return text;
     }
+
+
 }

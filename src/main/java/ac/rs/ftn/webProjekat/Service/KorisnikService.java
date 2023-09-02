@@ -1,6 +1,7 @@
 package ac.rs.ftn.webProjekat.Service;
 
 import ac.rs.ftn.webProjekat.Entity.*;
+import ac.rs.ftn.webProjekat.Repository.AutorRepository;
 import ac.rs.ftn.webProjekat.Repository.KorisnikRepository;
 import ac.rs.ftn.webProjekat.Repository.PolicaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,11 @@ import java.util.Set;
 public class KorisnikService {
     @Autowired
     private KorisnikRepository korisnikRepository;
+
+    @Autowired
+    private AutorRepository autorRepository;
+    @Autowired
+    private AutorService autorService;
 
     public Korisnik findById(Long id) {
         List<Korisnik> korisnici = korisnikRepository.findAll();
@@ -103,14 +109,17 @@ public class KorisnikService {
     // TO DO
 
     public void deleteKnjigaOfAutor(Knjiga knjiga) {
-        List<Korisnik> korisnici = korisnikRepository.findAll();
-        for(Korisnik it : korisnici) {
-            if(it.getUlogaKorisnika().equals(UlogaKorisnika.AUTOR)) {
-                Autor autor = (Autor) it;
-                autor.removeKnjiga(knjiga); // u autoru je izbrise
-                korisnikRepository.save(autor); //sacuvaj autora
+        List<Korisnik> korisnikList = korisnikRepository.findAll();
+        for (Korisnik k : korisnikList) {
+            System.out.println("KORISNIK" + k.toString());
+            if (knjiga.getEmailAdresaAutora().equals(k.getEmailAdresa())) {
+                System.out.println("uso sam u if" + k.toString());
+                Autor targetAutor = (Autor) k;
+                targetAutor.removeKnjiga(knjiga);
+                korisnikRepository.save(targetAutor);
             }
         }
+
     }
 
 

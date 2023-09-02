@@ -35,7 +35,8 @@ public class StavkaPoliceService {
     }
 
     public void deleteStavka(StavkaPolice st) {
-       stavkaPoliceRepository.delete(st);
+
+        stavkaPoliceRepository.delete(st);
     }
 
   /*  public void deleteStavkeOfKnjiga(Knjiga knjiga) {
@@ -53,17 +54,11 @@ public class StavkaPoliceService {
 
     public void deleteStavkeOfKnjiga(Knjiga knjiga) {
         List<StavkaPolice> stavke = stavkaPoliceRepository.findAll();
-        List<StavkaPolice> newStavkaPoliceList = new ArrayList<>();
-
-        for (StavkaPolice it : stavke) {
-            if (!it.getKnjiga().getId().equals(knjiga.getId())) {
-                newStavkaPoliceList.add(it);
-            } else {
-                deleteStavka(it);
+        for (StavkaPolice st : stavke) {
+            if (st.getKnjiga().getISBN().equals(knjiga.getISBN())) {
+                deleteStavka(st);
             }
         }
-
-        stavkaPoliceRepository.saveAll(newStavkaPoliceList);
     }
 
 

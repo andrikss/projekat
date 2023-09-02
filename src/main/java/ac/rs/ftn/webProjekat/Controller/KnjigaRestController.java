@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/knjige")
@@ -346,7 +347,8 @@ public class KnjigaRestController {
 
     //ne radi dobro
     // pise da je obrisana ali je ne obrise u listi
-    
+
+
     @DeleteMapping("/obrisiKnjigu/{id}")
     public ResponseEntity<String> deleteKnjiga(@PathVariable(name = "id") Long id, HttpSession httpSession) {
         Korisnik loggedUser = (Korisnik) httpSession.getAttribute("loggedUser");
@@ -372,31 +374,42 @@ public class KnjigaRestController {
         }
 
         // Obrisi knjigu
+        System.out.println("DEL STAVKE");
         knjigaService.deleteStavkeOfKnjiga(targetKnjiga);
-        stavkaPoliceService.deleteStavkeOfKnjiga(targetKnjiga);
+
+        //stavkaPoliceService.deleteStavkeOfKnjiga(targetKnjiga);
         // Pre nego što obrišete knjigu
 
-        System.out.println("DEL STAVKE");
 
-        knjigaService.deleteZanrOfKnjiga(targetKnjiga);
         System.out.println("DEL ZANR");
+        knjigaService.deleteZanrOfKnjiga(targetKnjiga);
 
+
+        System.out.println("DEL AUTOR");
         knjigaService.deleteKnjigaOfAutor(targetKnjiga);
+        List<Autor> autori = autorService.getAll();
+        for(Autor it: autori) {
+            for(Knjiga jt: it.getAutoroveKnjige())
+                System.out.println(jt.toString());
+        }
 
-        if(!loggedUser.getUlogaKorisnika().equals(UlogaKorisnika.AUTOR)) {
+        /*if(!loggedUser.getUlogaKorisnika().equals(UlogaKorisnika.AUTOR)) {
             Autor autor = knjigaService.findAutorByEmailAdresaAutora(targetKnjiga.getEmailAdresaAutora());
             autorService.removeAuthorFromBook(autor.getId(), targetKnjiga.getId());
         }
-        autorService.removeAuthorFromBook(loggedUser.getId(), targetKnjiga.getId());
+        autorService.removeAuthorFromBook(loggedUser.getId(), targetKnjiga.getId());*/
 
-        System.out.println("DEL AUTOR");
+
 
         System.out.println("Deleting knjiga with ID: " + id);
 
-        targetKnjiga.setZanrovi(null);
+     System.out.println("Stanje knjige pre brisanja: " + targetKnjiga.toString());
         knjigaService.delete(targetKnjiga);
 
+
+     System.out.println("Stanje knjige nakon brisanja: " + targetKnjiga.toString());
         System.out.println("OVO SU KNJIGE" + knjigaService.findAllKnjiga());
+
         return new ResponseEntity<>("Knjiga je uspesno obrisana", HttpStatus.OK);
     }
 

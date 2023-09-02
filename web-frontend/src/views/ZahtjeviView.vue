@@ -95,7 +95,7 @@ export default {
     },
 
     prihvatiZahtjev(zahtjevDto) {
-      fetch('http://localhost:9090/api/zahtjevi/prihvatiZahtjev' + zahtjevDto.id, {
+      fetch('http://localhost:9090/api/zahtjevi/prihvatiZahtjev/' + zahtjevDto.id, {
         method: "PUT",
         credentials: 'include',
         headers: {
@@ -123,20 +123,19 @@ export default {
           .catch((error) => {
             console.error("Error:", error);
           }).then(() => {
-        this.refresh();
-      });
+            this.refresh();
+           });
     },
 
 
     odbijZahtjev(zahtjevDto) {
-      fetch('http://localhost:9090/api/zahtjevi/odbijZahtjev' + zahtjevDto.id, {
+      fetch('http://localhost:9090/api/zahtjevi/odbijZahtjev/' + zahtjevDto.id, {
         method: "PUT",
         credentials: 'include',
         headers: {
           Accept: "application/json",
           "Content-type": "application/json",
         },
-        //body: JSON.stringify(this.updateDto),
       })
           .then(response => response.json())
           .then((res) => {
@@ -150,15 +149,34 @@ export default {
             } else if (res.status === 404) {
               alert('Not found!');
             } else {
+              console.log(res)
               throw new Error('Failed to deny zahtev');
             }
           })
           .catch((error) => {
             console.error("Error:", error);
           }).then(() => {
-        this.refresh();
-      });
-    }
+              this.refresh();
+           });
+    },
+
+    refresh() {
+      fetch('http://localhost:9090/api/zahtjevi/lista', {
+        method: "GET",
+        credentials: 'include',
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json",
+        },
+        //body: JSON.stringify(this.updateDto),
+      })
+          .then(response => response.json())
+          .then(data => { this.zahtjeviDto = data})
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+    },
+
   }
 }
 </script>

@@ -41,16 +41,19 @@ public class Autor extends Korisnik implements Serializable {
         return false;
     }
 
+
     // izbrisi knjigu
     public void removeKnjiga(Knjiga knjiga) {
         Set<Knjiga> newAutoroveKnjige = new HashSet<>();
         for (Knjiga it : autoroveKnjige) {
             if (!it.getISBN().equals(knjiga.getISBN())) {
                 newAutoroveKnjige.add(it);
+                System.out.println("DODAJEM KNJIGU" + it.toString());
             }
         } //if treba zakomentarisati??
        // if (newAutoroveKnjige.size() != autoroveKnjige.size())
-        autoroveKnjige = newAutoroveKnjige;
+        System.out.println("KAZEM DA NIJE JEDANK ISBN");
+        this.autoroveKnjige = newAutoroveKnjige;
     }
 
     //apdejt

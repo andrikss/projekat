@@ -51,7 +51,9 @@ public class KorisnikRestController {
 
         List<AutorDto> autorDtos = new ArrayList<>();
         for (Autor autor : autori) {
-            autorDtos.add(new AutorDto(autor));
+            if(autor.isAktivan()) {
+                autorDtos.add(new AutorDto(autor));
+            }
         }
 
         return new ResponseEntity<>(autorDtos, HttpStatus.OK);

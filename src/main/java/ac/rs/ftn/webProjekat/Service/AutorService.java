@@ -48,4 +48,8 @@ public class AutorService {
             autorRepository.save(autor);
         }
     }
+
+    public List<Autor> getAll() {
+        return autorRepository.findAll();
+    }
 }

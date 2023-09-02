@@ -18,7 +18,7 @@ public class Zanr implements Serializable {
     @Column(name = "naziv")
     private String naziv;
 
-    @ManyToMany(mappedBy = "zanrovi", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "zanrovi", fetch = FetchType.EAGER, cascade = {})
     private Set<Knjiga> knjige = new HashSet<>();
 
     public void izbrisiKnjigu(Knjiga knjiga) {

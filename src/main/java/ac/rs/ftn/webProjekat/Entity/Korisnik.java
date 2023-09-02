@@ -49,23 +49,23 @@ public class Korisnik implements Serializable {
 
     //pravljenje primarnih polica
     public void napraviPrimarnePolice() {
-        System.out.println("Usao sam u napraviPrimarnePolice() za " + korisnickoIme);
+       // System.out.println("Usao sam u napraviPrimarnePolice() za " + korisnickoIme);
         Polica wantToRead = new Polica("WantToRead", TipPolice.WANT_TO_READ);
         Polica currentlyReading = new Polica("CurrentlyReading", TipPolice.CURRENTLY_READING);
         Polica read = new Polica("Read", TipPolice.READ);
 
         police.add(wantToRead);
-        System.out.println("Dodajem policu: WantToRead" + korisnickoIme);
+       // System.out.println("Dodajem policu: WantToRead" + korisnickoIme);
 
-        if (police.contains(currentlyReading)) {
-            System.out.println("NE ZNAM RAZLIKOVATI");
-        }
+       /* if (police.contains(currentlyReading)) {
+         //   System.out.println("NE ZNAM RAZLIKOVATI");
+        }*/
 
         police.add(currentlyReading);
-        System.out.println("Dodajem policu: CurrentlyReading" + korisnickoIme);
+        //System.out.println("Dodajem policu: CurrentlyReading" + korisnickoIme);
 
         police.add(read);
-        System.out.println("Dodajem policu: Read" + korisnickoIme);
+        //System.out.println("Dodajem policu: Read" + korisnickoIme);
 
     }
 
@@ -367,12 +367,13 @@ public class Korisnik implements Serializable {
         Korisnik korisnik = (Korisnik) o;
         return Objects.equals(id, korisnik.id) &&
                 Objects.equals(korisnickoIme, korisnik.korisnickoIme) &&
-                Objects.equals(emailAdresa, korisnik.emailAdresa);
+                Objects.equals(emailAdresa, korisnik.emailAdresa) &&
+             Objects.equals(ulogaKorisnika, korisnik.ulogaKorisnika);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, korisnickoIme, emailAdresa);
+        return Objects.hash(id, korisnickoIme, emailAdresa, ulogaKorisnika);
     }
 
 }

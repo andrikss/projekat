@@ -234,7 +234,7 @@ public class PolicaRestController {
             return new ResponseEntity<>("Polica vec sadrzi knjigu!",HttpStatus.FORBIDDEN);
         }
 
-        if (targetPolica.getTip() != TipPolice.REGULAR && korisnik.daLiJeKnjigaNaPrimarnoj(targetKnjiga) )
+        if (targetPolica.getTip() == TipPolice.REGULAR && !korisnik.daLiJeKnjigaNaPrimarnoj(targetKnjiga) )
         {
             return new ResponseEntity<>("Knjiga mora biti prvo dodana na primarnoj polici", HttpStatus.FORBIDDEN);
         }

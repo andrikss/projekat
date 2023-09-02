@@ -5,6 +5,7 @@ import ac.rs.ftn.webProjekat.Dto.KnjigaDto;
 import jakarta.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.io.Serializable;
 
@@ -43,6 +44,9 @@ public class Knjiga implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "zanr_id", referencedColumnName = "id")
     )
     private Set<Zanr> zanrovi = new HashSet<>();
+
+    @ManyToMany(mappedBy = "autoroveKnjige", fetch = FetchType.EAGER, cascade = {})
+    private Set<Autor> autori = new HashSet<>();
 
     @Column(name = "ocjena")
     private Long ocjena;
@@ -197,5 +201,18 @@ public class Knjiga implements Serializable {
 
     public void setEmailAdresaAutora(String emailAdresaAutora) {
         this.emailAdresaAutora = emailAdresaAutora;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Knjiga knjiga = (Knjiga) o;
+        return Objects.equals(id, knjiga.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

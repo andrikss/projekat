@@ -2,6 +2,7 @@ package ac.rs.ftn.webProjekat.Controller;
 
 import ac.rs.ftn.webProjekat.Dto.ZahtjevZaAktivacijuNalogaAutoraDto;
 import ac.rs.ftn.webProjekat.Entity.*;
+import ac.rs.ftn.webProjekat.Service.KorisnikService;
 import ac.rs.ftn.webProjekat.Service.MailService;
 import ac.rs.ftn.webProjekat.Service.ZahtjevZaAktivacijuNalogaAutoraService;
 import jakarta.servlet.http.HttpSession;
@@ -14,10 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;*/
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.Random;
+import java.security.SecureRandom;
+import java.util.*;
 
 @CrossOrigin
 @RestController
@@ -29,6 +28,9 @@ public class ZahtjevRestController {
 
     @Autowired
     private MailService mailService;
+
+    @Autowired
+    private KorisnikService korisnikService;
 
 
     //private final String adresa = "andriks5667@outlook.com";
@@ -172,24 +174,26 @@ public class ZahtjevRestController {
         zahtjevZaAktivacijuNalogaAutoraService.saveZahtjev(targetZahtev);
 
 
-        Autor targetAutor = (Autor) zahtjevZaAktivacijuNalogaAutoraService.findKorisnikByEmail(targetZahtev.getAutor().getEmailAdresa());
+        Autor targetAutor = (Autor) korisnikService.findByEmail(targetZahtev.getEmailAdresa());
         if (targetAutor == null) {
             return new ResponseEntity<>("Ne mogu da pronadjem autora sa tom email adresom!", HttpStatus.BAD_REQUEST);
         }
 
-        targetAutor.napraviPrimarnePolice();
 
 
-        byte[] passwordArray = new byte[10];
+       /* byte[] passwordArray = new byte[10];
         new Random().nextBytes(passwordArray);
         String generatedPassword = new String(passwordArray, Charset.forName("UTF-8"));
-
+        */
+        String generatedPassword = generateRandomPassword(9);
+        System.out.println("LOZINKA JE" + generatedPassword);
         targetAutor.setLozinka(generatedPassword);
+        targetAutor.setAktivan(true);
         zahtjevZaAktivacijuNalogaAutoraService.saveKorisnik(targetAutor);
         String poruka = "Vas nalog je uspjesno aktiviran. Vasa lozinka je: " + generatedPassword;
        // System.out.println(targetZahtev.getStatus().toString());
        // List<ZahtjevZaAktivacijuNalogaAutora> lista = zahtjevZaAktivacijuNalogaAutoraService.findAll();
-        mailService.sendEmail(targetAutor.getEmailAdresa(), "Aktivacija naloga", poruka);
+        mailService.sendSimpleMessage(targetAutor.getEmailAdresa(), "Aktivacija naloga", poruka);
 
         //slanje imejla boze pomozi mi
        /* String emailText =
@@ -204,6 +208,14 @@ public class ZahtjevRestController {
         return new ResponseEntity<>("Zahtjev je odobren!!", HttpStatus.OK);
     }
 
+    public String generateRandomPassword(int length) {
+        SecureRandom random = new SecureRandom();
+        byte[] passwordBytes = new byte[length];
+        random.nextBytes(passwordBytes);
+        String generatedPassword = Base64.getEncoder().encodeToString(passwordBytes);
+
+        return generatedPassword;
+    }
     @PutMapping("/odbijZahtjev/{id}")
     public ResponseEntity<String> denyZahtjev(@PathVariable(name="id") Long zahtevId,
                                                                   HttpSession httpSession)
@@ -237,8 +249,7 @@ public class ZahtjevRestController {
         */
         //sendEmailToAddress(toAddress,emailSubject,emailText);
         String poruka = "Vas zahtjev za aktivaciju naloga je odbijen.";
-        mailService.sendEmail(targetZahtev.getEmailAdresa(), "Odbijanje zahtjeva", poruka);
-
+        mailService.sendSimpleMessage(targetZahtev.getEmailAdresa(), "Odbijanje zahtjeva", poruka);
         return new ResponseEntity<>("Zahtjev je odbijen!", HttpStatus.OK);
     }
 }

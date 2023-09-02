@@ -48,13 +48,13 @@ public class ZanrService {
     }
 
     public void deleteZanrOfKnjiga(Knjiga knjiga) {
-        List<Zanr> zanrovi = knjiga.getZanrovi().stream().toList(); //jer je set
-        for(Zanr it : zanrovi) {
-            it.izbrisiKnjigu(knjiga);
-            zanrRepository.save(it);
-            // pretty jednostavno
-            // izbrise knjigu pomocu f-je u entity
-            // sacuva preko repository jpa
+        List<Zanr> allZanrList = knjiga.getZanrovi().stream().toList();
+
+        for (Zanr z : allZanrList) {
+
+            z.izbrisiKnjigu(knjiga);
+            zanrRepository.save(z);
+
         }
     }
 
