@@ -4,6 +4,7 @@ import ac.rs.ftn.webProjekat.Dto.KnjigaDto;
 import ac.rs.ftn.webProjekat.Dto.PolicaDto;
 import ac.rs.ftn.webProjekat.Entity.*;
 import ac.rs.ftn.webProjekat.Service.PolicaService;
+import ac.rs.ftn.webProjekat.Service.StavkaPoliceService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/police")
@@ -21,6 +23,9 @@ public class PolicaRestController {
 
     @Autowired
     private PolicaService policaService;
+
+    @Autowired
+    private StavkaPoliceService stavkaPoliceService;
 
     //lista polica
     // podrazumijeva se lista ulogovanog korisnika
@@ -241,6 +246,8 @@ public class PolicaRestController {
 
         StavkaPolice newStavka = new StavkaPolice();
         newStavka.setKnjiga(targetKnjiga);
+
+        List<StavkaPolice> sveStavke = stavkaPoliceService.findAllStavka();
         targetPolica.getStavkaPolice().add(newStavka);
 
         policaService.savePolica(targetPolica);

@@ -114,7 +114,9 @@ export default {
 
 /* Stil za sekciju pretrage */
 .search-section {
-  background-color: purple;
+  background-image: url('@/assets/slike/pozadinaa.jpg');
+  background-size: cover;
+  background-position: center;
   color: white;
   padding: 10px;
   border-radius: 8px;

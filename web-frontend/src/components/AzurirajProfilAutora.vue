@@ -1,5 +1,6 @@
 <template>
-  <div class="update_form" v-if="showProfileUpdate">    <h2>Ažuriraj profil:</h2>
+  <div class="update_form" v-if="showProfileUpdate">
+    <h2>Ažuriraj profil:</h2>
     <label for="oldEmailAdresa">Stara Email adresa:</label>
     <input v-model="updateDTO.staraEmailAdresa" /><br />
     <label for="newEmailAdresa">Nova Email adresa:</label>
@@ -49,41 +50,41 @@ export default {
         profilnaSlika: "",
       },
     };
-},
+  },
   mounted: function() {
     this.loadUserData();
+  },
+  methods: {
+    toggleForm() {
+      this.showForm = !this.showForm;
     },
-    methods: {
-      toggleForm() {
-        this.showForm = !this.showForm;
-      },
-      loadUserData() {
-        fetch('http://localhost:9090/api/korisnici/korisnik', {
-          method: "GET",
-          credentials: 'include',
-          headers: {
-            Accept: "application/json",
-            "Content-type": "application/json",
-          },
-        })
-            .then(response => response.json())
-            .then(data => {
-              this.updateDTO.staraEmailAdresa = data.emailAdresa;
-              this.updateDTO.korisnickoIme = data.korisnickoIme;
-              this.updateDTO.ime = data.ime;
-              this.updateDTO.prezime = data.prezime;
-              this.updateDTO.datumRodjenja = data.datumRodjenja;
-              this.updateDTO.opis = data.opis;
-              this.updateDTO.profilnaSlika = data.profilnaSlika;
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-            });
-      },
+    loadUserData() {
+      fetch('http://localhost:9090/api/korisnici/korisnik', {
+        method: "GET",
+        credentials: 'include',
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json",
+        },
+      })
+          .then(response => response.json())
+          .then(data => {
+            this.updateDTO.staraEmailAdresa = data.emailAdresa;
+            this.updateDTO.korisnickoIme = data.korisnickoIme;
+            this.updateDTO.ime = data.ime;
+            this.updateDTO.prezime = data.prezime;
+            this.updateDTO.datumRodjenja = data.datumRodjenja;
+            this.updateDTO.opis = data.opis;
+            this.updateDTO.profilnaSlika = data.profilnaSlika;
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+    },
     submit: function() {
       console.log("Submit kliknut!");
       console.log(JSON.stringify(this.updateDTO));
-      fetch("http://localhost:9090/api/korisnici/updateKorisnik", {
+      fetch("http://localhost:9090/api/korisnici/updateAutor", {
         method: "POST",
         credentials: 'include',
         headers: {

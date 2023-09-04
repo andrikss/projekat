@@ -1,25 +1,24 @@
 <template>
   <div class="register">
 
-    <h2>Postani naš član!</h2>
     <label for="emailAdresa">Email adresa:</label>
     <input v-model="registrujseDTO.emailAdresa" /><br />
     <label for="lozinka">Lozinka:</label>
     <input type="password" v-model="registrujseDTO.lozinka" /><br />
-    <label for="ponovljenaLozinka">Ponovljena lozinka:</label>
+    <label for="ponovljenaLozinka" >Ponovljena lozinka:</label>
     <input type="password" v-model="registrujseDTO.ponovljenaLozinka" /><br />
-    <label for="korisnickoIme">Korisničko ime:</label>
+    <label for="korisnickoIme" >Korisničko ime:</label>
     <input v-model="registrujseDTO.korisnickoIme" /><br />
 
-    <label for="ime">Ime:</label>
+    <label for="ime" >Ime:</label>
     <input v-model="registrujseDTO.ime" /><br />
     <label for="prezime">Prezime:</label>
     <input v-model="registrujseDTO.prezime" /><br />
-    <label for="datumRodjenja">Datum rođenja:</label>
+    <label for="datumRodjenja" >Datum rođenja:</label>
     <input type="date" v-model="registrujseDTO.datumRodjenja" /><br />
 
 
-    <button v-on:click="submit()">submit</button>
+    <button v-on:click="submit()">POTVRDI</button>
   </div>
 </template>
 
@@ -119,18 +118,52 @@ export default {
 </script>
 
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+/* Stilizacija za formu za registraciju */
+.register {
+  text-align: center;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+
+.register h2 {
+  font-size: 24px; /* Velika veličina naslova */
+  margin-bottom: 20px; /* Razmak ispod naslova */
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+
+.register label {
+  display: block; /* Polje za unos će biti prikazano kao blok element, jedno ispod drugog */
+  margin-bottom: 10px; /* Razmak između labela i input polja */
+  font-weight: bold;
+  color: white;
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2); /* Dodajte sjenku tekstu */
+
 }
-a {
-  color: #42b983;
+
+.register input {
+  width: 100%;
+  padding: 0px;
+  margin-bottom: 10px; /* Dodajte razmak između input polja */
+  border: 2px solid #ccc; /* Dodajte okvir za input polje */
+  border-radius: 5px; /* Zaobljeni rubovi za input polje */
+  font-size: 14px; /* Velika veličina fonta za unos */
 }
+
+.register button {
+  background-color: #3a9550; /* Boja dugmeta za submit */
+  color: white; /* Boja teksta na dugmetu */
+  padding: 10px 20px; /* Dodajte malo prostora oko teksta na dugmetu */
+  border: none; /* Uklonite okvir dugmeta */
+  font-weight: bold;
+  border-radius: 3px; /* Zaobljeni rubovi za dugme */
+  font-size: 15px; /* Velika veličina fonta za dugme */
+  cursor: pointer; /* Prikazuje da je element interaktivan */
+}
+
+.register button:hover {
+  background-color: #3a9570; /* Promenite boju dugmeta na hover */
+}
+
+.naslov {
+  color: white; /* Bijela boja za naslov */
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5); /* Dodajte sjenku tekstu */
+}
+
 </style>

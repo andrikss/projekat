@@ -122,7 +122,7 @@ export default {
 .azuriraj-container {
   position: fixed;
   top: 0;
-  left: 2;
+  left: 2px;
   margin: 20px;
   display: flex;
   align-items: center;

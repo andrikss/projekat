@@ -22,7 +22,7 @@
 
   <div class="azuriraj-container">
     <button @click="toggleProfileUpdate" class="azuriraj">Ažuriraj profil </button>
-    <AzurirajProfil :showProfileUpdate="showProfileUpdate" />
+    <AzurirajProfilAutora :showProfileUpdate="showProfileUpdate" />
   </div>
 
   <div class="logout-button-container">
@@ -39,13 +39,13 @@
 import Logout from '@/components/Logout.vue'
 import JedanKorisnik from "@/components/JedanKorisnik.vue";
 import DodajNovuKnjigu from "@/components/DodajNovuKnjigu.vue";
-import AzurirajProfil from "@/components/AzurirajProfil.vue";
+import AzurirajProfilAutora from "@/components/AzurirajProfil.vue";
 export default {
   name: "HomeAutor",
   components: {
     Logout,
     JedanKorisnik,
-    AzurirajProfil,
+    AzurirajProfilAutora,
     DodajNovuKnjigu
   },
   data() {

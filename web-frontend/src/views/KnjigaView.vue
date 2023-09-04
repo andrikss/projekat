@@ -434,6 +434,7 @@ export default {
                 this.$router.push('/polica?id='+selectedPolica.id);
               }
             } else {
+
               alert('Failed to add knjiga to polica');
               //console.log(res);
               throw new Error('Adding knjiga to polica failed');

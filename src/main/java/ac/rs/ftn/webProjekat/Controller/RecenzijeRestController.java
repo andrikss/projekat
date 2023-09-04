@@ -97,21 +97,22 @@ public class RecenzijeRestController {
         }
 
         StavkaPolice targetStavka = targetPolica.getStavkaByKnjigaId(knjigaId);
-
-
+        System.out.println("STAVKA PRIJE ADDA" +targetStavka.toString());
         Recenzija recenzija = new Recenzija(recenzijaDataDto);
         recenzija.setKorisnik(loggedUser);
         recenzijaService.saveRecenzija(recenzija);
-        System.out.println(recenzija.toString());
+       // System.out.println(recenzija.toString());
         targetStavka.getRecenzija().add(recenzija);
         recenzijaService.saveStavkaPolice(targetStavka);
+        System.out.println("STAVKA POSLE ADDA " +targetStavka.toString());
+        //knjigaService.saveStavkeOfKnjiga(targetStavka);
         // recenzija.setKorisnik(praviKorisnik);
         // Korisnik korisnik = new Korisnik();
        // korisnik.setEmailAdresa(loggedUser.getEmailAdresa());
        // korisnik.setKorisnickoIme(loggedUser.getKorisnickoIme());
        // recenzija.setKorisnik(korisnik);
 
-        System.out.println("KOR POLICE KONACNO" + loggedUser.getPolice().toString());
+        //System.out.println("KOR POLICE KONACNO" + loggedUser.getPolice().toString());
 
         return new ResponseEntity<>("Recenzija uspješno dodata!", HttpStatus.OK);
     }

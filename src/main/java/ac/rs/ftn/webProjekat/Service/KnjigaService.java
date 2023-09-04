@@ -8,10 +8,7 @@ import ac.rs.ftn.webProjekat.Repository.ZanrRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class KnjigaService {
@@ -83,12 +80,19 @@ public class KnjigaService {
     //dobavi recenziju
     public Set<Recenzija> getRecenzija(Knjiga knjiga) {
         List<StavkaPolice> stavke = stavkaPoliceService.findAllStavka();
+        Set<Recenzija> recenzije = new HashSet<>();
         for(StavkaPolice it : stavke) {
+           // System.out.println(it.getKnjiga().getId());
             if(it.getKnjiga().getId().equals(knjiga.getId())) {
-                return it.getRecenzija();
+                System.out.println("USAO SAM U EQUALS ID" + it.getRecenzija().toString());
+                Set<Recenzija> recenzijeStavke = it.getRecenzija();
+                if(recenzijeStavke != null) {
+                    recenzije.addAll(recenzijeStavke);
+                }
             }
+            //return it.getRecenzija();
         }
-        return null;
+        return recenzije;
     }
 
     public void poveziZanrSaKnjigom(Knjiga knjiga, List<String> zanrNaziv)

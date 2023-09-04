@@ -95,7 +95,7 @@ public class StavkaPolice implements Serializable {
         return "StavkaPolice{" +
                 "id=" + id +
                 ", knjiga=" + knjiga +
-              //  ", recenzija=" + recenzija +
+                ", recenzija=" + recenzija +
                 '}';
     }
 

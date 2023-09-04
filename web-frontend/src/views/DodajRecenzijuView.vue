@@ -2,8 +2,8 @@
   <div>
     <label for="tekst">Tekst:</label>
     <input v-model="recenzijaDto.tekst" /><br />
-    <label for="ocjena">Ocena:</label>
-    <input v-model="recenzijaDto.ocena" /><br />
+    <label for="ocjena">Ocjena:</label>
+    <input v-model="recenzijaDto.ocjena" /><br />
 
     <label for="datumRecenzije">Datum recenzije:</label>
     <input type="date" v-model="recenzijaDto.datumRecenzije" /><br />
@@ -39,6 +39,7 @@ methods: {
     })
         .then((res) => {
           if (res.ok) {
+            console.log(this.recenzijaDto)
             alert('Recenzija successfully added!');
             this.$router.push('/knjiga?id=' + this.$route.query.id);
           } else if (res.status === 400) {

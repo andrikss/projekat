@@ -118,12 +118,12 @@ public class Korisnik implements Serializable {
     //dobavljanje PRIMARNE police po id-u knjige
     public Polica getPrimarnaPolicaByKnjigaId(Long knjigaId) {
         for (Polica p : police) {
-            if (p.getTip() == TipPolice.REGULAR) {
+            if (p.getTip().equals(TipPolice.REGULAR)) {
                 continue;
             }
 
             for (StavkaPolice st : p.getStavkaPolice()) {
-                if (st.getKnjiga().getId() == knjigaId) {
+                if (st.getKnjiga().getId().equals(knjigaId)) {
                     return p;
                 }
             }

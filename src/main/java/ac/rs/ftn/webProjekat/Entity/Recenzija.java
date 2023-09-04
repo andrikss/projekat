@@ -109,4 +109,17 @@ public class Recenzija implements Serializable {
                 '}';
     }
 
+    public boolean equals(RecenzijaDto recenzijaDto) {
+        //this.datumRecenzije == recenzijaDto.getDatumRecenzije()   //Date are still messy so either make a class that casts them or dont use them at all
+        if (this.ocjena != recenzijaDto.getOcjena())
+            return false;
+        if (this.tekst == null && recenzijaDto.getTekst() == null)
+            return true;
+        if (this.tekst != null && recenzijaDto.getTekst() != null &&
+                this.tekst.equals(recenzijaDto.getTekst()))
+        {
+            return true;
+        }
+        return false;
+    }
 }
