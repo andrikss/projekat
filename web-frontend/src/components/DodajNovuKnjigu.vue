@@ -1,28 +1,45 @@
 <template>
   <div >
-    <h3>Kreiraj novu knjigu:</h3>
+    <h3>Napravi novu knjigu:</h3>
+    <div class="form-group">
     <label for="naslov">Naslov:</label>
     <input v-model="knjigaDto.naslov" /><br />
+    </div>
+    <div class="form-group">
     <label for="isbn">ISBN:</label>
     <input v-model="knjigaDto.isbn" /><br />
+    </div>
+
+    <div class="form-group">
     <label for="brojStrana">Broj strana:</label>
     <input v-model="knjigaDto.brojStrana" /><br />
+    </div>
+
+    <div class="form-group">
     <label for="opis">Opis:</label>
     <input v-model="knjigaDto.opis" /><br />
+    </div>
+
+    <div class="form-group">
     <label for="ocena">Ocjena:</label>
     <input v-model="knjigaDto.ocjena" /><br />
+    </div>
 
+    <div class="form-group">
     <label for="datumObjavljivanja">Datum objavljivanja:</label>
     <input type="date" v-model="knjigaDto.datumObjavljivanja" /><br />
+    </div>
 
+    <div class="form-group">
     <label for="selectedAutor">Autor:</label>
     <select v-model="selectedAutor">
       <option disabled value="">Please Select</option>
       <option v-for="autorDto in autorsDto" :value="autorDto">{{autorDto.emailAdresa}}</option>
     </select>
+    </div>
 
 
-    <button v-on:click="submit()">Add knjiga</button>
+    <button class = "dugme" v-on:click="submit()">Dodaj knjigu</button>
 
   </div>
 </template>
@@ -105,5 +122,26 @@ export default {
 </script>
 
 <style scoped>
+.form-group {
+  margin-bottom: 4px;
+  display: flex;
+  flex-direction: column;
+}
 
+label {
+  margin-bottom: 2px;
+}
+
+.dugme {
+  font-size: 14px;
+  padding: 5px 5px;
+  font-weight: bold;
+  color: white;
+  background-color: #d32f2f;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Dodaje sjenku tekstu */
+}
+
+.dugme:hover {
+  background-color: darkred;
+}
 </style>

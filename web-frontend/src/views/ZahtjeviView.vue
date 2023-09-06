@@ -14,7 +14,11 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="zahtjevDto in zahtjeviDto" :key="zahtjevDto.id">
+      <tr v-for="zahtjevDto in zahtjeviDto" :key="zahtjevDto.id"
+          :class="{
+            'accepted-row': zahtjevDto.status === 'Odobren',
+            'rejected-row': zahtjevDto.status === 'Odbijen'
+          }">
         <td>{{ zahtjevDto.id }}</td>
         <td>{{ zahtjevDto.emailAdresa }}</td>
         <td>{{ zahtjevDto.telefon }}</td>
@@ -231,5 +235,13 @@ thead th {
 
 .btn.reject:hover {
   background-color: #d32f2f;
+}
+
+.accepted-row {
+  background-color: mediumseagreen; /* Zelena boja za odobrene redove */
+}
+
+.rejected-row {
+  background-color: lightcoral; /* Crvena boja za odbijene redove */
 }
 </style>

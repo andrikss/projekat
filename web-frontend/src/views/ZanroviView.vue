@@ -1,15 +1,13 @@
 <template>
   <div>
 
-    <div >
       <h2 class="list-title">Lista žanrova:</h2>
-      <div class="zanr-table">
-        <table class="center custom-table">
+      <table class="zanr-table orange-border">
 
           <thead>
           <tr>
-            <th class="white-background">ID</th>
-            <th class="white-background">Naziv</th>
+            <th class="top-row">ID</th>
+            <th class="top-row">Naziv</th>
           </tr>
           </thead>
           <tbody>
@@ -23,11 +21,8 @@
 
           </tr>
           </tbody>
-        </table>
-      </div>
+      </table>
     </div>
-
-  </div>
 
   <div class="add-genre-section" id="dodajNoviZanrID">
     <h2 class="add-genre-title">Dodaj novi žanr:</h2>
@@ -153,6 +148,17 @@ export default {
 
 <style>
 
+.orange-border {
+  border: 4px solid orangered;
+  background-color: rgba(150, 150, 150, 0.2);
+  border-radius: 15px;
+  padding: 20px;
+  color: white;
+  font-weight: bold;
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+  width: 100%;
+}
+
 .list-title {
   background-color: white;
   color: black;
@@ -161,48 +167,8 @@ export default {
   text-align: center;
   margin-bottom: 20px;
 }
-.custom-table {
-  width: 80%;
-  margin: 20px auto;
-  border-collapse: collapse;
-}
-
-.custom-table th,
-.custom-table td {
-  padding: 10px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-.highlight-id {
-  background-color: deeppink; /*  boja za parne redove u koloni ID */
-  color: deeppink;
-}
-
-footer {
-  text-align: center;
-  margin-top: 40px;
-  font-weight: bold;
-}
 
 
-table.center {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-
-.zanr-table tr:nth-child(even) {
-  background-color: #ffffcc; /* Svijetlo žuta boja za parne redove */
-}
-
-.zanr-table tr:nth-child(odd) {
-  background-color: #ffc0cb; /* Svijetlo roze boja za neparne redove */
-}
-
-.white-background {
-  background-color: white; /* Bijela pozadina za ID i Naziv */
-}
 
 .add-genre-section {
   margin: 20px auto;
@@ -231,4 +197,17 @@ table.center {
   margin-top: 10px;
 }
 
+.zanr-table td {
+  background-color: rgba(150, 150, 150, 0.6); /* Boja za redove tabele */
+  color: white;
+  padding: 10px;
+  text-align: left;
+   /* Granica oko redova */
+  border-bottom: 1px solid white; /* Linija ispod redova */
+}
+
+/* Hover efekat za redove tabele */
+.zanr-table tbody tr:hover {
+  background-color: darkorange; /* Boja za hover efekat */
+}
 </style>

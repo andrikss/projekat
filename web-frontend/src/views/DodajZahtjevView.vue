@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <h1 class="title">Dobrodošli na stranicu za kreiranje naloga autora</h1>
     <p class="description">Ako želite da napravite nalog autora, pošaljite svoje podatke administratoru i očekujte odgovor administratora na mejlu! :)</p>
 
     <div class="form-group">
@@ -102,19 +101,22 @@ export default {
   padding: 20px;
   text-align: center;
   background-color: #f7f7f7;
-  border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border: 4px solid orangered;
+  background-color: rgba(150, 150, 150, 0.5);
+  border-radius: 15px;
+  color: white;
+  font-weight: bold;
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
 }
 
-.title {
-  font-size: 24px;
-  margin-bottom: 20px;
-}
 
 .description {
-  font-size: 16px;
+  font-size: 20px;
   margin-bottom: 30px;
-  color: #555;
+  color: white;
+  font-weight: bold;
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
 }
 
 .form-group {
@@ -137,7 +139,7 @@ label {
 }
 
 .form-control:focus {
-  border-color: #007bff;
+  border-color: darkorange;
   outline: none;
 }
 
@@ -148,7 +150,7 @@ select.form-control {
 .btn {
   padding: 10px 20px;
   font-size: 18px;
-  background-color: #007bff;
+  background-color: orangered;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -157,6 +159,6 @@ select.form-control {
 }
 
 .btn:hover {
-  background-color: #0056b3;
+  background-color: darkorange;
 }
 </style>

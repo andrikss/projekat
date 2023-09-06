@@ -15,6 +15,9 @@
       <a href="/zanrovi">LISTA ŽANROVA</a>
       <span class="separator">|</span>
       <a href="/korisnici">LISTA KORISNIKA</a>
+      <span class="separator">|</span>
+      <a href="/listaAutora">LISTA AUTORA</a>
+
     </nav>
 
     <div class="activation-request">

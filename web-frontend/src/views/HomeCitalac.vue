@@ -4,24 +4,24 @@
     <JedanKorisnik/>
   </div>
 
-  <div class="home">
-    <div class="table">
-      <div class="table-item"><a href="/knjige">LISTA KNJIGA</a></div>
+  <div class="kuca">
+    <div class="tabb">
+      <div class="tabbb-item"><a href="/knjige">LISTA KNJIGA</a></div>
       <div class="separator">|</div>
-      <div class="table-item"><a href="/zanrovi">LISTA ZANROVA</a></div>
+      <div class="tabbb-item"><a href="/zanrovi">LISTA ŽANROVA</a></div>
       <div class="separator">|</div>
-      <div class="table-item"><a href="/listaAutora">LISTA AUTORA</a></div>
+      <div class="tabbb-item"><a href="/dodajZahtjev">LISTA RECENZIJA</a></div>
       <div class="separator">|</div>
-      <div class="table-item"><a href="/dodajZahtjev">PODNESI ZAHTJEV ZA AUTOR NALOG</a></div>
-      <div class="table-item"><a href="/korisnici">LISTA KORISNIKA</a></div>
+      <div class="tabbb-item"><a href="/listaAutora">LISTA AUTORA</a></div>
       <div class="separator">|</div>
+      <div class="tabbb-item"><a href="/korisnici">LISTA KORISNIKA</a></div>
     </div>
   </div>
 
-  <div class="pretraga"><a href="/pretragaKnjiga">PRETRAGA KNJIGA</a></div>
+  <div class="pretragggg"><a href="/pretragaKnjiga">PRETRAGA KNJIGA</a></div>
 
-  <div class="azuriraj-container">
-  <button @click="toggleProfileUpdate" class="azuriraj">Ažuriraj profil </button>
+  <div class="azurirajjj">
+  <button @click="toggleProfileUpdate" class="azurirajjjb">Ažuriraj profil </button>
   <AzurirajProfil :showProfileUpdate="showProfileUpdate" />
   </div>
 
@@ -58,83 +58,124 @@ export default {
 
 <style scoped>
 
-.home {
-  background-color: #ffc0cb; /* Svijetlo roze pozadina */
+.kuca {
+  background-color: #d32f2f;
   padding: 20px;
-  width: 40%;
+  width: 530px;
   height: 34px;
   align-items: flex-start;
   bottom: 0;
   position: fixed;
-  left: 23%;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  left: 0;
+  color: white;
+  font-weight: bold;
 }
 
-.table {
+.tabb {
   position: absolute;
   display: flex;
   align-items: center;
   padding: 10px 0;
   bottom:0;
-  left: 40px;
+  left: 0px;
 }
 
-.table-item {
-  font-weight: bold;
-  color: #6b0f9c; /* Tamno ljubičasta boja */
-  margin-bottom: 10px;
+/* Stilizacija navigacionih linkova */
+.tabbb-item a {
+  text-decoration: none; /* Uklanja podvučenost linkova */
+  color: white; /* Boja teksta */
+  font-weight: bold; /* Podebljan tekst */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Dodaje sjenku tekstu */
+  transition: color 0.3s, border-bottom-color 0.3s; /* Dodaje tranziciju za boju i donju granicu teksta */
+}
+
+.tabbb-item a:hover {
+  color: lightcoral; /* Boja teksta na hover-u */
+  border-bottom: 2px solid #555; /* Donja granica na hover-u */
 }
 
 .logout-button-container {
-  position: absolute; /* Postavlja "Logout" u apsolutni položaj unutar roditeljskog kontejnera */
+  position: page; /* Postavlja "Logout" u apsolutni položaj unutar roditeljskog kontejnera */
   bottom: 0; /* Pomjeranje na dno */
   right: 0; /* Pomjeranje na desno */
   padding: 50px;
-  background-color: #ff6666;
+  background-color: transparent;
 }
 
-.pretraga {
+.pretragggg {
   position: fixed;
-  top: 30px; /* Podešava udaljenost od vrha ekrana */
-  right: 0; /* Podešava udaljenost od desne ivice ekrana */
-  padding: 30px 40px; /* Povećava unutrašnji prostor */
-  background-color: #3498db; /* Drecavo plava boja */
-  color: white; /* Bijela boja teksta */
+  top: 5px; /* Podešava udaljenost od vrha ekrana */
+  right: 3px; /* Podešava udaljenost od desne ivice ekrana */
+  padding: 20px 20px; /* Povećava unutrašnji prostor */
+  background-color: #B8860B; /* Tamno žuta boja */
+  color: white;
+  font-weight: bold;
   font-size: 16px; /* Povećava veličinu fonta */
   font-weight: bold; /* Podebljan tekst */
   border: none; /* Uklanja okvir dugmeta */
-  cursor: pointer; /* Pokazivač prilikom hover-a preko dugmeta */
-  z-index: 9999; /* Postavlja z-index kako bi bio iznad drugih elemenata */
-  transform: translateX(-50%); /* Pomeranje elementa za polovinu širine kako bi bio centriran */
+  cursor: pointer; /* Postavite prilagođeni kursor kao lupa na hover-u preko dugmeta */
+  border-radius: 30px;
+  transition: color 0.3s, border-bottom-color 0.3s; /* Dodaje tranziciju za boju i donju granicu teksta */
 }
 
-.azuriraj {
-  background-color: plum; /* Drecavo plava boja */
-  color: deeppink; /* Bijela boja teksta */
-  font-size: 16px; /* Povećava veličinu fonta */
-  font-weight: bold; /* Podebljan tekst */
-  padding: 10px 20px; /* Povećava unutrašnji prostor dugmeta */
-  border: none; /* Uklanja okvir dugmeta */
-  cursor: pointer; /* Pokazivač prilikom hover-a preko dugmeta */
-  margin: 0;
-  height: 50px;
+
+.pretragggg:hover {
+  text-decoration: underline; /* Podvlači tekst na hover-u */
+  color: #333; /* Tamno siva boja teksta na hover-u */
 }
 
-.azuriraj-container {
+.pretragggg a {
+  color: white;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Dodaje sjenku tekstu */
+  text-decoration: none; /* Uklanja podvučenost linkova */
+}
+
+.azurirajjj {
   position: fixed;
-  top: 0;
-  left: 2px;
-  margin: 20px;
-  display: flex;
-  align-items: center;
+  bottom: calc(15% - 25px); /* 50% s lijeve strane ekrana, -25px za polovicu visine gumba */
+  left: 4px;
+  display: inline-block;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: transparent;
+  color: orangered;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.azurirajjjb {
+  position: fixed;
+  bottom: calc(15% - 25px); /* 50% s lijeve strane ekrana, -25px za polovicu visine gumba */
+  left: 4px;
+  display: inline-block;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: whitesmoke;
+  color: orangered;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+
+.azurirajjjb:hover {
+  background-color: orangered; /* Promijenite background boju za hover */
+  color: white; /* Boja teksta za hover */
 }
 
 .user-info-container {
   display: flex; /* Koristi fleksibilno poravnanje */
+  align-content: flex-start;
   justify-content: center; /* Poravnavanje sadržaja horizontalno */
   align-items: center; /* Poravnavanje sadržaja vertikalno */
-  height: 15vh;
-  margin-top: 40px;
-  width: 100%;
+  margin-top: 0px;
+  margin-left: 280px;
+  width: 950px;
+  padding: 15px;
 }
 
 .table-item {

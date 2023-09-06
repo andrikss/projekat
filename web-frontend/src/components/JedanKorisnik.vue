@@ -1,48 +1,54 @@
 <template>
-  <div class="basic_user_info">
     <div class="user-profile">
-      <table class="user-table">
-        <h2 class="title"> Osnovne informacije korisnika: </h2>
+      <table class="center custom-table">
+        <thead>
         <tr>
-          <td>
-            <h6>{{ id }}</h6>
-            <div class="separator">|</div>
+          <th>ID</th>
+          <th>Email Adresa</th>
+          <th>Korisničko ime</th>
+          <th>Uloga korisnika</th>
+          <th>Ime</th>
+          <th>Prezime</th>
+          <th>Datum rođenja</th>
+          <th>Opis</th>
+          <th>Avatar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ id }}</td>
 
-            <h6>{{ emailAdresa }}</h6>
-            <div class="separator">|</div>
+            <td>{{ emailAdresa }}</td>
 
-            <h6>{{ korisnickoIme }}</h6>
-            <div class="separator">|</div>
+            <td>{{ korisnickoIme }}</td>
 
-            <h6>{{ ulogaKorisnika }}</h6>
-            <div class="separator">|</div>
+            <td>{{ ulogaKorisnika }}</td>
 
-            <h6>{{ ime }}</h6>
-            <div class="separator">|</div>
+            <td>{{ ime }}</td>
 
-            <h6>{{ prezime }}</h6>
-            <div class="separator">|</div>
+            <td>{{ prezime }}</td>
 
-            <h6>{{ opis ? opis : '/' }}</h6>
-            <div class="separator">|</div>
+            <td>{{ formatDate(datumRodjenjaParsed) }}</td>
 
-            <h6>{{ formatDate(datumRodjenjaParsed) }}</h6>
-            <div class="separator">|</div>
-          </td>
-          <td>
-            <img :src="profilnaSlika" alt="profilna slika">
-          </td>
-        </tr>
+            <td>{{ opis ? opis : '/' }}</td>
+
+            <td>
+              <img :src="profileImage" alt="profilna slika" class="avatar-image" style="width: 150px; height: 150px;">
+            </td>
+          </tr>
+        </tbody>
       </table>
 
 
 
-      <h3 class="title">Korisnikove police:</h3>
+
+      <h3 class="naslovv">Korisnikove police:</h3>
+      <div class="police-container">
     <table class="police-table">
       <tr v-for="polica in policeDto" :key="polica.id">
-        <td>
-          id= {{ polica.id }} | {{ polica.naziv }} | {{ polica.tip }}
-        </td>
+        <td>ID: {{ polica.id }}</td>
+        <td>Naziv: {{ polica.naziv }}</td>
+        <td>Tip: {{ polica.tip }}</td>
         <td>
           <button class="polica-button" v-on:click="viewPolica(polica)">View</button>
         </td>
@@ -58,7 +64,8 @@
       </tr>
     </table>
   </div>
-  </div>
+    </div>
+
 </template>
 
 <script>
@@ -83,6 +90,19 @@ export default {
         naziv: "",
       },
     };
+  },
+  computed: {
+    profileImage() {
+      if (this.ulogaKorisnika === 'Administrator') {
+        return require('@/assets/slike/administrator.png');
+      } else if (this.ulogaKorisnika === 'Citalac') {
+        return require('@/assets/slike/citalac.png');
+      } else if (this.ulogaKorisnika === 'Autor') {
+        return require('@/assets/slike/autor.png');
+      } else {
+        return require('@/assets/slike/pozadinaa.jpg'); // Slika za sve ostale uloge
+      }
+    },
   },
   methods: {
 
@@ -219,37 +239,55 @@ export default {
 </script>
 
 <style scoped>
-
 .user-profile {
-  width: 100%;
-  overflow-x: auto;
+  align-content: center;
+  align-content: flex-start;
 }
-
-.user-table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: lightseagreen;
-}
-
-.user-table td {
-  padding: 10px;
-  border: 1px solid #ddd;
-  text-align: left;
-  display: flex;
-  align-items: center; /* Poredajte sadržaj vertikalno */
-}
-
-.user-table h6 {
-  margin: 0;
-}
-
-.user-table img {
-  max-width: 100px;
-}
-
-.separator {
+.naslovv {
+  background-color: rgba(50, 50, 50, 0.2);
+  background-color: indianred;
+  color: white;
+  width: 300px;
+  position: center;
   font-weight: bold;
-  margin: 0 5px;
+  margin-left: 325px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Dodaj crni shadow */
+  align-self: center; /* Izmenjeno da bi se centrirao horizontalno */
+  text-align: center;
+  border: 3px solid #333333;
+  border-radius: 50px;
+  padding: 15px;
+}
+
+.avatar-image {
+  width: auto; /* Automatska širina slike (prilagodit će se visini tabele) */
+  vertical-align: middle; /* Vertikalno poravnanje sa sredinom ćelija u istoj vrsti */
+}
+
+.custom-table th,
+.custom-table td {
+  padding: 15px;
+  text-align: left;
+  font-weight: bold; /* Podebljani tekst */
+  color: white; /* Bela boja teksta */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Dodaj crni shadow */
+  transition: background-color 0.3s; /* Dodaj hover efekat */
+}
+
+.custom-table th {
+  background-color: orangered; /* Narandžasta boja za zaglavlje */
+}
+
+.custom-table td {
+  background-color: rgba(50, 50, 50, 0.4); /* Providno tamno siva boja za parne redove */
+}
+
+.custom-table {
+  border: 5px solid orangered;
+}
+
+.custom-table tbody tr:hover {
+  background-color: #555;
 }
 
 /* Dodajte ovaj stil za mobilne uređaje kako bi se sadržaj pravilno prikazivao */
@@ -269,78 +307,49 @@ export default {
   border: none; /* Uklanja okvir dugmeta */
   cursor: pointer; /* Pokazivač prilikom hover-a preko dugmeta */
 }
-.user-profile {
-  width: 100%;
-  overflow-x: auto; /* Dodaje horizontalni scrollbar ako tabela premaši širinu ekrana */
-}
 
-.user-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.user-table {
-  width: 100%;
-  border-collapse: collapse; /* Spaja granice ćelija */
-  background-color: lightseagreen;
-  font-weight: bold;
-}
 
 .user-table img {
   max-width: 100px;
 }
 
-.police-table {
-  width: 150%;
-  margin-top: 20px;
-  border-collapse: collapse;
-  background-color: lightseagreen;
-  display: flex; /* Dodajte ovu liniju za fleksibilno poravnanje */
-  flex-direction: column; /* Dodajte ovu liniju za prikaz u koloni
+.police-table button {
+  background-color: indianred;
+  border: 1px solid orangered;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin-left: 10px; /* Dodajte razmak s desne strane */
 }
 
 .police-table td {
   padding: 10px;
-  border: 1px solid #ddd;
-  text-align: left;
-  display: flex; /* Dodajte ovu liniju za fleksibilno poravnanje */
-  justify-content: center; /* Poravnavanje sadržaja horizontalno
-}
-
-.basic_user_info {
-  text-align: center;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
+  justify-content: space-between; /* Podešavanje razmaka između sadržaja i dugmeta "View" */
+  align-items: center; /* Centralno poravnanje sadržaja i dugmeta "View" vertikalno */
 }
 
-.user-table td {
-  padding: 10px; /* Dodaje unutrašnji prostor oko sadržaja ćelija */
-  border: 1px solid #ddd; /* Dodaje sivu ivicu oko ćelija */
+.police-container {
+  display: flex;
+  justify-content: center; /* Centrirajte sadržaj horizontalno */
 }
 
-.user-table h6 {
-  margin: 0; /* Uklanja unutrašnji razmak oko naslova */
+.police-table tr {
+  border: 4px solid indianred;
 }
 
-.polica-button {
-  background-color: plum;
-  color: deeppink;
-  font-size: 14px;
+.police-table {
+  width: 300px;
+  margin-top: 20px;
+  color: white;
   font-weight: bold;
-  padding: 5px 10px;
-  border: none;
-  cursor: pointer;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Dodaj crni shadow */
+  background-color: rgba(50, 50, 50, 0.4); /* Providno tamno siva boja za parne redove */
+  display: flex; /* Dodajte ovu liniju za fleksibilno poravnanje */
+  flex-direction: column;
 }
 
-.title {
-  background-color: white;
-  color: rebeccapurple;
-}
 
-.separator {
-  font-weight: bold;
-  margin: 0 5px; /* Add spacing around the separator */
-}
 </style>

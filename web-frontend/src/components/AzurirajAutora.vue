@@ -38,6 +38,11 @@
     </div>
 
     <div class="form-field">
+      <label for="opis">Lozinka:</label>
+      <input v-model="updateDTO.lozinka" /><br />
+    </div>
+
+    <div class="form-field">
       <button v-on:click="submit()" class="submit-button">Ažuriraj!</button>
     </div>
     </div>
@@ -59,6 +64,7 @@ export default {
         datumRodjenja: "",
         opis: "",
         profilnaSlika: "",
+        lozinka: ""
       },
     };
   },
@@ -70,7 +76,7 @@ export default {
       this.showForm = !this.showForm;
     },
     loadUserData() {
-      fetch('http://localhost:9090/api/korisnici/autor' + this.$route.query.id, {
+      fetch('http://localhost:9090/api/korisnici/autor/' + this.$route.query.id, {
         method: "GET",
         credentials: 'include',
         headers: {
@@ -94,6 +100,7 @@ export default {
     submit: function () {
       console.log("Submit kliknut!");
       console.log(JSON.stringify(this.updateDTO));
+
       fetch("http://localhost:9090/api/korisnici/updateAutor/" + this.$route.query.id , {
         method: "POST",
         credentials: 'include',

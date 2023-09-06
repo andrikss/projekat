@@ -1,12 +1,13 @@
 <template>
-  <div class="autori">
-    <table class="center">
+
+    <div class = "table-container">
+    <table class="orange-border">
       <thead>
       <tr>
 
         <th>ID</th>
         <th>Email Adresa</th>
-        <th>Korisnicko ime</th>
+        <th>Korisničko ime</th>
         <th>Ime</th>
         <th>Prezime</th>
         <th>Datum rođenja</th>
@@ -14,15 +15,36 @@
       </tr>
       </thead>
       <tbody>
-      <td> {{ autorDto.id }} </td>
-      <td> {{ autorDto.emailAdresa }} </td>
-      <td> {{ autorDto.korisnickoIme }} </td>
-      <td> {{ autorDto.ime }} </td>
-      <td> {{ autorDto.prezime }} </td>
-      <td> {{ formatDate(autorDto.datumRodjenja)}} </td>
-      <td> {{ autorDto.opis ? autorDto.opis : '/' }} </td>
+      <tr>
+        <td class="orange-border">{{ autorDto.id }}</td>
+        <td class="orange-border">{{ autorDto.emailAdresa }}</td>
+        <td class="orange-border">{{ autorDto.korisnickoIme }}</td>
+        <td class="orange-border">{{ autorDto.ime }}</td>
+        <td class="orange-border">{{ autorDto.prezime }}</td>
+        <td class="orange-border">{{ formatDate(autorDto.datumRodjenja) }}</td>
+        <td class="orange-border">{{ autorDto.opis ? autorDto.opis : '/' }}</td>
+      </tr>
       </tbody>
     </table>
+    </div>
+
+
+  <div class="button-and-title-container">
+    <button @click="dobaviPolice" class="pogledaj-button">Pogledaj police</button>
+  </div>
+    <ul class="police-list">
+      <li v-for="polica in policaDto" :key="polica.id" class="polica-item">
+        <strong>ID:</strong> {{ polica.id }}<br>
+        <strong>Naziv:</strong> {{ polica.naziv }}<br>
+        <strong>Tip:</strong> {{ polica.tip }}
+        <button @click="prikaziKnjigeNaPolici(polica.id)">Prikaži knjige</button>
+      </li>
+    </ul>
+
+  <div class = "knjige">
+    <KnjigeNaPolici v-if="showKnjigeNaPolici" :knjige="knjigeNaPolici" />
+  </div>
+
 
     <div id="azurirajAutora-ID">
       <div class="azuriraj-container">
@@ -60,27 +82,21 @@
 
     </div>
 
-    <button @click="dobaviPolice" class="pogledaj-button">Korisnikove police</button>
-    <div v-for="polica in policaDto" :key="polica.id" class="polica-item">
-      <div>
-        <strong>ID:</strong> {{ polica.id }}<br>
-        <strong>Naziv:</strong> {{ polica.naziv }}<br>
-        <strong>Tip:</strong> {{ polica.tip }}
-      </div>
-    </div>
-  </div>
 </template>
 
 <script>
-import AzurirajProfil from "@/components/AzurirajProfil.vue";
+import KnjigeNaPolici from "@/components/KnjigeNaPolici.vue";
 export default {
   name: "KorisnikView",
-  components: {AzurirajProfil},
+  components: {
+    KnjigeNaPolici,
+  },
   data() {
     return {
       autorDto: {},
-      updateAutorDto: {},
       showProfileUpdate: false,
+      showKnjigeNaPolici: false,
+      knjigeNaPolici: [],
       policaDto: {
         naziv: "",
         tip: "",
@@ -90,12 +106,12 @@ export default {
   },
   mounted: function () {
 
-    if (this.isLoggedUserAdmin()) {
-      document.getElementById("azurirajAutora-ID").style.visibility = "visible";
-    } else {
-      alert('Samo administrator moze vidjeti odredjene opcije!');
+    //if (this.isLoggedUserAdmin()) {
+      //document.getElementById("azurirajAutora-ID").style.visibility = "visible";
+    //} else {
+    //  alert('Samo administrator moze vidjeti odredjene opcije!');
       document.getElementById("azurirajAutora-ID").style.visibility = "hidden";
-    }
+    this.showKnjigeNaPolici = false;
 
     //Get autors za azuriranje
     fetch('http://localhost:9090/api/korisnici/' + this.$route.query.id, {
@@ -155,6 +171,30 @@ export default {
       return true;
     },
 
+    prikaziKnjigeNaPolici(policaId) {
+      // Napravite zahtev za dobijanje knjiga na odabranoj polici
+      fetch(`http://localhost:9090/api/police/${policaId}/knjige`, {
+        method: "GET",
+        credentials: 'include',
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json",
+        },
+      })
+          .then(response => response.json())
+          .then(data => {
+            // Ovde možete prikazati knjige, na primer, dodavanjem u neki podatak ili komponentu
+            console.log("Knjige na polici:", data);
+            this.knjigeNaPolici = data;
+            this.showKnjigeNaPolici = true;
+            // Ako želite prikazati knjige na posebnoj stranici, možete koristiti router za navigaciju
+            // this.$router.push(`/police/${policaId}/knjige`);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+    },
+
     azurirajProfilAutora() {
       fetch('http://localhost:9090/api/korisnici/autor/' + this.autorDto.id, {
         method: "POST",
@@ -201,7 +241,9 @@ export default {
       })
           .then(response => response.json())
           .then(data => {
-            this.policaDto = data
+            this.policaDto = data;
+            this.showKnjigeNaPolici = true;
+
           })
           .catch((error) => {
             console.error("Error:", error);
@@ -238,65 +280,101 @@ export default {
   },
 
 
+
+
 }
 </script>
 
 <style scoped>
-.title {
-  background-color: white;
-  color: rebeccapurple;
-  width: 30%;
-  position: absolute;
-  left: 450px;
-}
 
-.police-table {
-  position: absolute;
-  left: 450px;
-  background-color: #3498db;
-  font-weight: bold;
-}
-
-
-.title {
-  background-color: white;
-  color: rebeccapurple;
-  width: 30%;
-  position: absolute;
-  left: 450px;
-}
-
-.polica-item {
+.table-container {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  padding: 10px;
-  background-color: white;
-  margin: 10px 0;
-  border-radius: 5px;
-  width: 30%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  justify-content: flex-start;
+  height: 50vh; /* Postavite visinu kontejnera na 50% visine ekrana */
 }
 
-.police-table {
-  position: absolute;
-  left: 450px;
-  background-color: #3498db;
+.orange-border {
+  border: 4px solid orangered;
+  background-color: rgba(150, 150, 150, 0.6);
+  border-radius: 15px;
+  padding: 15px;
+  color: white;
+  width: 900px;
   font-weight: bold;
-  padding: 10px;
-  border-radius: 5px;
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
 }
 
 .pogledaj-button {
-  background-color: darkblue;
+  background-color: orangered;
   color: white;
   font-weight: bold;
+  font-size: 16px;
+  padding: 20px 10px;
+  border: orangered;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 20px;
+}
+
+.police-list {
+  list-style: none;
+  padding: 0;
+  width: 40%;
+  height: 50vh;
+  overflow-y: auto;
+  position: fixed;
+  bottom: 10%; /* Postavljanje na 70% od dna */
+  left: 0; /* Postavljanje uz skroz levu stranu */
+}
+
+.polica-item {
+  padding: 10px;
+  background-color: rgba(150, 150, 150, 0.6);
+  margin: 10px 0;
+  color: white;
+  font-weight: bold;
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex; /* Postavljanje elemenata u red */
+  justify-content: space-between; /* Raspodela prostora između elemenata */
+  align-items: center;
+  flex-direction: column; /* Promenjeno na column za bolje poravnavanje teksta */}
+
+.button-and-title-container {
   position: absolute;
-  top: 160px;
-  left: 150px;
-  padding: 10px 20px;
+  left: 30px;
+  top: 100px;
+}
+
+.polica-item strong {
+  margin-bottom: 5px; /* Dodajte razmak između jakih oznaka i vrednosti */
+}
+
+.polica-item button {
+  background-color: orangered;
+  color: white;
+  font-weight: bold;
+  font-size: 14px; /* Smanjio sam font za dugme */
+  padding: 10px 15px; /* Smanjio sam padding dugmeta */
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.knjige {
+  background-color: rgba(150, 150, 150, 0.9);
+  position: absolute;
+  border: 5px solid orangered;
+  right: 350px;
+  bottom: 250px;
+  width: 250px;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+
 }
 </style>

@@ -1,14 +1,14 @@
 <template>
   <div>
     <h2 class="list-title">Lista recenzija</h2>
-    <table class="recenzije-table">
+    <table class="recenzije-table orange-border">
       <thead>
       <tr>
-        <th>ID</th>
-        <th>Tekst</th>
-        <th>Ocjena</th>
-        <th>Korisničko ime</th>
-        <th>Datum</th>
+        <th class="top-row">ID</th>
+        <th class="top-row">Tekst</th>
+        <th class="top-row">Ocjena</th>
+        <th class="top-row">Korisničko ime</th>
+        <th class="top-row">Datum</th>
       </tr>
       </thead>
       <tbody>
@@ -161,11 +161,23 @@ export default {
 
 <style>
 
+.orange-border {
+  border: 4px solid orangered;
+  background-color: rgba(150, 150, 150, 0.2);
+  border-radius: 15px;
+  padding: 20px;
+  color: white;
+  font-weight: bold;
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+}
+
 .list-title {
   background-color: white;
-  color: black;
+  color: #333333;
+  font-weight: bold;
   padding: 10px;
   border-radius: 5px;
+  border: 3px solid #333;
   text-align: center;
   margin-bottom: 20px;
 }
@@ -183,26 +195,16 @@ export default {
   text-align: left;
 }
 
-.recenzija-row tr:nth-child(even) {
-  background-color: #f2f2f2;
+.recenzije-table tbody tr:hover,
+.recenzije-table tbody tr:hover {
+  background-color: darkorange;
 }
-
-.recenzija-table tr:nth-child(odd) {
-  background-color: #ffc0cb; /* Svijetlo roze boja za neparne redove */
-}
-
-.light-pink-row {
-  background-color: #ffc0cb; /* Svijetlo roze boja za parne redove */
-}
-
-.light-yellow-row {
-  background-color: #ffffcc; /* Svijetlo žuta boja za neparne redove */
-}
-
-footer {
-  text-align: center;
-  margin-top: 40px;
+.top-row {
+  background-color: orangered; /* Boja za gornji red tabele */
+  color: white;
   font-weight: bold;
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid white; /* Linija ispod zaglavlja */
 }
-
 </style>

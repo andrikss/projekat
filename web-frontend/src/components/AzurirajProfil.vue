@@ -1,19 +1,19 @@
 <template>
-  <div class="update_form" v-if="showProfileUpdate">    <h2>Ažuriraj profil:</h2>
-    <label for="oldEmailAdresa">Stara Email adresa:</label>
+  <div class="update_form" v-if="showProfileUpdate">
+    <label for="oldEmailAdresa">Stara email adresa:</label>
     <input v-model="updateDTO.staraEmailAdresa" /><br />
-    <label for="newEmailAdresa">Nova Email adresa:</label>
+    <label for="newEmailAdresa">Nova email adresa:</label>
     <input v-model="updateDTO.novaEmailAdresa" /><br />
-
-    <label for="ime">Ime:</label>
-    <input v-model="updateDTO.ime" /><br />
-    <label for="prezime">Prezime:</label>
-    <input v-model="updateDTO.prezime" /><br />
 
     <label for="staraLozinka">Stara lozinka:</label>
     <input v-model="updateDTO.staraLozinka" /><br />
     <label for="novaLozinka">Nova lozinka:</label>
     <input v-model="updateDTO.novaLozinka" /><br />
+
+    <label for="ime">Ime:</label>
+    <input v-model="updateDTO.ime" /><br />
+    <label for="prezime">Prezime:</label>
+    <input v-model="updateDTO.prezime" /><br />
 
     <label for="opis">Opis:</label>
     <input v-model="updateDTO.opis" /><br />
@@ -24,7 +24,7 @@
     <input v-model="updateDTO.profilnaSlika" /><br />
 
 
-    <button v-on:click="submit()">submit</button>
+    <button class="azurirajdugme" v-on:click="submit()">submit</button>
   </div>
 </template>
 
@@ -83,6 +83,10 @@ export default {
     submit: function() {
       console.log("Submit kliknut!");
       console.log(JSON.stringify(this.updateDTO));
+
+      this.updateDTO.novaEmailAdresa = this.updateDTO.novaEmailAdresa || null;
+      this.updateDTO.novaLozinka = this.updateDTO.novaLozinka || null;
+
       fetch("http://localhost:9090/api/korisnici/updateKorisnik", {
         method: "POST",
         credentials: 'include',
@@ -113,13 +117,31 @@ export default {
 <style scoped>
 .update_form {
   text-align: left; /* Poravnavanje teksta s lijeve strane */
-  margin-top: 20px;
-  background-color: pink;
+  margin-bottom: 40px;
+  background-color: rgba(230, 70, 70, 0.2);
+  color: white;
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5); /* Dodaj crni shadow */
+
 }
 
 .update_form label {
   display: inline-block; /* Postavljanje labela kao inline-blok elemente */
   width: 150px; /* Fiksna širina labela */
   margin-right: 10px; /* Malo odvajanje između labela i input polja */
+}
+
+.azurirajdugme {
+  background-color: firebrick;
+  color: white;
+  font-weight: bold;
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5); /* Dodaj crni shadow */
+  font-size: 16px; /* Povećaj veličinu fonta */
+  padding: 10px 10px; /* Povećaj padding za veću veličinu */
+  width: 150px;
+  cursor: pointer;
+}
+
+.azurirajdugme:hover {
+  background-color: coral; /* Promijenite pozadinu na koralnu boju na hover-u */
 }
 </style>

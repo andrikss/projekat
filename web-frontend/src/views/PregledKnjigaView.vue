@@ -1,7 +1,7 @@
 <template>
   <div>
     <section class="search-section">
-      <h2>Pretraži knjigu: </h2>
+      <h2 class="title">Pretraži knjigu: </h2>
       <form @submit.prevent="searchKnjige">
         <input class="search-input" type="text" v-model="searchQuery" placeholder="Unesite ISBN ili naslov knjige" />
         <button class="search-button" type="submit">Pretraži</button>
@@ -111,8 +111,15 @@ export default {
 </script>
 
 <style>
-
-/* Stil za sekciju pretrage */
+.title {
+  border: 4px solid orangered;
+  background-color: rgba(150, 150, 150, 0.6);
+  border-radius: 15px;
+  padding: 20px;
+  color: white;
+  font-weight: bold;
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+}
 .search-section {
   background-image: url('@/assets/slike/pozadinaa.jpg');
   background-size: cover;
@@ -129,86 +136,27 @@ export default {
   background-color: white;
   color: darkslategray;
   font-size: 18px;
-  padding: 10px;
+  padding: 20px;
+  width: 250px;
   border: none;
   border-radius: 8px;
   margin-right: 10px;
+  margin-bottom: 20px;
 }
 
 /* Stil za pretrazi button */
 .search-button {
-  background-color: hotpink;
+  background-color: orangered;
   color: white;
   border: none;
   border-radius: 8px;
   padding: 10px 20px;
   font-size: 18px;
   cursor: pointer;
-}
-footer {
-  text-align: center;
-  margin-top: 40px;
-  font-weight: bold;
+  transition: background-color 0.3s;
 }
 
-.knjige-table,
-.korisnici-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-}
-
-.knjige-table th,
-.knjige-table td,
-.korisnici-table th,
-.korisnici-table td {
-  padding: 8px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-.knjige-table th,
-.korisnici-table th {
-  background-color: #f2f2f2;
-  font-weight: bold;
-}
-
-.knjige-table button {
-  background-color: aquamarine;
-  padding: 8px 14px;
-  text-decoration: none;
-  margin: 4px 2px;
-  cursor: pointer;
-  border-radius: 8px;
-  color: black;
-}
-
-.knjige-table tbody tr:hover,
-.korisnici-table tbody tr:hover {
-  background-color: #f5f5f5;
-}
-
-table.center {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.container2 li button {
-  background-color: aquamarine;
-  border: 2px solid rgb(36, 136, 102);
-  text-decoration: none;
-  cursor: pointer;
-  border-radius: 8px;
-  color: black;
-}
-
-.knjige-table .dodaj_knjigu button {
-  background-color: aquamarine;
-  padding: 8px 14px;
-  text-decoration: none;
-  cursor: pointer;
-  border-radius: 8px;
-  color: black;
-  margin-top: 15px;
+.search-button:hover {
+  background-color: darkorange;
 }
 </style>

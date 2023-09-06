@@ -6,14 +6,14 @@
 
         <thead>
         <tr>
-          <th>ID</th>
-          <th>Naslov</th>
-          <th>ISBN</th>
-          <th>Broj Strana</th>
-          <th>Datum Objavljivanja</th>
-          <th>Opis</th>
-          <th>Ocjena</th>
-          <th>Zanr</th>
+          <th class="top-row">ID</th>
+          <th class="top-row">Naslov</th>
+          <th class="top-row">ISBN</th>
+          <th class="top-row">Broj Strana</th>
+          <th class="top-row">Datum Objavljivanja</th>
+          <th class="top-row">Opis</th>
+          <th class="top-row">Ocjena</th>
+          <th class="top-row">Zanr</th>
         </tr>
         </thead>
         <tbody>
@@ -22,7 +22,7 @@
           <td>{{ knjiga.naslov }}</td>
           <td>{{ knjiga.isbn }}</td>
           <td>{{ knjiga.brojStrana }}</td>
-          <td>{{ this.datumObjavljivanjaParsed[knjiga.id] }}</td>
+          <td>{{ formatDate(knjiga.datumObjavljivanja) }}</td>
           <td>{{ knjiga.opis }}</td>
           <td>{{ knjiga.ocjena }}</td>
           <td>
@@ -68,84 +68,76 @@ export default {
         .catch((error) => {
           console.log(error);
           alert('Ne postoji ta knjiga');
-        })
-        //Parse time
-        .then( () => {
-          this.datumObjavljivanjaParsed = [];
-
-          for (let i=0;i < this.knjige.length; i++) {
-            this.datumObjavljivanjaParsed[this.knjige[i].id] = this.knjige[i].datumObjavljivanja;
-            this.datumObjavljivanjaParsed[this.knjige[i].id] = new Date(this.datumObjavljivanjaParsed[this.knjige[i].id]);
-          }
-
         });
   },
+
   methods: {
     viewKnjiga(knjiga) {
       this.$router.push("/knjiga?id=" + knjiga.id);
+    },
+    formatDate(dateString) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', options);
     },
   }
 };
 </script>
 
 <style>
-/* Stilizacija za gornji deo tabele */
-.knjige-table th {
-  background-color: #8bc34a; /* Svijetlo zelena */
-  font-weight: bold;
-  padding: 8px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
 
-/* Stilizacija za cijelu tablu */
-.knjige-table td {
-  background-color: lavender;
-  padding: 8px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-body {
-  background-color: #5e35b1;
-}
-
-footer {
-  text-align: center;
-  margin-top: 40px;
-  font-weight: bold;
-}
-
-.knjige-table,
-.korisnici-table {
+.knjige-table table {
+  border: 3px solid orangered; /* Granica oko cele tabele */
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
 }
 
-.knjige-table th,
-.knjige-table td,
-.korisnici-table th,
-.korisnici-table td {
-  padding: 8px;
+.knjige-table .top-row {
+  background-color: orangered; /* Boja za gornji red tabele */
+  color: white;
+  font-weight: bold;
+  padding: 10px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid white; /* Linija ispod zaglavlja */
 }
 
-.knjige-table th,
-.korisnici-table th {
-  background-color: #f2f2f2;
+.knjige-table th {
+  background-color: orangered; /* Boja za gornji deo tabele */
+  color: white;
   font-weight: bold;
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid white; /* Linija ispod zaglavlja */
+}
+
+/* Stil za redove tabele */
+.knjige-table td {
+  background-color: rgba(150, 150, 150, 0.6); /* Boja za redove tabele */
+  color: white;
+  font-weight: bold;
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  text-align: left;
+  border : 3px solid orangered;
+  border-bottom: 1px solid white; /* Linija ispod redova */
+}
+
+/* Hover efekat za redove tabele */
+.knjige-table tbody tr:hover {
+  background-color: darkorange; /* Boja za hover efekat */
 }
 
 .knjige-table .view-button {
-  background-color:  #ff4081;
-  padding: 8px 14px;
+  background-color: orangered;
+  padding: 20px 14px;
   text-decoration: none;
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 8px;
   color: white;
+  font-weight: bold;
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
 }
 
 .knjige-table tbody tr:hover,
@@ -153,19 +145,4 @@ footer {
   background-color: #f5f5f5;
 }
 
-table.center {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-
-.knjige-table .dodaj_knjigu button {
-  background-color: deeppink;
-  padding: 8px 14px;
-  text-decoration: none;
-  cursor: pointer;
-  border-radius: 8px;
-  color: black;
-  margin-top: 15px;
-}
 </style>

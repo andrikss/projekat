@@ -2,7 +2,7 @@
   <div>
 
     <div class="korisnici-table">
-      <table class="center">
+      <table class="center custom-table">
 
         <thead>
         <tr>
@@ -25,7 +25,7 @@
           <td>{{ formatDate(korisnikDto.datumRodjenja) }}</td>
           <td>{{ korisnikDto.opis }}</td>
           <td>
-            <button v-on:click="viewAutor(korisnikDto)">View</button>
+            <button class = "view-button" v-on:click="viewAutor(korisnikDto)">View</button>
           </td>
         </tr>
         </tbody>
@@ -98,11 +98,48 @@ export default {
 </script>
 
 <style scoped>
+
+.custom-table th,
+.custom-table td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-weight: bold; /* Podebljani tekst */
+  color: white; /* Bela boja teksta */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Dodaj crni shadow */
+  transition: background-color 0.3s; /* Dodaj hover efekat */
+}
+
+.custom-table th {
+  background-color: orange; /* Narandžasta boja za zaglavlje */
+}
+
 .korisnici-table tr:nth-child(even) {
-  background-color: #ffffcc; /* Svijetlo žuta boja za parne redove */
+  background-color: rgba(50, 50, 50, 0.2); /* Providno tamno siva boja za parne redove */
 }
 
 .korisnici-table tr:nth-child(odd) {
-  background-color: #ffc0cb; /* Svijetlo roze boja za neparne redove */
+  background-color: rgba(50, 50, 50, 0.4); /* Providno tamno siva boja za neparne redove */
+}
+
+.custom-table tbody tr:hover {
+  background-color: #555;
+}
+
+.view-button {
+  background-color: orange;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Dodaj crni shadow */
+  transition: background-color 0.3s;
+}
+
+.view-button:hover {
+  background-color: orangered; /* Boja za hover efekat */
 }
 </style>

@@ -35,7 +35,7 @@ public class KorisnikRestController {
 
         List<KorisnikDto> korisnikDtos = new ArrayList<>();
         for (Korisnik korisnik : korisnici) {
-            if (!korisnik.getUlogaKorisnika().equals(UlogaKorisnika.ADMINISTRATOR.toString())) {
+            if (korisnik.getUlogaKorisnika().equals(UlogaKorisnika.CITALAC.toString())) {
                 korisnikDtos.add(new KorisnikDto(korisnik));
                 System.out.println("OVO JE KORISNIK: " + korisnik.toString());
             }
@@ -59,6 +59,18 @@ public class KorisnikRestController {
         return new ResponseEntity<>(autorDtos, HttpStatus.OK);
     }
 
+    @GetMapping("/listaSvihAutora")
+    public ResponseEntity<List<AutorDto>> getAllNeaktivniAutori() {
+        List<Autor> autori = korisnikService.findAllAutor();
+
+        List<AutorDto> autorDtos = new ArrayList<>();
+        for (Autor autor : autori) {
+                autorDtos.add(new AutorDto(autor));
+
+        }
+
+        return new ResponseEntity<>(autorDtos, HttpStatus.OK);
+    }
     @GetMapping("/korisnik")
     public ResponseEntity<KorisnikDto> getThisSessionUserInfo(HttpSession httpSession)
     {
@@ -246,9 +258,6 @@ public class KorisnikRestController {
         if (korisnik == null) {
             return new ResponseEntity<>("Korisnik ne postoji", HttpStatus.NOT_FOUND); // ne postoji
         }
-        if (!korisnik.getLozinka().equals(azurirajKorisnikaDto.getStaraLozinka())) {
-            return new ResponseEntity<>("Lozinke nisu okej!", HttpStatus.UNAUTHORIZED); // neispravna trenutna lozinka
-        }
 
         if(azurirajKorisnikaDto.getIme() != null) {
             korisnik.setIme(azurirajKorisnikaDto.getIme());
@@ -275,10 +284,17 @@ public class KorisnikRestController {
         }
 
         if (azurirajKorisnikaDto.getNovaEmailAdresa() != null) {
+            if (!korisnik.getLozinka().equals(azurirajKorisnikaDto.getStaraLozinka())) {
+                return new ResponseEntity<>("Lozinke se ne poklapaju!", HttpStatus.UNAUTHORIZED); // neispravna trenutna lozinka
+            }
             korisnik.setEmailAdresa(azurirajKorisnikaDto.getNovaEmailAdresa());
         }
 
+        System.out.println("NOVA LOZINKA JE " + azurirajKorisnikaDto.getNovaLozinka());
         if (azurirajKorisnikaDto.getNovaLozinka() != null) {
+            if (!korisnik.getLozinka().equals(azurirajKorisnikaDto.getStaraLozinka())) {
+                return new ResponseEntity<>("Lozinke se ne poklapaju!", HttpStatus.UNAUTHORIZED); // neispravna trenutna lozinka
+            }
             korisnik.setLozinka(azurirajKorisnikaDto.getNovaLozinka());
         }
         korisnik = korisnikService.saveKorisnik(korisnik);
@@ -356,29 +372,48 @@ public class KorisnikRestController {
             return new ResponseEntity<>("Autor nije pronadjen!", HttpStatus.NOT_FOUND);
         }
 
-       /* if (autor.isAktivan()) {
-            return new ResponseEntity<>("Autor je aktivan i ne moze se modifikovati!", HttpStatus.FORBIDDEN);
-        }*/
 
-        if (autorDto.getEmailAdresa() != null &&
+        if (
                 !autorDto.getEmailAdresa().equals(autor.getEmailAdresa()) &&
                 korisnikService.findByEmail(autorDto.getEmailAdresa()) != null)
         {
             return new ResponseEntity<>("Autor sa email adresom vec postoji", HttpStatus.FORBIDDEN);
         }
 
-        if (autorDto.getKorisnickoIme() != null && !autorDto.getKorisnickoIme().equals(autor.getKorisnickoIme())
+        if ( !autorDto.getKorisnickoIme().equals(autor.getKorisnickoIme())
                 && korisnikService.findByKorisnickoIme(autorDto.getKorisnickoIme()) != null)
         {
             return new ResponseEntity<>("Autor sa korisnickim imenom vec postoji", HttpStatus.FORBIDDEN);
         }
 
-        autor.setIme(autorDto.getIme());
-        autor.setPrezime(autorDto.getPrezime());
-        autor.setKorisnickoIme(autorDto.getKorisnickoIme());
-        autor.setEmailAdresa(autorDto.getEmailAdresa());
-        autor.setDatumRodjenja(autorDto.getDatumRodjenja());
-        autor.setOpis(autorDto.getOpis());
+
+        if(autorDto.getIme() != null) {
+            autor.setIme(autorDto.getIme());
+        }
+
+        if(autorDto.getPrezime() != null) {
+            autor.setPrezime(autorDto.getPrezime());
+        }
+
+        if(autorDto.getKorisnickoIme() != null) {
+            autor.setKorisnickoIme(autor.getKorisnickoIme());
+        }
+
+        if(autorDto.getEmailAdresa() != null) {
+            autor.setEmailAdresa(autorDto.getEmailAdresa());
+        }
+
+        if(autorDto.getDatumRodjenja() != null) {
+            autor.setDatumRodjenja(autorDto.getDatumRodjenja());
+        }
+
+        if(autorDto.getOpis() != null) {
+            autor.setOpis(autorDto.getOpis());
+        }
+
+        if(autorDto.getLozinka() != null) {
+            autor.setLozinka(autorDto.getLozinka());
+        }
 
         korisnikService.saveKorisnik(autor);
         return new ResponseEntity<>("Uspjesno!", HttpStatus.OK);
@@ -463,10 +498,9 @@ public class KorisnikRestController {
             autor.setKorisnickoIme(azurirajKorisnikaDto.getKorisnickoIme());
         }
 
-        if (azurirajKorisnikaDto.getNovaEmailAdresa() != null && !azurirajKorisnikaDto.getNovaEmailAdresa().isEmpty()) {
+        if (azurirajKorisnikaDto.getNovaEmailAdresa() != null) {
             autor.setEmailAdresa(azurirajKorisnikaDto.getNovaEmailAdresa());
         }
-
 
         if (azurirajKorisnikaDto.getNovaLozinka() != null) {
             autor.setLozinka(azurirajKorisnikaDto.getNovaLozinka());
