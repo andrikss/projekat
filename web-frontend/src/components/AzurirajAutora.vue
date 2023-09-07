@@ -112,7 +112,7 @@ export default {
           .then((res) => {
             if (res.ok) {
               console.log(this.updateDTO)
-              window.location.reload();
+              6
             } else {
               console.log(res);
               console.log(JSON.stringify(this.updateDTO));

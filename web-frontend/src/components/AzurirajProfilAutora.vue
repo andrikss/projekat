@@ -6,6 +6,8 @@
     <label for="newEmailAdresa">Nova Email adresa:</label>
     <input v-model="updateDTO.novaEmailAdresa" /><br />
 
+    <label for="prezime">Korisničko ime:</label>
+    <input v-model="updateDTO.korisnickoIme" /><br />
     <label for="ime">Ime:</label>
     <input v-model="updateDTO.ime" /><br />
     <label for="prezime">Prezime:</label>
@@ -41,6 +43,7 @@ export default {
       updateDTO: {
         staraEmailAdresa: "",
         novaEmailAdresa: "",
+        korisnickoIme: "",
         ime: "",
         prezime: "",
         staraLozinka: "",

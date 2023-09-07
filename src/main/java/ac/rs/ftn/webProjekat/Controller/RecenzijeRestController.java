@@ -138,6 +138,14 @@ public class RecenzijeRestController {
             return new ResponseEntity<>("Recenzija nije od strane ovog korisnika!", HttpStatus.FORBIDDEN);
         }
 
+        System.out.println("OVO JE RECENZIJADTO: " + recenzijaDto.getTekst());
+        if(recenzijaDto.getTekst() == null) {
+            recenzijaDto.setTekst(targetRecenzija.getTekst());
+        }
+
+        if(recenzijaDto.getTekst().isEmpty()) {
+            recenzijaDto.setTekst(targetRecenzija.getTekst());
+        }
         targetRecenzija.updateRecenzija(
                 recenzijaDto.getOcjena(),
                 recenzijaDto.getTekst(),

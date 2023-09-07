@@ -10,7 +10,7 @@
       <div class="separator">|</div>
       <div class="tabbb-item"><a href="/recenzije">LISTA RECENZIJA</a></div>
       <div class="separator">|</div>
-      <div class="tabbb-item"><a href="/zanrovi">LISTA ZANROVA</a></div>
+      <div class="tabbb-item"><a href="/zanrovi">LISTA ŽANROVA</a></div>
       <div class="separator">|</div>
       <div class="tabbb-item"><a href="/listaAutora">LISTA AUTORA</a></div>
       <div class="separator">|</div>

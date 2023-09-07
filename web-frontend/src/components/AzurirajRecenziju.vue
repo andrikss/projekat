@@ -6,8 +6,6 @@
     <input v-model="updateDTO.tekst" /><br />
     <label for="ocjena">Ocjena:</label>
     <input v-model="updateDTO.ocjena" /><br />
-    <label for="korisnickoIme">Korisničko ime:</label>
-    <input v-model="updateDTO.ime" /><br />
     <label for="datumRecenzije">Datum recenzije:</label>
     <input type="date" v-model="updateDTO.datumRecenzije" /><br />
 
@@ -28,7 +26,6 @@ export default {
       updateDTO: {
         tekst: "",
         ocjena: "",
-        korisnickoIme: "",
         datumRecenzije: ""
       }
     };

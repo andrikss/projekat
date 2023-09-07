@@ -3,7 +3,7 @@
     <section class="search-section">
       <h2 class="title">Pretraži knjigu: </h2>
       <form @submit.prevent="searchKnjige">
-        <input class="search-input" type="text" v-model="searchQuery" placeholder="Unesite ISBN ili naslov knjige" />
+        <input class="search-input" type="text" v-model="searchQuery" placeholder="Unesite naslov knjige" />
         <button class="search-button" type="submit">Pretraži</button>
       </form>
     </section>

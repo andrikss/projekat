@@ -10,6 +10,8 @@
     <label for="novaLozinka">Nova lozinka:</label>
     <input v-model="updateDTO.novaLozinka" /><br />
 
+    <label for="prezime">Korisničko ime:</label>
+    <input v-model="updateDTO.korisnickoIme" /><br />
     <label for="ime">Ime:</label>
     <input v-model="updateDTO.ime" /><br />
     <label for="prezime">Prezime:</label>
@@ -40,6 +42,7 @@ export default {
       updateDTO: {
         staraEmailAdresa: "",
         novaEmailAdresa: "",
+        korisnickoIme: "",
         ime: "",
         prezime: "",
         staraLozinka: "",
@@ -72,6 +75,7 @@ export default {
               this.updateDTO.korisnickoIme = data.korisnickoIme;
               this.updateDTO.ime = data.ime;
               this.updateDTO.prezime = data.prezime;
+              this.updateDTO.korisnickoIme = data.korisnickoIme;
               this.updateDTO.datumRodjenja = data.datumRodjenja;
               this.updateDTO.opis = data.opis;
               this.updateDTO.profilnaSlika = data.profilnaSlika;

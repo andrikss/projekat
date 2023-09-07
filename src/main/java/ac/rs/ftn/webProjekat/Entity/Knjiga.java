@@ -64,15 +64,31 @@ public class Knjiga implements Serializable {
 
     //treba pogledati logiku azurirajKnjigaDto cini mi se d a je isto kao KNjigaDTO
 
-     public void updateKnjiga(AzurirajKnjiguDto updateKnjigaDto) {
-        this.ISBN = updateKnjigaDto.getISBN();
-        this.naslov = updateKnjigaDto.getNaslov();
-        this.opis = updateKnjigaDto.getOpis();
-        this.brojStrana = updateKnjigaDto.getBrojStrana();
-        this.ocjena = updateKnjigaDto.getOcjena();
-        this.naslovnaFotografija = updateKnjigaDto.getNaslovnaFotografija();
-        this.datumObjavljivanja = updateKnjigaDto.getDatumObjavljivanja();
-        this.emailAdresaAutora = updateKnjigaDto.getEmailAdresaAutora();
+    public void updateKnjiga(AzurirajKnjiguDto updateKnjigaDto) {
+        if (updateKnjigaDto.getISBN() != null) {
+            this.ISBN = updateKnjigaDto.getISBN();
+        }
+        if (updateKnjigaDto.getNaslov() != null) {
+            this.naslov = updateKnjigaDto.getNaslov();
+        }
+        if (updateKnjigaDto.getOpis() != null) {
+            this.opis = updateKnjigaDto.getOpis();
+        }
+        if (updateKnjigaDto.getBrojStrana() != null) {
+            this.brojStrana = updateKnjigaDto.getBrojStrana();
+        }
+        if (updateKnjigaDto.getOcjena() != null) {
+            this.ocjena = updateKnjigaDto.getOcjena();
+        }
+        if (updateKnjigaDto.getNaslovnaFotografija() != null) {
+            this.naslovnaFotografija = updateKnjigaDto.getNaslovnaFotografija();
+        }
+        if (updateKnjigaDto.getDatumObjavljivanja() != null) {
+            this.datumObjavljivanja = updateKnjigaDto.getDatumObjavljivanja();
+        }
+        if (updateKnjigaDto.getEmailAdresaAutora() != null) {
+            this.emailAdresaAutora = updateKnjigaDto.getEmailAdresaAutora();
+        }
     }
 
     public boolean daLiImaZanr(Zanr zanr) {

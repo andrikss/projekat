@@ -30,10 +30,17 @@ public class Recenzija implements Serializable {
     private Korisnik korisnik;
 
     public void updateRecenzija(Long ocjena, String tekst, Date datumRecenzije) {
-        this.ocjena = ocjena;
-        this.tekst = tekst;
-        this.datumRecenzije = datumRecenzije;
+        if (ocjena != null) {
+            this.ocjena = ocjena;
+        }
+        if (tekst != null || tekst.isEmpty()) {
+            this.tekst = tekst;
+        }
+        if (datumRecenzije != null) {
+            this.datumRecenzije = datumRecenzije;
+        }
     }
+
 
     //equals metoda???? da li treba mozda
 
