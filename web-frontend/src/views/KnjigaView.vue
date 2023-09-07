@@ -17,6 +17,10 @@
           <td>{{ knjiga.isbn }}</td>
         </tr>
         <tr>
+          <td>Autor:</td>
+          <td>{{ knjiga.emailAdresaAutora }}</td>
+        </tr>
+        <tr>
           <td>Broj strana:</td>
           <td>{{ knjiga.brojStrana }}</td>
         </tr>
@@ -25,12 +29,12 @@
           <td>{{ knjiga.opis }}</td>
         </tr>
         <tr>
-          <td>Ocena:</td>
+          <td>Ocjena:</td>
           <td>{{ knjiga.ocjena }}</td>
         </tr>
         <tr>
           <td>Datum objavljivanja:</td>
-          <td>{{ knjigaDatumObjavljivanja }}</td>
+          <td>{{ formatDate(knjigaDatumObjavljivanja) }}</td>
         </tr>
         </tbody>
       </table>
@@ -48,47 +52,43 @@
         </table>
       </div>
 
-    <table class="zanrovi-table">
-      <thead>
-      <h2 class="delete-title">Dodijeli ili izbriši žanr na ovoj knjizi:</h2>
-      <tr>
-        <th>Žanr</th>
-        <th>Dodaj</th>
-        <th>Izbriši</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="zanrDto in zanrDto" :key="zanrDto.id">
-        <td>{{ zanrDto.naziv }}</td>
-        <td><button class="delete-button" v-on:click="addZanrToKnjiga(zanrDto)">Dodaj</button></td>
-        <td><button class="delete-button" v-on:click="removeZanrFromKnjiga(zanrDto)">Izbriši</button></td>
-      </tr>
-      </tbody>
-    </table>
-
-  </div>
-
-
     <div class="recenzije-wrapper">
       <h2 class="delete-title">Recenzije na ovu knjigu:</h2>
-    <table class="recenzije-table">
-      <tbody>
-      <tr v-for="recenzija in knjiga.recenzije" :key="recenzija.id">
-        <td class="recenzija-cell">{{ recenzija.tekst }}</td>
-        <td class="pregled-cell">
-          <div class="pregled-button-wrapper">
-          <button class="recenzija-view-button" v-on:click="viewRecenzija(recenzija)">Detalji</button>
-            <button class="recenzija-view-button" v-on:click="deleteRecenzija(recenzija)">Izbriši</button>
-          </div>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-    <button class="dodaj-recenziju-button" v-on:click="addRecenzija">Dodaj novu recenziju</button>
-    <br />
+      <table class="recenzije-table">
+        <tbody>
+        <tr v-for="recenzija in knjiga.recenzije" :key="recenzija.id">
+          <td class="recenzija-cell">{{ recenzija.tekst }}</td>
+          <td class="pregled-cell">
+            <div class="pregled-button-wrapper">
+              <button class="recenzija-view-button" v-on:click="viewRecenzija(recenzija)">Detalji</button>
+              <button class="recenzija-view-button" v-on:click="deleteRecenzija(recenzija)">Izbriši</button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <button class="dodaj-recenziju-button" v-if="isReader || isAuthor" v-on:click="addRecenzija">Dodaj novu recenziju</button>
+      <br />
     </div>
 
-    <div class="azuriraj-form">
+    <div class="add-to-shelf-section" v-if="isReader || isAuthor || isAdmin">
+      <h3 class="add-to-shelf-title">Dodaj knjigu na policu:</h3>
+      <table class="add-to-shelf-table">
+        <tbody>
+        <tr>
+          <td>
+            <select class="shelf-select" v-model="selectedPolica">
+              <option disabled value="">Molimo odaberite</option>
+              <option v-for="policaDto in policeDto" :value="policaDto">{{ policaDto.naziv }}</option>
+            </select>
+          </td>
+          <td><button class="add-to-shelf-button" v-on:click="dodajNaPolicu(selectedPolica)">Dodaj na policu</button></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="azuriraj-form" v-if="isAuthor || isAdmin">
       <h2 class="delete-title">Ažuriraj knjigu: </h2>
       <label for="isbn">ISBN:</label>
       <input class="input-field" v-model="azurirajKnjiguDto.isbn" /><br />
@@ -118,24 +118,27 @@
     </div>
     <br />
 
-    <div class="add-to-shelf-section">
-      <h3 class="add-to-shelf-title">Dodaj knjigu na policu:</h3>
-      <table class="add-to-shelf-table">
-        <tbody>
-        <tr>
-          <td>
-            <select class="shelf-select" v-model="selectedPolica">
-              <option disabled value="">Molimo odaberite</option>
-              <option v-for="policaDto in policeDto" :value="policaDto">{{ policaDto.naziv }}</option>
-            </select>
-          </td>
-          <td><button class="add-to-shelf-button" v-on:click="dodajNaPolicu(selectedPolica)">Dodaj na policu</button></td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
+    <table class="zanrovi-table" v-if="isAuthor || isAdmin">
+      <thead>
+      <h2 class="delete-title">Dodijeli ili izbriši žanr na ovoj knjizi:</h2>
+      <tr>
+        <th>Žanr</th>
+        <th>Dodaj</th>
+        <th>Izbriši</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="zanrDto in zanrDto" :key="zanrDto.id">
+        <td>{{ zanrDto.naziv }}</td>
+        <td><button class="delete-button" v-on:click="addZanrToKnjiga(zanrDto)">Dodaj</button></td>
+        <td><button class="delete-button" v-on:click="removeZanrFromKnjiga(zanrDto)">Izbriši</button></td>
+      </tr>
+      </tbody>
+    </table>
 
-  <div class="delete-section">
+  </div>
+
+  <div class="delete-section" v-if="isAdmin">
     <h2 class="delete-title">Izbriši knjigu:</h2>
     <table class="delete-table">
       <tbody>
@@ -151,7 +154,6 @@
 <script>
 
 import axios from 'axios';
-import router from "@/router";
 
 export default {
   name: 'KnjigaView',
@@ -166,11 +168,17 @@ export default {
       zanrDto: [],
       responseString: {},
       knjigaDatumObjavljivanja: {},
-      zanr: ""
+      zanr: "",
+      isReader: false,
+      isAuthor: false,
+      isAdmin: false,
+      userData: {}
     };
   },
 
   mounted: function() {
+
+    this.fetchLoggedUser();
 
     fetch(`http://localhost:9090/api/knjige/${this.$route.query.id}`)
         .then(response => response.json())
@@ -228,6 +236,25 @@ export default {
 
   },
   methods: {
+
+    fetchLoggedUser() {
+      axios.get('http://localhost:9090/api/korisnici/korisnik', { withCredentials: true })
+          .then(response => {
+            const userData = response.data;
+            console.log(userData.ulogaKorisnika)
+            this.isReader = userData.ulogaKorisnika === 'Citalac';
+            this.isAuthor = userData.ulogaKorisnika === 'Autor';
+            this.isAdmin = userData.ulogaKorisnika === 'Administrator';
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+    },
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      const options = { year: "numeric", month: "short", day: "numeric" };
+      return date.toLocaleDateString("en-US", options);
+    },
 
     addZanrToKnjiga(zanrDto) {
       fetch('http://localhost:9090/api/knjige/' + this.$route.query.id +  '/zanr/'  + zanrDto.id, {
@@ -460,10 +487,9 @@ footer {
   font-weight: bold;
 }
 
-/* Stil za detalje knjige */
 .details-table {
   margin: 40px auto;
-  border: 1px solid #ccc;
+  border: 5px solid #333333;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -482,26 +508,21 @@ footer {
   border-bottom: 1px solid #ddd;
 }
 
-/* Stil za zanrove */
+
 .zanrovi-table {
   margin: 40px auto;
-  border: 1px solid #ccc;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   background-color: #fff;
   width: 70%;
+  border: 5px solid indianred;
 }
 
 .zanrovi-table table {
   width: 100%;
+
 }
-
-.section-title {
-   font-size: 24px; /* Podesite veličinu prema želji */
-   margin-top: 20px; /* Dodajte razmak iznad naslova */
- }
-
 
 .zanrovi-table th,
 .zanrovi-table td {
@@ -510,24 +531,15 @@ footer {
   border-bottom: 1px solid #ddd;
 }
 
-.add-button {
-  background-color: #ff4081;
-  margin-right: 10px;
-  color: white;
-}
-
 .delete-button {
   background-color: #f44336;
   color: white;
 }
 
-.add-button:hover,
-.delete-button:hover {
-  opacity: 0.8;
-}
 
 .recenzije-wrapper {
   display: flex;
+  border: 5px solid indianred;
   flex-direction: column;
   align-items: center;
   padding: 20px;
@@ -543,6 +555,7 @@ footer {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
+
 }
 
 .recenzije-table th,
@@ -569,7 +582,7 @@ footer {
 }
 
 .recenzija-view-button {
-  background-color:  #ff4081;
+  background-color:  indianred;
   padding: 8px 14px;
   text-decoration: none;
   margin: 4px 2px;
@@ -578,7 +591,7 @@ footer {
   color: white;
 }
 .dodaj-recenziju-button {
-  background-color:  #ff4081;
+  background-color:  indianred;
   padding: 10px 20px;
   border: none;
   border-radius: 8px;
@@ -588,15 +601,10 @@ footer {
   margin-top: 10px;
 }
 
-.azuriraj-title {
-  font-size: 24px;
-  margin-top: 20px;
-  text-align: center;
-}
 
 .azuriraj-form {
   background-color: white;
-  border: 1px solid #ccc;
+  border: 5px solid indianred;
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -613,7 +621,7 @@ footer {
 }
 
 .azuriraj-button {
-  background-color: #ff4081;
+  background-color: indianred;
   padding: 10px 20px;
   border: none;
   border-radius: 8px;
@@ -623,37 +631,10 @@ footer {
   margin-top: 10px;
   width: 100%;
 }
-/* Stil za ostale tabele */
+
 .center {
   margin-left: auto;
   margin-right: auto;
-}
-.zanrovi-table {
-  margin: 40px auto;
-  border: 1px solid #ccc;
-  padding: 10px;
-}
-
-
-.knjige-table th,
-.korisnici-table th {
-  background-color: #f2f2f2;
-  font-weight: bold;
-}
-
-.knjige-table button {
-  background-color: aquamarine;
-  padding: 8px 14px;
-  text-decoration: none;
-  margin: 4px 2px;
-  cursor: pointer;
-  border-radius: 8px;
-  color: black;
-}
-
-.knjige-table tbody tr:hover,
-.korisnici-table tbody tr:hover {
-  background-color: #f5f5f5;
 }
 
 table.center {
@@ -663,6 +644,7 @@ table.center {
 
 
 .add-to-shelf-section {
+  border: 5px solid indianred;
   margin: 2rem auto;
   padding: 20px;
   max-width: 70%;
@@ -680,6 +662,7 @@ table.center {
 .add-to-shelf-table {
   width: 100%;
   border-collapse: collapse;
+
 }
 
 .shelf-select {
@@ -690,7 +673,7 @@ table.center {
 }
 
 .add-to-shelf-button {
-  background-color: #ff4081;
+  background-color: indianred;
   color: white;
   border: none;
   border-radius: 8px;
@@ -699,12 +682,13 @@ table.center {
 }
 
 .add-to-shelf-button:hover {
-  background-color: #ff2860;
+  background-color: #FF69B4;
 }
 
 .delete-section {
   margin: 2rem auto;
   padding: 20px;
+  border: 5px solid indianred;
   max-width: 70%;
   background-color: white;
   border-radius: 8px;
@@ -723,7 +707,7 @@ table.center {
 }
 
 .delete-button {
-  background-color: #ff4081;
+  background-color: indianred;
   color: white;
   border: none;
   border-radius: 8px;
@@ -733,16 +717,6 @@ table.center {
 
 .delete-button:hover {
   background-color: #ff2860;
-}
-
-.zanrovi-table {
-  margin: 40px auto;
-  border: 1px solid #ccc;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-  width: 70%;
 }
 
 </style>

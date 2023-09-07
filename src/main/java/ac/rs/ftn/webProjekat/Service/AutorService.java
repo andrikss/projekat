@@ -27,6 +27,7 @@ public class AutorService {
        return autorRepository.save(autor);
     }
 
+    public void deleteAutor(Autor autor) {  autorRepository.delete(autor);}
     public Autor findByEmail(String email) {
         List<Autor> autori = autorRepository.findAll();
         for(Autor it : autori) {

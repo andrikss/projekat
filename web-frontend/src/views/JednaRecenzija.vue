@@ -102,8 +102,34 @@ export default {
 
 <style scoped>
 
+.list-title {
+  width: 1300px;
+  position: absolute;
+  top: 0;
+  left: 110px;
+}
+.recenzije-table {
+  background-color: rgba(64, 64, 64, 0.7); /* Tamno siva providna pozadina */
+  color: white; /* Bijeli tekst */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5); /* Crni shadowing slova */
+  border-radius: 8px;
+  margin: 20px auto;
+  width: 70%;
+}
+
+.recenzije-table th,
+.recenzije-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Dodatni stil za tekst u tabeli */
+.recenzije-table td {
+  font-weight: bold; /* Podebljano slova */
+}
 .azuriraj {
-  background-color: #007bff;
+  background-color: orangered;
   color: white;
   font-size: 16px;
   padding: 10px 20px;
@@ -112,18 +138,19 @@ export default {
 }
 
 .azuriraj:hover {
-  background-color: #0062c7;
+  background-color: darkorange;
 }
 .izbrisi-button {
-  background-color: crimson;
+  background-color: darkred;
   color: white;
   font-size: 16px;
+  font-weight: bold;
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
 }
 
 .izbrisi-button:hover {
-  background-color: coral;
+  background-color: black;
 }
 </style>

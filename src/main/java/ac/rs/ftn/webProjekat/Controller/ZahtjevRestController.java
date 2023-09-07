@@ -2,6 +2,7 @@ package ac.rs.ftn.webProjekat.Controller;
 
 import ac.rs.ftn.webProjekat.Dto.ZahtjevZaAktivacijuNalogaAutoraDto;
 import ac.rs.ftn.webProjekat.Entity.*;
+import ac.rs.ftn.webProjekat.Service.AutorService;
 import ac.rs.ftn.webProjekat.Service.KorisnikService;
 import ac.rs.ftn.webProjekat.Service.MailService;
 import ac.rs.ftn.webProjekat.Service.ZahtjevZaAktivacijuNalogaAutoraService;
@@ -31,6 +32,9 @@ public class ZahtjevRestController {
 
     @Autowired
     private KorisnikService korisnikService;
+
+    @Autowired
+    private AutorService autorService;
 
 
     //private final String adresa = "andriks5667@outlook.com";
@@ -190,7 +194,7 @@ public class ZahtjevRestController {
         targetAutor.setLozinka(generatedPassword);
         targetAutor.setAktivan(true);
         zahtjevZaAktivacijuNalogaAutoraService.saveKorisnik(targetAutor);
-        String poruka = "Vas nalog je uspjesno aktiviran. Vasa lozinka je: " + generatedPassword;
+        String poruka = "Vaš nalog je uspješno aktiviran. Vaša lozinka je: " + generatedPassword;
        // System.out.println(targetZahtev.getStatus().toString());
        // List<ZahtjevZaAktivacijuNalogaAutora> lista = zahtjevZaAktivacijuNalogaAutoraService.findAll();
         mailService.sendSimpleMessage(targetAutor.getEmailAdresa(), "Aktivacija naloga", poruka);
@@ -222,6 +226,7 @@ public class ZahtjevRestController {
     {
 
         Korisnik loggedUser = (Korisnik) httpSession.getAttribute("loggedUser");
+        Autor targetAutor = autorService.findById(loggedUser.getId());
         if (loggedUser == null) {
             return new ResponseEntity<>("No session!", HttpStatus.FORBIDDEN);
         }
@@ -248,7 +253,7 @@ public class ZahtjevRestController {
                 targetZahtev.getAutor().getEmailAdresa()+"\' je odbijen!";
         */
         //sendEmailToAddress(toAddress,emailSubject,emailText);
-        String poruka = "Vas zahtjev za aktivaciju naloga je odbijen.";
+        String poruka = "Vaš zahtjev za aktivaciju naloga je odbijen.";
         mailService.sendSimpleMessage(targetZahtev.getEmailAdresa(), "Odbijanje zahtjeva", poruka);
         return new ResponseEntity<>("Zahtjev je odbijen!", HttpStatus.OK);
     }

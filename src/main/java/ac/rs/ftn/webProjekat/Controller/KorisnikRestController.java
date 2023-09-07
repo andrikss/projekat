@@ -62,11 +62,9 @@ public class KorisnikRestController {
     @GetMapping("/listaSvihAutora")
     public ResponseEntity<List<AutorDto>> getAllNeaktivniAutori() {
         List<Autor> autori = korisnikService.findAllAutor();
-
         List<AutorDto> autorDtos = new ArrayList<>();
         for (Autor autor : autori) {
                 autorDtos.add(new AutorDto(autor));
-
         }
 
         return new ResponseEntity<>(autorDtos, HttpStatus.OK);
@@ -373,18 +371,15 @@ public class KorisnikRestController {
         }
 
 
-        if (
-                !autorDto.getEmailAdresa().equals(autor.getEmailAdresa()) &&
-                korisnikService.findByEmail(autorDto.getEmailAdresa()) != null)
+        /*if (korisnikService.findByEmail(autorDto.getEmailAdresa()) != null)
         {
             return new ResponseEntity<>("Autor sa email adresom vec postoji", HttpStatus.FORBIDDEN);
         }
 
-        if ( !autorDto.getKorisnickoIme().equals(autor.getKorisnickoIme())
-                && korisnikService.findByKorisnickoIme(autorDto.getKorisnickoIme()) != null)
+        if (korisnikService.findByKorisnickoIme(autorDto.getKorisnickoIme()) != null)
         {
             return new ResponseEntity<>("Autor sa korisnickim imenom vec postoji", HttpStatus.FORBIDDEN);
-        }
+        }*/
 
 
         if(autorDto.getIme() != null) {
@@ -396,7 +391,7 @@ public class KorisnikRestController {
         }
 
         if(autorDto.getKorisnickoIme() != null) {
-            autor.setKorisnickoIme(autor.getKorisnickoIme());
+            autor.setKorisnickoIme(autorDto.getKorisnickoIme());
         }
 
         if(autorDto.getEmailAdresa() != null) {

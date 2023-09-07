@@ -7,10 +7,7 @@
     </div>
 
     <div class="form-field">
-    <label for="korisnickoIme">Korisnicko ime:</label>
-    </div>
-
-    <div class="form-field">
+    <label for="korisnickoIme">Korisničko ime:</label>
     <input v-model="updateDTO.korisnickoIme" /><br />
     </div>
 
@@ -59,6 +56,7 @@ export default {
     return {
       updateDTO: {
         emailAdresa: "",
+        korisnickoIme: "",
         ime: "",
         prezime: "",
         datumRodjenja: "",
@@ -92,6 +90,7 @@ export default {
             this.updateDTO.prezime = data.prezime;
             this.updateDTO.opis = data.opis;
             this.updateDTO.datumRodjenja = data.datumRodjenja;
+            this.updateDTO.lozinka = data.lozinka;
           })
           .catch((error) => {
             console.error("Error:", error);
@@ -112,6 +111,7 @@ export default {
       })
           .then((res) => {
             if (res.ok) {
+              console.log(this.updateDTO)
               window.location.reload();
             } else {
               console.log(res);

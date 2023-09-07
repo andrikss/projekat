@@ -1,5 +1,6 @@
 <template>
 
+  <img src="@/assets/slike/cool-kids.jpg" alt="Cool Kids" class="slika" />
   <h1 class="title">{{ policaInfo.id }} | {{ policaInfo.naziv }} | {{ policaInfo.tip }} </h1>
   <button class= "delete" v-on:click="izbrisi(policaInfo)">Izbriši ovu policu :(</button>
   <br />
@@ -13,6 +14,7 @@
         <th>ID</th>
         <th>Naslov</th>
         <th>ISBN</th>
+        <th>Akcije</th>
       </tr>
       </thead>
       <tbody>
@@ -20,8 +22,10 @@
         <td>{{ knjiga.id }}</td>
         <td>{{ knjiga.naslov }}</td>
         <td>{{ knjiga.isbn }}</td>
+        <td>
         <button class="button" v-on:click="viewKnjiga(knjiga)">Pogledaj</button>
         <button class="button" v-on:click="izbaciSaPolice(knjiga)">Izbriši sa police</button>
+        </td>
       </tr>
       </tbody>
     </table>
@@ -193,49 +197,43 @@ export default {
 
 
 <style scoped>
+
 .delete {
-  width: 30%;
-  height: 30%;
-  position: absolute;
-  top: 0;
+  width: 16%;
+  height: 15%;
+  position: fixed;
+  bottom: 0;
   right: 0;
-  background-color: indianred;
+  background-color: darkred;
   color: white;
   font-weight: bold;
+  font-size: 18px;
   padding: 5px 10px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 
-.center{
-  margin-left: 0;
+.knjige {
+  position: absolute;
+  left: 0;
+  bottom: 350px;
+  width: 600px;
 }
 .title {
-  background-color: white;
-  color: darkmagenta;
+  background-color: rgba(150, 150, 150, 0.5);
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   font-weight: bold;
-  width: 70%;
+  width: 780px;
   height: 50%;
   display: flex;
   font-family: "Georgia Pro Cond Black";
 }
-.knjige {
-  margin-left: 0px;
-  display: flex;
-
-}
-.knjige tr:nth-child(even) {
-  background-color: #ffffcc; /* Svijetlo žuta boja za parne redove */
-}
-
-.knjige tr:nth-child(odd) {
-  background-color: #ffc0cb; /* Svijetlo roze boja za neparne redove */
-}
 
 .button {
-  background-color: plum;
-  color: deeppink;
+  background-color: orangered;
+  color: white;
   font-size: 14px;
   font-weight: bold;
   padding: 5px 10px;
@@ -243,10 +241,30 @@ export default {
   cursor: pointer;
 }
 
+.button:hover {
+  background-color: #d32f2f;
+  text-decoration: underline;
+}
 .title2 {
-  background-color: #ff4081;
+  background-color: darkred;
   font-family: "Georgia Pro Black";
   width: 50%;
+  padding: 20px;
+  align-content: center;
+  border-radius: 40px;
   color: white;
+  margin-bottom: 10px;
+  position: absolute;
+  left: 0;
+  top: 180px
+}
+
+.slika {
+  border: 5px solid darkred;
+  position: absolute;
+  top: 20px; /* Podesite ovo prema vašim preferencijama */
+  right: 20px; /* Podesite ovo prema vašim preferencijama */
+  width: 300px;
+  height: auto; /* Očuva proporcije slike */
 }
 </style>

@@ -197,7 +197,7 @@ export default {
 
 .recenzije-table tbody tr:hover,
 .recenzije-table tbody tr:hover {
-  background-color: darkorange;
+  background-color: lightpink;
 }
 .top-row {
   background-color: orangered; /* Boja za gornji red tabele */

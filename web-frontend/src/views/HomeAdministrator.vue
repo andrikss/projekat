@@ -8,6 +8,8 @@
     <div class="tabb">
       <div class="tabbb-item"><a href="/knjige">LISTA KNJIGA</a></div>
       <div class="separator">|</div>
+      <div class="tabbb-item"><a href="/recenzije">LISTA RECENZIJA</a></div>
+      <div class="separator">|</div>
       <div class="tabbb-item"><a href="/zanrovi">LISTA ZANROVA</a></div>
       <div class="separator">|</div>
       <div class="tabbb-item"><a href="/listaAutora">LISTA AUTORA</a></div>

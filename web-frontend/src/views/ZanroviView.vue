@@ -173,10 +173,12 @@ export default {
 .add-genre-section {
   margin: 20px auto;
   padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  border: 8px solid orangered;
+  border-radius: 30px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
+  background-color: rgba(150, 150, 150, 0.6) ;
   width: 70%;
 }
 
@@ -187,7 +189,7 @@ export default {
 }
 
 .add-genre-button {
-  background-color: #ff4081;
+  background-color: indianred;
   color: white;
   border: none;
   border-radius: 8px;

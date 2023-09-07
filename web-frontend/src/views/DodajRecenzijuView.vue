@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="recenzijica">
     <label for="tekst">Tekst:</label>
     <input v-model="recenzijaDto.tekst" /><br />
     <label for="ocjena">Ocjena:</label>
@@ -8,10 +8,11 @@
     <label for="datumRecenzije">Datum recenzije:</label>
     <input type="date" v-model="recenzijaDto.datumRecenzije" /><br />
 
-
     <button v-on:click="addNewRecenzija()" class="dugme">Dodaj novu recenziju</button>
 
   </div>
+  <img src="@/assets/slike/many-books.png" alt="Books" class="slika2" /><br /> <!-- Dodajte sliku ovde -->
+
 </template>
 
 <script>
@@ -63,24 +64,38 @@ methods: {
 </script>
 
 <style scoped>
-label {
+
+.recenzijica {
+  width: 600px;
+  position: absolute;
+  right: 450px;
+  top: 210px;
+  width: 550px;
+  color: white;
+  font-weight: bold;
+  margin-bottom: 5px;
+  background-color: rgba(100, 50, 50, 0.7);}
+
+.label {
   display: block;
   font-weight: bold;
   margin-top: 10px;
-  color: #FF69B4; /* Roze boja */
+  color: white;
+  font-weight: bold;
+  background-color: rgba(150, 150, 150, 0.5);
 }
 
 input {
-  width: 100%;
-  padding: 8px;
+  width: 90%;
+  padding: 5px;
   margin-top: 5px;
-  border: 1px solid #FF69B4;
+  margin-bottom: 5px;
   border-radius: 4px;
 }
 
 /* Stilizacija za button element */
 .dugme {
-  background-color: #98FB98; /* Svijetlo zelena boja */
+  background-color: indianred; /* Svijetlo zelena boja */
   color: white;
   border: none;
   padding: 10px 20px;
@@ -91,5 +106,21 @@ input {
   border-radius: 5px;
   cursor: pointer;
   margin-top: 10px;
+}
+
+.slika {
+  width: 520px; /* Podesite širinu slike prema vašim potrebama */
+  height: auto; /* Očuva proporcije slike */
+  position: absolute;
+  left: 0;
+  top:0;
+}
+
+.slika2 {
+  position: absolute;
+  top: 0;
+  right: 470px;
+  width: 500px;
+  height: auto;
 }
 </style>
